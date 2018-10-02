@@ -20,16 +20,26 @@ export default class extends Phaser.Scene {
     var mage = new PlayerCharacter(this, 250, 100, 'player', 4, characters.heroes.wizard)
     this.add.existing(mage)
 
-    var dragonblue = new Enemy(this, 50, 50, 'dragonblue', null, characters.villains.dragon)
-    this.add.existing(dragonblue)
+    const monsters = []
 
-    var dragonOrange = new Enemy(this, 50, 100, 'dragonorrange', null, characters.villains.dragon)
-    this.add.existing(dragonOrange)
+    monsters.push('monster')
+
+    monsters.push('redmonster')
+
+    monsters.push('schaere')
+
+    this.enemies = []
+    for (let i = 0; i < 2; i++) {
+      const index = Math.floor(Math.random() * 3)
+      const monsterName = monsters[index]
+      const monster = characters.villains[monsterName]
+      const monsterEnemy = new Enemy(this, 50, 50 * (i + 1), monster.image, null, monster)
+      this.add.existing(monsterEnemy)
+      this.enemies.push(monsterEnemy)
+    }
 
     // array with heroes
     this.heroes = [warrior, mage]
-    // array with enemies
-    this.enemies = [dragonblue, dragonOrange]
     // array with both parties, who will attack
     this.units = this.heroes.concat(this.enemies)
 

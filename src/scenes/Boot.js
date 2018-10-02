@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
+import { characters } from '../gameplay/characters'
 
 export default class extends Phaser.Scene {
   constructor () {
@@ -13,8 +14,10 @@ export default class extends Phaser.Scene {
 
     // load resources
     this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 })
-    this.load.image('dragonblue', 'assets/dragonblue.png')
-    this.load.image('dragonorrange', 'assets/dragonorrange.png')
+
+    Object.values(characters.villains).forEach((villain) => {
+      this.load.image(villain.image, 'assets/' + villain.image + '.png')
+    })
 
     WebFont.load({
       google: {

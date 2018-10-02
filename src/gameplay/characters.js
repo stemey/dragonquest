@@ -38,8 +38,41 @@ const wizard = {
 
 }
 
-const dragon = {
-  name: 'Dragon',
+const redmonster = {
+  name: 'Kiri',
+  image: 'redmonster',
+  armor: 8,
+  maxHp: 30,
+  healing: 0,
+  attacks: [
+    {
+      name: 'claws',
+      strength: 10,
+      damage: 3
+    }
+  ]
+
+}
+
+const monster = {
+  name: 'Rumps',
+  image: 'monster',
+  armor: 8,
+  maxHp: 10,
+  healing: 0,
+  attacks: [
+    {
+      name: 'claws',
+      strength: 3,
+      damage: 20
+    }
+  ]
+
+}
+
+const schaere = {
+  name: 'Goldi',
+  image: 'goldenhand',
   armor: 8,
   maxHp: 30,
   healing: 0,
@@ -59,7 +92,9 @@ export const characters = {
     knight
   },
   villains: {
-    dragon
+    schaere,
+    redmonster,
+    monster
   }
 
 }
