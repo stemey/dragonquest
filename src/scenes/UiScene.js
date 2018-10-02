@@ -24,9 +24,13 @@ export default class extends Phaser.Scene {
     // basic container to hold all menus
     this.menus = this.add.container()
 
-    this.heroesMenu = new HeroesMenu(195, 153, this)
+    this.battleScene = this.scene.get('BattleScene')
+    var heroes = this.battleScene.heroes
+    var enemies = this.battleScene.enemies
+
+    this.heroesMenu = new HeroesMenu(195, 153, this, heroes)
     this.actionsMenu = new ActionsMenu(100, 153, this)
-    this.enemiesMenu = new EnemiesMenu(8, 153, this)
+    this.enemiesMenu = new EnemiesMenu(8, 153, this, enemies)
 
     // the currently selected menu
     this.currentMenu = this.actionsMenu
@@ -36,16 +40,13 @@ export default class extends Phaser.Scene {
     this.menus.add(this.actionsMenu)
     this.menus.add(this.enemiesMenu)
 
-    this.battleScene = this.scene.get('BattleScene')
-
-    this.remapHeroes()
-    this.remapEnemies()
-
     this.input.keyboard.on('keydown', this.onKeyInput, this)
 
     this.battleScene.events.on('PlayerSelect', this.onPlayerSelect, this)
+    this.battleScene.events.on('AttackLaunched', this.onAttackLaunched, this)
 
-    this.events.on('SelectEnemies', this.onSelectEnemies, this)
+
+    this.events.on('ActionSelect', this.onActionSelect, this)
 
     this.events.on('Enemy', this.onEnemy, this)
 
@@ -60,28 +61,24 @@ export default class extends Phaser.Scene {
     this.actionsMenu.deselect()
     this.enemiesMenu.deselect()
     this.currentMenu = null
-    this.battleScene.receivePlayerSelection('attack', index)
+    this.battleScene.receivePlayerSelection('attack', index, this.actionsMenu.menuItemIndex)
   }
 
-  onPlayerSelect (id) {
+  onPlayerSelect (id, character) {
     this.heroesMenu.select(id)
+    this.actionsMenu.initialize(character.attacks)
     this.actionsMenu.select(0)
     this.currentMenu = this.actionsMenu
   }
 
-  onSelectEnemies () {
+  onAttackLaunched () {
+    this.heroesMenu.refresh()
+    this.enemiesMenu.refresh()
+  }
+
+  onActionSelect () {
     this.currentMenu = this.enemiesMenu
     this.enemiesMenu.select(0)
-  }
-
-  remapHeroes () {
-    var heroes = this.battleScene.heroes
-    this.heroesMenu.remap(heroes)
-  }
-
-  remapEnemies () {
-    var enemies = this.battleScene.enemies
-    this.enemiesMenu.remap(enemies)
   }
 
   onKeyInput (event) {

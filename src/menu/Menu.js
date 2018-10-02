@@ -10,6 +10,7 @@ export default class extends Phaser.GameObjects.Container {
     this.heroes = heroes
     this.x = x
     this.y = y
+    this.build()
   }
 
   addMenuItem (unit) {
@@ -64,11 +65,17 @@ export default class extends Phaser.GameObjects.Container {
     this.menuItemIndex = 0
   }
 
-  remap (units) {
-    this.clear()
-    for (var i = 0; i < units.length; i++) {
-      var unit = units[i]
-      this.addMenuItem(unit.type)
+  build () {
+    if (this.heroes) {
+      for (var i = 0; i < this.heroes.length; i++) {
+        var unit = this.heroes[i]
+        this.addMenuItem(unit.type + ' ' + unit.hp)
+      }
     }
+  }
+
+  refresh () {
+    this.clear()
+    this.build()
   }
 }
