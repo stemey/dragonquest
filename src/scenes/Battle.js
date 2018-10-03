@@ -69,7 +69,7 @@ export default class extends Phaser.Scene {
         if (this.heroes.indexOf(currentUnit) >= 0) {
           this.playersTurn = true
           this.selectedIndex = 0
-          this.events.emit('UnitSelected', { selectedId: this.selectedIndex })
+          this.events.emit('UnitSelected', { selectedId: this.selectedIndex, selectedCharacter: this.units[this.selectedIndex] })
           this.events.emit('PlayerSelect', this.index, currentUnit)
         } else { // else if its enemy unit
           this.playersTurn = false
@@ -115,13 +115,13 @@ export default class extends Phaser.Scene {
         if (this.selectedIndex < 0) {
           this.selectedIndex = this.units.length - 1
         }
-        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id })
+        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id, selectedCharacter: this.units[this.selectedIndex] })
       } else if (event.code === 'ArrowRight') {
         this.selectedIndex++
         if (this.selectedIndex >= this.units.length) {
           this.selectedIndex = 0
         }
-        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id })
+        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id, selectedCharacter: this.units[this.selectedIndex] })
       }
     }
   }

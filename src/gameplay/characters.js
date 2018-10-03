@@ -23,7 +23,6 @@ const wizard = {
   armor: 4,
   image: 'player',
   maxHp: 30,
-  healing: 10,
   attacks: [
     {
       name: 'fireball',
