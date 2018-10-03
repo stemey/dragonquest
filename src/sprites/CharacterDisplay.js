@@ -41,6 +41,7 @@ export default class extends Phaser.GameObjects.Container {
 
   refresh () {
     this.label.setText(this.text)
+    this.visible = this.unit.alive
   }
 
 }

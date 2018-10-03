@@ -11,8 +11,8 @@ const knight = {
     },
     {
       name: 'axe',
-      strength: 15,
-      damage: 5
+      strength: 20,
+      damage: 7
     }
   ]
 
@@ -28,7 +28,7 @@ const wizard = {
       name: 'fireball',
       strength: 100,
       magical: true,
-      damage: 4
+      damage: 3
     },
     {
       name: 'healing',
@@ -42,8 +42,8 @@ const wizard = {
 const redmonster = {
   name: 'Kiri',
   image: 'redmonster',
-  armor: 8,
-  maxHp: 30,
+  armor: 18,
+  maxHp: 11,
   healing: 0,
   attacks: [
     {

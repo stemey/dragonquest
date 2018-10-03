@@ -63,14 +63,19 @@ export default class extends Phaser.Scene {
         this.index = 0
       }
       const currentUnit = this.units[this.index]
-      this.events.emit('UnitSelected', { turnId: currentUnit.id })
       if (currentUnit) {
+
         // if its player hero
         if (this.heroes.indexOf(currentUnit) >= 0) {
-          this.playersTurn = true
-          this.selectedIndex = 0
-          this.events.emit('UnitSelected', { selectedId: this.selectedIndex, selectedCharacter: this.units[this.selectedIndex] })
-          this.events.emit('PlayerSelect', this.index, currentUnit)
+          if (currentUnit.alive) {
+            this.events.emit('UnitSelected', { turnId: currentUnit.id })
+            this.playersTurn = true
+            this.selectedIndex = 0
+            this.events.emit('UnitSelected', { selectedId: this.selectedIndex, selectedCharacter: this.units[this.selectedIndex] })
+            this.events.emit('PlayerSelect', this.index, currentUnit)
+          } else {
+            this.time.addEvent({ delay: 1, callback: this.nextTurn, callbackScope: this })
+          }
         } else { // else if its enemy unit
           this.playersTurn = false
           this.events.emit('UnitSelected', { selectedId: -1 })
@@ -111,16 +116,20 @@ export default class extends Phaser.Scene {
   onKeyInput (event) {
     if (this.playersTurn) {
       if (event.code === 'ArrowLeft') {
-        this.selectedIndex--
-        if (this.selectedIndex < 0) {
-          this.selectedIndex = this.units.length - 1
-        }
+        do {
+          this.selectedIndex--
+          if (this.selectedIndex < 0) {
+            this.selectedIndex = this.units.length - 1
+          }
+        } while (!this.units[this.selectedIndex].alive)
         this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id, selectedCharacter: this.units[this.selectedIndex] })
       } else if (event.code === 'ArrowRight') {
-        this.selectedIndex++
-        if (this.selectedIndex >= this.units.length) {
-          this.selectedIndex = 0
-        }
+        do {
+          this.selectedIndex++
+          if (this.selectedIndex >= this.units.length) {
+            this.selectedIndex = 0
+          }
+        } while (!this.units[this.selectedIndex].alive)
         this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id, selectedCharacter: this.units[this.selectedIndex] })
       }
     }
