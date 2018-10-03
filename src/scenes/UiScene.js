@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import HeroesMenu from '../menu/HeroesMenu'
 import ActionsMenu from '../menu/ActionsMenu'
-import EnemiesMenu from '../menu/EnemiesMenu'
 import Message from '../ui/Message'
 
 export default class extends Phaser.Scene {
@@ -26,11 +25,9 @@ export default class extends Phaser.Scene {
 
     this.battleScene = this.scene.get('BattleScene')
     var heroes = this.battleScene.heroes
-    var enemies = this.battleScene.enemies
 
     this.heroesMenu = new HeroesMenu(195, 153, this, heroes)
     this.actionsMenu = new ActionsMenu(100, 153, this)
-    this.enemiesMenu = new EnemiesMenu(8, 153, this, enemies)
 
     // the currently selected menu
     this.currentMenu = this.actionsMenu
@@ -38,17 +35,11 @@ export default class extends Phaser.Scene {
     // add menus to the container
     this.menus.add(this.heroesMenu)
     this.menus.add(this.actionsMenu)
-    this.menus.add(this.enemiesMenu)
 
     this.input.keyboard.on('keydown', this.onKeyInput, this)
 
     this.battleScene.events.on('PlayerSelect', this.onPlayerSelect, this)
-    this.battleScene.events.on('AttackLaunched', this.onAttackLaunched, this)
-
-
-    this.events.on('ActionSelect', this.onActionSelect, this)
-
-    this.events.on('Enemy', this.onEnemy, this)
+    this.battleScene.events.on('ActionFinished', this.onAttackLaunched, this)
 
     this.message = new Message(this, this.battleScene.events)
     this.add.existing(this.message)
@@ -56,12 +47,12 @@ export default class extends Phaser.Scene {
     this.battleScene.nextTurn()
   }
 
-  onEnemy (index) {
+  attack () {
+    const actionIndex = this.actionsMenu.menuItemIndex
     this.heroesMenu.deselect()
     this.actionsMenu.deselect()
-    this.enemiesMenu.deselect()
     this.currentMenu = null
-    this.battleScene.receivePlayerSelection('attack', index, this.actionsMenu.menuItemIndex)
+    this.battleScene.receivePlayerSelection('attack', actionIndex)
   }
 
   onPlayerSelect (id, character) {
@@ -73,12 +64,6 @@ export default class extends Phaser.Scene {
 
   onAttackLaunched () {
     this.heroesMenu.refresh()
-    this.enemiesMenu.refresh()
-  }
-
-  onActionSelect () {
-    this.currentMenu = this.enemiesMenu
-    this.enemiesMenu.select(0)
   }
 
   onKeyInput (event) {
@@ -87,10 +72,8 @@ export default class extends Phaser.Scene {
         this.currentMenu.moveSelectionUp()
       } else if (event.code === 'ArrowDown') {
         this.currentMenu.moveSelectionDown()
-      } else if (event.code === 'ArrowRight' || event.code === 'Shift') {
-
-      } else if (event.code === 'Space' || event.code === 'ArrowLeft') {
-        this.currentMenu.confirm()
+      } else if (event.code === 'Space') {
+        this.attack()
       }
     }
   }

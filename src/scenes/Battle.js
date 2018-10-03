@@ -1,11 +1,12 @@
 import Phaser from 'phaser'
-import PlayerCharacter from '../sprites/PlayerCharacter'
-import Enemy from '../sprites/Enemy'
 import { characters } from '../gameplay/characters'
+import CharacterDisplay from '../sprites/CharacterDisplay'
+import Unit from '../sprites/Unit'
 
 export default class extends Phaser.Scene {
   constructor () {
     super({ key: 'BattleScene' })
+
   }
 
   create () {
@@ -13,29 +14,23 @@ export default class extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('rgba(0, 200, 0, 0.5)')
 
     // player character - warrior
-    var warrior = new PlayerCharacter(this, 250, 50, 'player', 1, characters.heroes.knight)
-    this.add.existing(warrior)
+    var warrior = new Unit(characters.heroes.knight)
+    this.add.existing(new CharacterDisplay(warrior, this, 250, 50))
 
     // player character - mage
-    var mage = new PlayerCharacter(this, 250, 100, 'player', 4, characters.heroes.wizard)
-    this.add.existing(mage)
+    var mage = new Unit(characters.heroes.wizard)
+    this.add.existing(new CharacterDisplay(mage, this, 250, 100))
 
-    const monsters = []
-
-    monsters.push('monster')
-
-    monsters.push('redmonster')
-
-    monsters.push('schaere')
+    const monsters = Object.keys(characters.villains)
 
     this.enemies = []
     for (let i = 0; i < 2; i++) {
-      const index = Math.floor(Math.random() * 3)
+      const index = Math.floor(Math.random() * monsters.length)
       const monsterName = monsters[index]
-      const monster = characters.villains[monsterName]
-      const monsterEnemy = new Enemy(this, 50, 50 * (i + 1), monster.image, null, monster)
+      const monster = new Unit(characters.villains[monsterName])
+      const monsterEnemy = new CharacterDisplay(monster, this, 50, 60 * i + 40)
       this.add.existing(monsterEnemy)
-      this.enemies.push(monsterEnemy)
+      this.enemies.push(monster)
     }
 
     // array with heroes
@@ -46,10 +41,17 @@ export default class extends Phaser.Scene {
     // Run UI Scene at the same time
     this.scene.launch('UIScene')
 
+    this.input.keyboard.on('keydown', this.onKeyInput, this)
     this.index = -1
+    this.selectedIndex = 0
+    this.playersTurn = false
   }
 
   nextTurn () {
+    const oldUnit = this.units[this.index]
+    if (oldUnit) {
+      this.events.emit('UnitSelected', { turnId: -1 })
+    }
     if (this.enemies.filter((enemy) => enemy.alive).length === 0) {
       this.events.emit('Message', 'Heroes win')
     } else if (this.heroes.filter((hero) => hero.alive).length === 0) {
@@ -60,15 +62,23 @@ export default class extends Phaser.Scene {
       if (this.index >= this.units.length) {
         this.index = 0
       }
-      if (this.units[this.index]) {
+      const currentUnit = this.units[this.index]
+      this.events.emit('UnitSelected', { turnId: currentUnit.id })
+      if (currentUnit) {
         // if its player hero
-        if (this.units[this.index] instanceof PlayerCharacter) {
-          this.events.emit('PlayerSelect', this.index, this.units[this.index])
+        if (this.heroes.indexOf(currentUnit) >= 0) {
+          this.playersTurn = true
+          this.selectedIndex = 0
+          this.events.emit('UnitSelected', { selectedId: this.selectedIndex })
+          this.events.emit('PlayerSelect', this.index, currentUnit)
         } else { // else if its enemy unit
+          this.playersTurn = false
+          this.events.emit('UnitSelected', { selectedId: -1 })
           // pick random hero
+          this.events.emit('UnitSelected', { turnId: currentUnit.id })
           var r = Math.floor(Math.random() * this.heroes.length)
           // call the enemy"s attack function
-          const villain = this.units[this.index]
+          const villain = currentUnit
           if (villain.alive) {
             this.attack(villain, this.heroes[r], villain.attacks[0])
             // add timer for the next turn, so will have smooth gameplay
@@ -82,10 +92,10 @@ export default class extends Phaser.Scene {
   }
 
   // when the player have selected the enemy to be attacked
-  receivePlayerSelection (action, enemyIndex, actionIndex) {
+  receivePlayerSelection (action, actionIndex) {
 
     const attacker = this.units[this.index]
-    const enemy = this.enemies[enemyIndex]
+    const enemy = this.units[this.selectedIndex]
     const attack = attacker.attacks[actionIndex]
     this.attack(attacker, enemy, attack)
 
@@ -94,22 +104,26 @@ export default class extends Phaser.Scene {
   }
 
   attack (attacker, opponent, attack) {
-    const strength = Math.random() * 20
-    if (opponent.isHurt(attack.strength + strength)) {
-      const strength = Math.random() * 8
-      const totalDamage = Math.round(attack.damage + strength)
-      opponent.takeDamage(totalDamage)
-      attacker.actionPerformed(true, attack)
-      if (!opponent.alive) {
-        this.events.emit('Message', opponent.type + ' is unable to battle')
-
-      } else {
-        this.events.emit('Message', attacker.type + ' attacks ' + opponent.type + ' for ' + totalDamage + ' damage')
-
-      }
-    } else {
-      this.events.emit('Message', attacker.type + '\'s attacks was futile')
-    }
-    this.events.emit('AttackLaunched')
+    attack.execute(this.events, attacker, opponent)
+    this.events.emit('ActionFinished')
   }
+
+  onKeyInput (event) {
+    if (this.playersTurn) {
+      if (event.code === 'ArrowLeft') {
+        this.selectedIndex--
+        if (this.selectedIndex < 0) {
+          this.selectedIndex = this.units.length - 1
+        }
+        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id })
+      } else if (event.code === 'ArrowRight') {
+        this.selectedIndex++
+        if (this.selectedIndex >= this.units.length) {
+          this.selectedIndex = 0
+        }
+        this.events.emit('UnitSelected', { selectedId: this.units[this.selectedIndex].id })
+      }
+    }
+  }
+
 }

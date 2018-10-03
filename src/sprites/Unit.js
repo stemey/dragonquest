@@ -1,4 +1,8 @@
 import Phaser from 'phaser'
+import Heal from '../gameplay/Heal'
+import Attack from '../gameplay/Attack'
+
+let unitId = 0
 
 /**
  * properties:
@@ -13,18 +17,27 @@ import Phaser from 'phaser'
  *    - magical?
  *    - damage
  */
-export default class extends Phaser.GameObjects.Sprite {
+export default class {
 
-  constructor (scene, x, y, texture, frame, properties) {
-    super(scene, x, y, texture, frame)
+  constructor (properties) {
+    this.id = unitId++
     this.type = properties.name
     this.hp = properties.maxHp
     this.armor = properties.armor
     this.maxHp = properties.maxHp
-    this.attacks = properties.attacks
+    this.attacks = properties.attacks.map((action) => this.convertAction(action))
+    this.image = properties.image
   }
 
-  actionPerformed(successful, action) {
+  convertAction (action) {
+    if (action.type && action.type === 'heal') {
+      return new Heal(action)
+    } else {
+      return new Attack(action)
+    }
+  }
+
+  actionPerformed (successful, action) {
 
   }
 

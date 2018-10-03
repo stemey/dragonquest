@@ -1,6 +1,7 @@
 const knight = {
   name: 'Knight',
   armor: 12,
+  image: 'player',
   maxHp: 30,
   attacks: [
     {
@@ -20,6 +21,7 @@ const knight = {
 const wizard = {
   name: 'Wizard',
   armor: 4,
+  image: 'player',
   maxHp: 30,
   healing: 10,
   attacks: [
@@ -31,8 +33,8 @@ const wizard = {
     },
     {
       name: 'healing',
-      strength: 100,
-      damage: -4
+      type: 'heal',
+      healing: 4
     }
   ]
 
@@ -86,6 +88,22 @@ const schaere = {
 
 }
 
+const stampfi = {
+  name: 'Stampfi',
+  image: 'greenstampfer',
+  armor: 8,
+  maxHp: 30,
+  healing: 0,
+  attacks: [
+    {
+      name: 'claws',
+      strength: 10,
+      damage: 10
+    }
+  ]
+
+}
+
 export const characters = {
   heroes: {
     wizard,
@@ -94,7 +112,8 @@ export const characters = {
   villains: {
     schaere,
     redmonster,
-    monster
+    monster,
+    stampfi
   }
 
 }
