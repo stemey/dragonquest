@@ -1,9 +1,14 @@
 import Phaser from 'phaser'
 
-const STATS = [{
-  name: 'max HP',
-  property: 'maxHp'
-},
+const STATS = [
+  {
+    name: 'Name',
+    property: 'type'
+  },
+  {
+    name: 'max HP',
+    property: 'maxHp'
+  },
   {
     name: 'HP',
     property: 'hp'
@@ -12,12 +17,6 @@ const STATS = [{
     name: 'RK',
     property: 'armor'
   }
-  ,
-  {
-    name: 'Name',
-    property: 'type'
-  }
-
 ]
 
 export default class extends Phaser.GameObjects.Container {
@@ -45,5 +44,4 @@ export default class extends Phaser.GameObjects.Container {
       })
     }
   }
-
 }

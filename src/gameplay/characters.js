@@ -108,11 +108,11 @@ export const characters = {
     wizard,
     knight
   },
-  villains: {
+  villains: [
     schaere,
     redmonster,
     monster,
     stampfi
-  }
+  ]
 
 }

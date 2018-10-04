@@ -12,6 +12,11 @@ export default class extends Phaser.Scene {
     this.fontsLoaded = this.fontsLoaded.bind(this)
     this.add.text(100, 100, 'loading fonts...')
 
+    // map tiles
+    this.load.image('tiles', 'assets/map/spritesheet.png');
+
+    this.load.tilemapTiledJSON('map', 'assets/map/map.json');
+
     // load resources
     this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 })
 
@@ -28,7 +33,7 @@ export default class extends Phaser.Scene {
   }
 
   create () {
-    this.scene.start('BattleScene')
+    this.scene.start('WorldScene')
   }
 
   fontsLoaded () {

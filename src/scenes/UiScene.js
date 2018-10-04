@@ -41,8 +41,10 @@ export default class extends Phaser.Scene {
     this.message = new Message(this, this.battleScene.events)
     this.add.existing(this.message)
 
+    // TODO should be in battleScene
     this.battleScene.nextTurn()
   }
+
 
   attack () {
     const actionIndex = this.actionsMenu.menuItemIndex

@@ -44,4 +44,10 @@ export default class extends Phaser.GameObjects.Container {
     this.visible = this.unit.alive
   }
 
+  destroy () {
+    this.scene.events.removeListener('ActionFinished', this.refresh, this)
+    this.scene.events.removeListener('UnitSelected', this.refreshSelection, this)
+    super.destroy()
+  }
+
 }

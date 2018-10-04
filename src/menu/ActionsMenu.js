@@ -9,7 +9,8 @@ export default class extends Menu {
   initialize (attacks) {
     this.clear()
     for (let i = 0; i < attacks.length; i++) {
-      this.addMenuItem(attacks[i].name)
+      const attack = attacks[i]
+      this.addMenuItem(attack.description)
     }
   }
 }
