@@ -19,14 +19,60 @@ export default class extends Phaser.Scene {
     var map = this.make.tilemap({ key: 'map' })
 
     // first parameter is the name of the tilemap in tiled
-    var tiles = map.addTilesetImage('spritesheet', 'tiles')
-
+    // var tiles = map.addTilesetImage('spritesheet', 'tiles')
+    var terrain = map.addTilesetImage('terrain', 'terrain')
+    var tiles1 = map.addTilesetImage('VX Architecture Tileset', 'VX Architecture Tileset')
+    var tiles2 = map.addTilesetImage('VX BuildingsTileset', 'VX BuildingsTileset')
+    var tiles3 = map.addTilesetImage('VX DungeonTileset', 'VX DungeonTileset')
+    var tiles4 = map.addTilesetImage('VX Interior Tileset', 'VX Interior Tileset')
+    var tiles5 = map.addTilesetImage('VX Plants Tileset', 'VX Plants Tileset')
+    var tiles6 = map.addTilesetImage('VX Scenery Tileset', 'VX Scenery Tileset')
+    var tiles7 = map.addTilesetImage('VX Shop Tileset', 'VX Shop Tileset')
+    var tiles8 = map.addTilesetImage('VX Winter Tileset', 'VX Winter Tileset')
     // creating the layers
-    var grass = map.createStaticLayer('Grass', tiles, 0, 0)
-    var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0)
+    var background = map.createStaticLayer('background', terrain, 0, 0)
+    var background2 = map.createStaticLayer('background2', terrain, 0, 0)
+    var water = map.createStaticLayer('water', terrain, 0, 0)
+    var buildingbottom = map.createStaticLayer('buildingbottom', terrain, 0, 0)
+    var buildingwall = map.createStaticLayer('buildingwall', tiles1, 0, 0)
+    var terrainwall = map.createStaticLayer('terrainwall', terrain, 0, 0)
+    var building = map.createStaticLayer('building', tiles2, 0, 0)
+    var building2 = map.createStaticLayer('building2', tiles2, 0, 0)
+    var plants = map.createStaticLayer('plants', tiles5, 0, 0)
+    var gold = map.createStaticLayer('gold', tiles6, 0, 0)
+    var food = map.createStaticLayer('food', tiles6, 0, 0)
+    var deco = map.createStaticLayer('deco', tiles6, 0, 0)
+
+    this.monsters = []
+    const monsterLayer = map.getObjectLayer('monster')
+    const container = this.physics.add.group({ classType: Phaser.GameObjects.Container })
+    monsterLayer.objects.forEach((obj) => {
+      if (obj.properties && obj.properties) {
+        obj.properties.filter((prop) => prop.name === 'monster').forEach((prop) => {
+          const monsterIds = prop.value.split(',')
+          const enemies = monsterIds.map((id) => DragonQuest.getVillainByName(id)).filter((villain) => !!villain).map((villain) => new Unit(villain))
+          monsterIds.filter((monsterId) => monsterId.length > 0)
+            .forEach((monsterId, idx) => {
+              const villain = DragonQuest.getVillainByName(monsterId)
+              if (villain) {
+                const sprite = this.make.sprite({ x: obj.x + Math.round(idx * 30), y: obj.y + Math.round(idx * 5), key: villain.image })
+                this.monsters.push(sprite)
+                container.add(sprite)
+                sprite.enemies = enemies
+                sprite.enemyId = enemies[idx].id
+              } else {
+                console.error(`cannot find villain with name ${monsterId}`)
+              }
+            })
+        })
+      }
+    })
 
     // make all tiles in obstacles collidable
-    obstacles.setCollisionByExclusion([-1])
+    water.setCollisionByExclusion([-1])
+    building.setCollisionByExclusion([-1])
+    buildingwall.setCollisionByExclusion([-1])
+    terrainwall.setCollisionByExclusion([-1])
     this.events.on('wake', this.wake, this)
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
@@ -58,7 +104,9 @@ export default class extends Phaser.Scene {
     })
 
     // our player sprite created through the phycis system
-    this.player = this.physics.add.sprite(50, 100, 'player', 6)
+    this.player = this.physics.add.sprite(2200, 600, 'player', 6)
+    this.player.scaleX = 2
+    this.player.scaleY = 2
 
     // don't go out of the map
     this.physics.world.bounds.width = map.widthInPixels
@@ -66,7 +114,11 @@ export default class extends Phaser.Scene {
     this.player.setCollideWorldBounds(true)
 
     // don't walk on trees
-    this.physics.add.collider(this.player, obstacles)
+    // this.physics.add.collider(this.player, obstacles1)
+    this.physics.add.collider(this.player, water)
+    this.physics.add.collider(this.player, building)
+    this.physics.add.collider(this.player, buildingwall)
+    this.physics.add.collider(this.player, terrainwall)
 
     // limit camera to map
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
@@ -76,25 +128,39 @@ export default class extends Phaser.Scene {
     // user input
     this.cursors = this.input.keyboard.createCursorKeys()
 
-    // where the enemies will be
-    this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone })
-    for (var i = 0; i < 30; i++) {
-      var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width)
-      var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height)
-      // parameters are x, y, width, height
-      let zone = this.spawns.create(x, y, 20, 20)
-      zone.enemies = this.createEnemies()
-
-    }
-    // add collider
-    this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this)
     this.player.body.setVelocity(0)
+
+    // 840, 841,902
+    this.golds = this.physics.add.group({ classType: Phaser.GameObjects.Container })
+    let goldSprites = map.createFromTiles(840, 840, { key: 'scenery', frame: 100 }, undefined, undefined, 'gold')
+    goldSprites = goldSprites.concat(map.createFromTiles(841, 841, { key: 'scenery', frame: 101 }, undefined, undefined, 'gold'))
+    goldSprites = goldSprites.concat(map.createFromTiles(890, 841, { key: 'scenery', frame: 102 }, undefined, undefined, 'gold'))
+    goldSprites = goldSprites.concat(map.createFromTiles(902, 841, { key: 'scenery', frame: 103 }, undefined, undefined, 'gold'))
+    gold.visible = false
+    goldSprites.forEach((goldSprite) => {
+      this.golds.add(goldSprite)
+      this.physics.add.overlap(this.player, goldSprite, this.onGold, false, this)
+    })
+
+    this.foods = this.physics.add.group({ classType: Phaser.GameObjects.Container })
+    let foodsSprites = map.createFromTiles(902, 902, { key: 'scenery', frame: 164 }, undefined, undefined, 'food')
+    foodsSprites = foodsSprites.concat(map.createFromTiles(903, 903, { key: 'scenery', frame: 163 }, undefined, undefined, 'food'))
+    foodsSprites = foodsSprites.concat(map.createFromTiles(904, 904, { key: 'scenery', frame: 162 }, undefined, undefined, 'food'))
+    foodsSprites = foodsSprites.concat(map.createFromTiles(905, 905, { key: 'scenery', frame: 165 }, undefined, undefined, 'food'))
+    food.visible = false
+    foodsSprites.forEach((foodSprite) => {
+      this.foods.add(foodSprite)
+      this.physics.add.overlap(this.player, foodSprite, this.onFood, false, this)
+    })
+
+    this.monsters.forEach((child) => {
+      this.physics.add.overlap(this.player, child, this.onMeetEnemy, false, this)
+    })
+
   }
 
   onMeetEnemy (player, zone) {
     // we move the zone to some other location
-    zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width)
-    zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height)
 
     this.player.body.setVelocity(0)
     this.scene.sleep()
@@ -107,14 +173,20 @@ export default class extends Phaser.Scene {
     // start battle
   }
 
-  createEnemies () {
-    const villains = DragonQuest.villains
-    const enemies = []
-    for (let i = 0; i < 2; i++) {
-      const index = Math.floor(Math.random() * villains.length)
-      enemies.push(new Unit(villains[index]))
+  onGold (player, gold) {
+    if (gold.active) {
+      gold.visible = false
+      gold.active = false
+      DragonQuest.foundGold(10)
     }
-    return enemies
+  }
+
+  onFood (player, food) {
+    if (food.active) {
+      food.visible = false
+      food.active = false
+      DragonQuest.foundFood(10)
+    }
   }
 
   update (time, delta) {
@@ -158,7 +230,22 @@ export default class extends Phaser.Scene {
     }
   }
 
-  wake () {
+  render () {
+    this.debug.spriteInfo(this.monsters)
+  }
+
+  wake (sys, data) {
+    if (data.deadEnemies && data.deadEnemies.length > 0) {
+
+      this.monsters.filter((sprite) =>
+        data.deadEnemies.filter((enemy) =>
+          sprite.enemyId === enemy.id
+        ).length > 0
+      ).forEach((sprite) => {
+        sprite.destroy()
+      })
+    }
+    this.player.x = this.player.x + 100
     this.player.body.setVelocity(0)
     this.cursors.right.reset()
     this.cursors.left.reset()

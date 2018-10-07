@@ -25,6 +25,7 @@ export default class extends Action {
       events.emit('Message', actor.type + '\'s attacks was futile')
     }
 
+
   }
 
   get description () {

@@ -14,7 +14,8 @@ export default class extends Phaser.GameObjects.Container {
   }
 
   addMenuItem (unit) {
-    var menuItem = new MenuItem(0, this.menuItems.length * 20, unit, this.scene)
+    const scale = 2
+    var menuItem = new MenuItem(0, scale * this.menuItems.length * 20, unit, this.scene)
     this.menuItems.push(menuItem)
     this.add(menuItem)
   }

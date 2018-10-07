@@ -59,6 +59,10 @@ export default class {
     }
   }
 
+  foundFood (food) {
+    this.heal(food)
+  }
+
   get alive () {
     return this.hp > 0
   }

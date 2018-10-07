@@ -32,8 +32,9 @@ export default class extends Phaser.GameObjects.Container {
   }
 
   addStat (name, idx) {
-    this.add(new Phaser.GameObjects.Text(this.scene, 0, idx * 20, name + ' :'))
-    this.values[name] = new Phaser.GameObjects.Text(this.scene, 80, idx * 20, '--')
+    const scale = 2
+    this.add(new Phaser.GameObjects.Text(this.scene, 0, scale * idx * 20, name + ' :', { color: '#ffffff', align: 'left', fontSize: scale * 10 }))
+    this.values[name] = new Phaser.GameObjects.Text(this.scene, scale * 80, scale * idx * 20, '--', { color: '#ffffff', align: 'left', fontSize: scale * 10 })
     this.add(this.values[name])
   }
 

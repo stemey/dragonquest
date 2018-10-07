@@ -24,17 +24,18 @@ export default class extends Phaser.Scene {
   }
 
   addCharacters (enemies) {
+    const scale = 2
     this.characterList = []
-    let knight = new CharacterDisplay(DragonQuest.heroes.knight, this, 250, 50)
+    let knight = new CharacterDisplay(DragonQuest.heroes.knight, this, scale * 250, scale * 50)
     this.add.existing(knight)
     this.characterList.push(knight)
-    let wizard = new CharacterDisplay(DragonQuest.heroes.wizard, this, 250, 100)
+    let wizard = new CharacterDisplay(DragonQuest.heroes.wizard, this, scale * 250, scale * 100)
     this.add.existing(wizard)
     this.characterList.push(wizard)
 
     this.enemies = enemies
     this.enemies.forEach((enemy, idx) => {
-      const monsterEnemy = new CharacterDisplay(enemy, this, 50, 60 * idx + 40)
+      const monsterEnemy = new CharacterDisplay(enemy, this, scale * 50, scale * 60 * idx + scale * 40)
       this.add.existing(monsterEnemy)
       this.characterList.push(monsterEnemy)
     })
@@ -136,7 +137,7 @@ export default class extends Phaser.Scene {
   goToWorld () {
     this.scene.sleep('BattleScene')
     this.scene.sleep('UIScene')
-    this.scene.wake('WorldScene')
+    this.scene.wake('WorldScene', { deadEnemies: this.enemies.filter((enemy) => !enemy.alive) })
   }
 
   onKeyInput (event) {

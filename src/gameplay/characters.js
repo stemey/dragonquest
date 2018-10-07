@@ -28,12 +28,12 @@ const wizard = {
       name: 'fireball',
       strength: 100,
       magical: true,
-      damage: 3
+      damage: 6
     },
     {
       name: 'healing',
       type: 'heal',
-      healing: 4
+      healing: 10
     }
   ]
 
@@ -42,14 +42,14 @@ const wizard = {
 const redmonster = {
   name: 'Kiri',
   image: 'redmonster',
-  armor: 18,
-  maxHp: 11,
+  armor: 30,
+  maxHp: 500,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 10,
-      damage: 3
+      strength: 100,
+      damage: 50
     }
   ]
 
@@ -58,14 +58,14 @@ const redmonster = {
 const monster = {
   name: 'Rumps',
   image: 'monster',
-  armor: 8,
-  maxHp: 10,
+  armor: 30,
+  maxHp: 500,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 3,
-      damage: 20
+      strength: 100,
+      damage: 50
     }
   ]
 
@@ -74,14 +74,30 @@ const monster = {
 const schaere = {
   name: 'Goldi',
   image: 'goldenhand',
-  armor: 8,
-  maxHp: 30,
+  armor: 50,
+  maxHp: 500,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 10,
-      damage: 10
+      strength: 100,
+      damage: 50
+    }
+  ]
+
+}
+
+const greeneyemage = {
+  name: 'Greenie',
+  image: 'bossmagequesttempel',
+  armor: 100,
+  maxHp: 50000,
+  healing: 0,
+  attacks: [
+    {
+      name: 'beam',
+      strength: 1000,
+      damage: 100
     }
   ]
 
@@ -90,14 +106,14 @@ const schaere = {
 const stampfi = {
   name: 'Stampfi',
   image: 'greenstampfer',
-  armor: 8,
-  maxHp: 30,
+  armor: 30,
+  maxHp: 500,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 10,
-      damage: 10
+      strength: 100,
+      damage: 50
     }
   ]
 
@@ -112,7 +128,8 @@ export const characters = {
     schaere,
     redmonster,
     monster,
-    stampfi
+    stampfi,
+    greeneyemage
   ]
 
 }
