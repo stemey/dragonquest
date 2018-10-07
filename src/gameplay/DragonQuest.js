@@ -1,7 +1,9 @@
 import { characters } from './characters'
 import Unit from '../sprites/Unit'
+import LayerObject from './worldaction/LayerObject'
 
 class DragonQuestType {
+
   constructor (characters) {
     this.villains = characters.villains
     this.heroes = {}
@@ -10,9 +12,11 @@ class DragonQuestType {
     Object.keys(characters.heroes).forEach((key) => {
       this.heroes[key] = new Unit(characters.heroes[key])
     })
+
+    this.worldActionRegistry = {}
   }
 
-  getVillainByName(name) {
+  getVillainByName (name) {
     const filtered = Object.values(this.villains).filter((villain, key) => villain.name === name)
     return filtered && filtered.length > 0 ? filtered[0] : undefined
   }
@@ -32,6 +36,19 @@ class DragonQuestType {
     Object.values(this.heroes).forEach((hero) => {
       hero.foundFood(foodShare)
     })
+  }
+
+  getWorldAction (object, physics, container, scene) {
+    if (object.properties) {
+      const layerObject = new LayerObject(object)
+      if (object.type) {
+        return this.worldActionRegistry[object.type](new LayerObject(object), physics, container, scene)
+      } else if (layerObject.getProp('monster')) {
+        return this.worldActionRegistry['monster'](new LayerObject(object), physics, container, scene)
+      } else {
+        console.log('unknown action')
+      }
+    }
   }
 }
 

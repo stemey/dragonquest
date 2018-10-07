@@ -3,6 +3,8 @@ import { characters } from '../gameplay/characters'
 import Unit from '../sprites/Unit'
 import CharacterDisplay from '../sprites/CharacterDisplay'
 import { DragonQuest } from '../gameplay/DragonQuest'
+import LayerObject from '../gameplay/worldaction/LayerObject'
+import { initDragonQuest } from '../gameplay/initDragonQuest'
 
 export default class extends Phaser.Scene {
 
@@ -15,6 +17,8 @@ export default class extends Phaser.Scene {
   }
 
   create () {
+    initDragonQuest()
+
     // create the map
     var map = this.make.tilemap({ key: 'map' })
 
@@ -43,30 +47,6 @@ export default class extends Phaser.Scene {
     var food = map.createStaticLayer('food', tiles6, 0, 0)
     var deco = map.createStaticLayer('deco', tiles6, 0, 0)
 
-    this.monsters = []
-    const monsterLayer = map.getObjectLayer('monster')
-    const container = this.physics.add.group({ classType: Phaser.GameObjects.Container })
-    monsterLayer.objects.forEach((obj) => {
-      if (obj.properties && obj.properties) {
-        obj.properties.filter((prop) => prop.name === 'monster').forEach((prop) => {
-          const monsterIds = prop.value.split(',')
-          const enemies = monsterIds.map((id) => DragonQuest.getVillainByName(id)).filter((villain) => !!villain).map((villain) => new Unit(villain))
-          monsterIds.filter((monsterId) => monsterId.length > 0)
-            .forEach((monsterId, idx) => {
-              const villain = DragonQuest.getVillainByName(monsterId)
-              if (villain) {
-                const sprite = this.make.sprite({ x: obj.x + Math.round(idx * 30), y: obj.y + Math.round(idx * 5), key: villain.image })
-                this.monsters.push(sprite)
-                container.add(sprite)
-                sprite.enemies = enemies
-                sprite.enemyId = enemies[idx].id
-              } else {
-                console.error(`cannot find villain with name ${monsterId}`)
-              }
-            })
-        })
-      }
-    })
 
     // make all tiles in obstacles collidable
     water.setCollisionByExclusion([-1])
@@ -153,24 +133,13 @@ export default class extends Phaser.Scene {
       this.physics.add.overlap(this.player, foodSprite, this.onFood, false, this)
     })
 
-    this.monsters.forEach((child) => {
-      this.physics.add.overlap(this.player, child, this.onMeetEnemy, false, this)
+    this.monsters = []
+    const monsterLayer = map.getObjectLayer('monster')
+    monsterLayer.objects.forEach((obj) => {
+      DragonQuest.getWorldAction(obj, this)
     })
 
-  }
 
-  onMeetEnemy (player, zone) {
-    // we move the zone to some other location
-
-    this.player.body.setVelocity(0)
-    this.scene.sleep()
-    if (this.scene.isSleeping('BattleScene')) {
-      this.scene.wake('BattleScene', { enemies: zone.enemies })
-    } else {
-      this.scene.launch('BattleScene', { enemies: zone.enemies })
-    }
-
-    // start battle
   }
 
   onGold (player, gold) {
