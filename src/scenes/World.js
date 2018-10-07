@@ -1,10 +1,8 @@
 import Phaser from 'phaser'
-import { characters } from '../gameplay/characters'
-import Unit from '../sprites/Unit'
-import CharacterDisplay from '../sprites/CharacterDisplay'
 import { DragonQuest } from '../gameplay/DragonQuest'
-import LayerObject from '../gameplay/worldaction/LayerObject'
 import { initDragonQuest } from '../gameplay/initDragonQuest'
+import TileLayerFactory from '../tile/TileLayerFactory'
+import PickUpAction from '../gameplay/worldaction/PickupAction'
 
 export default class extends Phaser.Scene {
 
@@ -19,40 +17,6 @@ export default class extends Phaser.Scene {
   create () {
     initDragonQuest()
 
-    // create the map
-    var map = this.make.tilemap({ key: 'map' })
-
-    // first parameter is the name of the tilemap in tiled
-    // var tiles = map.addTilesetImage('spritesheet', 'tiles')
-    var terrain = map.addTilesetImage('terrain', 'terrain')
-    var tiles1 = map.addTilesetImage('VX Architecture Tileset', 'VX Architecture Tileset')
-    var tiles2 = map.addTilesetImage('VX BuildingsTileset', 'VX BuildingsTileset')
-    var tiles3 = map.addTilesetImage('VX DungeonTileset', 'VX DungeonTileset')
-    var tiles4 = map.addTilesetImage('VX Interior Tileset', 'VX Interior Tileset')
-    var tiles5 = map.addTilesetImage('VX Plants Tileset', 'VX Plants Tileset')
-    var tiles6 = map.addTilesetImage('VX Scenery Tileset', 'VX Scenery Tileset')
-    var tiles7 = map.addTilesetImage('VX Shop Tileset', 'VX Shop Tileset')
-    var tiles8 = map.addTilesetImage('VX Winter Tileset', 'VX Winter Tileset')
-    // creating the layers
-    var background = map.createStaticLayer('background', terrain, 0, 0)
-    var background2 = map.createStaticLayer('background2', terrain, 0, 0)
-    var water = map.createStaticLayer('water', terrain, 0, 0)
-    var buildingbottom = map.createStaticLayer('buildingbottom', terrain, 0, 0)
-    var buildingwall = map.createStaticLayer('buildingwall', tiles1, 0, 0)
-    var terrainwall = map.createStaticLayer('terrainwall', terrain, 0, 0)
-    var building = map.createStaticLayer('building', tiles2, 0, 0)
-    var building2 = map.createStaticLayer('building2', tiles2, 0, 0)
-    var plants = map.createStaticLayer('plants', tiles5, 0, 0)
-    var gold = map.createStaticLayer('gold', tiles6, 0, 0)
-    var food = map.createStaticLayer('food', tiles6, 0, 0)
-    var deco = map.createStaticLayer('deco', tiles6, 0, 0)
-
-
-    // make all tiles in obstacles collidable
-    water.setCollisionByExclusion([-1])
-    building.setCollisionByExclusion([-1])
-    buildingwall.setCollisionByExclusion([-1])
-    terrainwall.setCollisionByExclusion([-1])
     this.events.on('wake', this.wake, this)
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
@@ -88,17 +52,29 @@ export default class extends Phaser.Scene {
     this.player.scaleX = 2
     this.player.scaleY = 2
 
-    // don't go out of the map
-    this.physics.world.bounds.width = map.widthInPixels
-    this.physics.world.bounds.height = map.heightInPixels
-    this.player.setCollideWorldBounds(true)
+    const smallmap = new TileLayerFactory('map', this)
+    smallmap.actions['gold'] = PickUpAction([100, 101], (player, gold) => {
+      if (gold.active) {
+        gold.visible = false
+        gold.active = false
+        DragonQuest.foundGold(10)
+      }
+    })
+    smallmap.actions['food'] = PickUpAction([162, 163, 164, 165], (player, gold) => {
+      if (gold.active) {
+        gold.visible = false
+        gold.active = false
+        DragonQuest.foundFood(10)
+      }
+    })
+    smallmap.create()
+    const map = smallmap.map
+    this.children.bringToTop(this.player)
 
-    // don't walk on trees
-    // this.physics.add.collider(this.player, obstacles1)
-    this.physics.add.collider(this.player, water)
-    this.physics.add.collider(this.player, building)
-    this.physics.add.collider(this.player, buildingwall)
-    this.physics.add.collider(this.player, terrainwall)
+    // don't go out of the map
+    this.physics.world.bounds.width = smallmap.map.widthInPixels
+    this.physics.world.bounds.height = smallmap.map.heightInPixels
+    this.player.setCollideWorldBounds(true)
 
     // limit camera to map
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
@@ -110,52 +86,11 @@ export default class extends Phaser.Scene {
 
     this.player.body.setVelocity(0)
 
-    // 840, 841,902
-    this.golds = this.physics.add.group({ classType: Phaser.GameObjects.Container })
-    let goldSprites = map.createFromTiles(840, 840, { key: 'scenery', frame: 100 }, undefined, undefined, 'gold')
-    goldSprites = goldSprites.concat(map.createFromTiles(841, 841, { key: 'scenery', frame: 101 }, undefined, undefined, 'gold'))
-    goldSprites = goldSprites.concat(map.createFromTiles(890, 841, { key: 'scenery', frame: 102 }, undefined, undefined, 'gold'))
-    goldSprites = goldSprites.concat(map.createFromTiles(902, 841, { key: 'scenery', frame: 103 }, undefined, undefined, 'gold'))
-    gold.visible = false
-    goldSprites.forEach((goldSprite) => {
-      this.golds.add(goldSprite)
-      this.physics.add.overlap(this.player, goldSprite, this.onGold, false, this)
-    })
-
-    this.foods = this.physics.add.group({ classType: Phaser.GameObjects.Container })
-    let foodsSprites = map.createFromTiles(902, 902, { key: 'scenery', frame: 164 }, undefined, undefined, 'food')
-    foodsSprites = foodsSprites.concat(map.createFromTiles(903, 903, { key: 'scenery', frame: 163 }, undefined, undefined, 'food'))
-    foodsSprites = foodsSprites.concat(map.createFromTiles(904, 904, { key: 'scenery', frame: 162 }, undefined, undefined, 'food'))
-    foodsSprites = foodsSprites.concat(map.createFromTiles(905, 905, { key: 'scenery', frame: 165 }, undefined, undefined, 'food'))
-    food.visible = false
-    foodsSprites.forEach((foodSprite) => {
-      this.foods.add(foodSprite)
-      this.physics.add.overlap(this.player, foodSprite, this.onFood, false, this)
-    })
-
     this.monsters = []
     const monsterLayer = map.getObjectLayer('monster')
     monsterLayer.objects.forEach((obj) => {
       DragonQuest.getWorldAction(obj, this)
     })
-
-
-  }
-
-  onGold (player, gold) {
-    if (gold.active) {
-      gold.visible = false
-      gold.active = false
-      DragonQuest.foundGold(10)
-    }
-  }
-
-  onFood (player, food) {
-    if (food.active) {
-      food.visible = false
-      food.active = false
-      DragonQuest.foundFood(10)
-    }
   }
 
   update (time, delta) {
@@ -197,10 +132,6 @@ export default class extends Phaser.Scene {
     else {
       this.player.anims.stop()
     }
-  }
-
-  render () {
-    this.debug.spriteInfo(this.monsters)
   }
 
   wake (sys, data) {
