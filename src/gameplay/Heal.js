@@ -12,8 +12,8 @@ export default class extends Action {
     events.emit('Message', actor.type + 'heals ' + target.type)
   }
 
-  get description() {
-    return this.name+" "+this.healing;
+  get description () {
+    return this.name + ' ' + this.healing
   }
 
 }

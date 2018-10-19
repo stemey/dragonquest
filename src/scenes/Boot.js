@@ -24,6 +24,7 @@ export default class extends Phaser.Scene {
     this.load.image('VX Winter Tileset', 'assets/map/VX Winter Tileset.png')
 
     this.load.tilemapTiledJSON('map', 'assets/map/smallmap.json')
+    this.load.tilemapTiledJSON('castle', 'assets/map/castle.json')
 
     // load resources
     this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 })

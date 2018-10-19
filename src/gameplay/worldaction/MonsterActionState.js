@@ -9,9 +9,9 @@ export default class MonsterActionState {
     player.body.setVelocity(0)
     this.scene.scene.sleep()
     if (this.scene.scene.isSleeping('BattleScene')) {
-      this.scene.scene.wake('BattleScene', { enemies: monster.enemies })
+      this.scene.scene.wake('BattleScene', { enemies: monster.enemies, entryWorld: this.scene.scene.key })
     } else {
-      this.scene.scene.launch('BattleScene', { enemies: monster.enemies })
+      this.scene.scene.launch('BattleScene', { enemies: monster.enemies, entryWorld: this.scene.scene.key })
     }
   }
 

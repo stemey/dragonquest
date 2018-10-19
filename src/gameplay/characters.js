@@ -43,7 +43,7 @@ const redmonster = {
   name: 'Kiri',
   image: 'redmonster',
   armor: 30,
-  maxHp: 500,
+  maxHp: 20,
   healing: 0,
   attacks: [
     {
@@ -59,7 +59,7 @@ const monster = {
   name: 'Rumps',
   image: 'monster',
   armor: 30,
-  maxHp: 500,
+  maxHp: 20,
   healing: 0,
   attacks: [
     {
@@ -74,14 +74,14 @@ const monster = {
 const schaere = {
   name: 'Goldi',
   image: 'goldenhand',
-  armor: 50,
-  maxHp: 500,
+  armor: 5,
+  maxHp: 20,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 100,
-      damage: 50
+      strength: 10,
+      damage: 5
     }
   ]
 
@@ -90,14 +90,14 @@ const schaere = {
 const greeneyemage = {
   name: 'Greenie',
   image: 'bossmagequesttempel',
-  armor: 100,
-  maxHp: 50000,
+  armor: 10,
+  maxHp: 20,
   healing: 0,
   attacks: [
     {
       name: 'beam',
-      strength: 1000,
-      damage: 100
+      strength: 100,
+      damage: 10
     }
   ]
 
@@ -107,13 +107,13 @@ const stampfi = {
   name: 'Stampfi',
   image: 'greenstampfer',
   armor: 30,
-  maxHp: 500,
+  maxHp: 20,
   healing: 0,
   attacks: [
     {
       name: 'claws',
-      strength: 100,
-      damage: 50
+      strength: 10,
+      damage: 5
     }
   ]
 

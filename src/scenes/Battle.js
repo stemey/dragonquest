@@ -9,6 +9,7 @@ export default class extends Phaser.Scene {
   }
 
   create (data) {
+    this.entryWorld = data.entryWorld
     // change the background to green
     this.cameras.main.setBackgroundColor('rgba(0, 200, 0, 0.5)')
 
@@ -51,6 +52,7 @@ export default class extends Phaser.Scene {
   }
 
   wake (sys, data) {
+    this.entryWorld = data.entryWorld
     this.scene.wake('UIScene')
     this.characterList.forEach((child) => {
       child.destroy()
@@ -137,7 +139,8 @@ export default class extends Phaser.Scene {
   goToWorld () {
     this.scene.sleep('BattleScene')
     this.scene.sleep('UIScene')
-    this.scene.wake('WorldScene', { deadEnemies: this.enemies.filter((enemy) => !enemy.alive) })
+    this.scene.wake(this.entryWorld, { battleFinished: true })
+    this.scene.scene.events.emit('battleFinished', { deadEnemies: this.enemies.filter((enemy) => !enemy.alive) })
   }
 
   onKeyInput (event) {

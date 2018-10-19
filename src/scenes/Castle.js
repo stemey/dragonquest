@@ -3,15 +3,11 @@ import AbstractWorld from './AbstractWorld'
 export default class extends AbstractWorld {
 
   constructor () {
-    super({ key: 'WorldScene' })
-  }
-
-  preload () {
-
+    super({ key: 'CastleScene' })
   }
 
   create () {
-    this.startWorld('map', 100, 100)
+    this.startWorld('castle', 100, 100)
   }
 
 }
