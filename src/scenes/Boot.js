@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import { characters } from '../gameplay/characters'
+import Table, { TextCell } from '../gui/Table'
 
 export default class extends Phaser.Scene {
   constructor () {
@@ -8,9 +9,6 @@ export default class extends Phaser.Scene {
   }
 
   preload () {
-    this.fontsReady = false
-    this.fontsLoaded = this.fontsLoaded.bind(this)
-    this.add.text(100, 100, 'loading fonts...')
 
     // map tiles
     this.load.image('terrain', 'assets/map/terrain.png')
@@ -29,10 +27,14 @@ export default class extends Phaser.Scene {
     // load resources
     this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 })
 
+    this.load.spritesheet('shop', 'assets/map/VX Shop Tileset.png', { frameWidth: 32, frameHeight: 32 })
     this.load.spritesheet('scenery', 'assets/map/VX Scenery Tileset.png', { frameWidth: 32, frameHeight: 32 })
 
     Object.values(characters.villains).forEach((villain) => {
       this.load.image(villain.image, 'assets/' + villain.image + '.png')
+    })
+    Object.values(characters.npc).forEach((npc) => {
+      this.load.image(npc.image, 'assets/' + npc.image + '.png')
     })
 
     WebFont.load({
@@ -44,6 +46,8 @@ export default class extends Phaser.Scene {
   }
 
   create () {
+
+
     this.scene.start('WorldScene')
   }
 

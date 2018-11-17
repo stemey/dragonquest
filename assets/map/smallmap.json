@@ -218,7 +218,7 @@
                  "value":true
                 }],
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":80,
          "x":0,
          "y":0
@@ -393,8 +393,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":566.866,
-                 "y":850.299
+                 "x":738.866,
+                 "y":948.299
                 }, 
                 {
                  "height":0,
@@ -509,6 +509,57 @@
                  "width":0,
                  "x":231,
                  "y":1090
+                }, 
+                {
+                 "height":0,
+                 "id":48,
+                 "name":"stranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"npc"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":240,
+                 "y":980
+                }, 
+                {
+                 "height":0,
+                 "id":49,
+                 "name":"key_for_stranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"description",
+                         "type":"string",
+                         "value":"a golden key"
+                        }, 
+                        {
+                         "name":"image",
+                         "type":"string",
+                         "value":"blue_chest"
+                        }, 
+                        {
+                         "name":"message",
+                         "type":"string",
+                         "value":"You found a golden key"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"item"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":398,
+                 "y":1160
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -516,8 +567,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":40,
- "nextobjectid":47,
+ "nextlayerid":43,
+ "nextobjectid":50,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.0",

@@ -1,3 +1,5 @@
+import { StrangerDialog } from './dialog/StrangerDialog'
+
 const knight = {
   name: 'Knight',
   armor: 12,
@@ -115,8 +117,35 @@ const stampfi = {
       strength: 10,
       damage: 5
     }
+  ],
+  dropItems: [
+    {
+      type: 'gold',
+      amount: 4000
+    },
+    {
+      type: 'weapon',
+      name: 'golden monsterslayer',
+      image: 'sword',
+      strength: 100,
+      damage: 10
+    },
+    {
+      type: 'key',
+      name: 'golden key',
+      image: 'bronce_key',
+      id: 'noobpapanr1'
+    }
   ]
 
+}
+
+const stranger = {
+  type: 'dialog',
+  name: 'Willibert',
+  dialog: StrangerDialog,
+  image: 'stranger',
+  scale: 0.4
 }
 
 export const characters = {
@@ -130,6 +159,9 @@ export const characters = {
     monster,
     stampfi,
     greeneyemage
-  ]
+  ],
+  npc: {
+    stranger
+  }
 
 }

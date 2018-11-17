@@ -140,7 +140,13 @@ export default class extends Phaser.Scene {
     this.scene.sleep('BattleScene')
     this.scene.sleep('UIScene')
     this.scene.wake(this.entryWorld, { battleFinished: true })
-    this.scene.scene.events.emit('battleFinished', { deadEnemies: this.enemies.filter((enemy) => !enemy.alive) })
+    const deadEnemies = this.enemies.filter((enemy) => !enemy.alive);
+    deadEnemies.forEach((enemy)=> {
+      if (enemy.dropItems) {
+        DragonQuest.foundItems(enemy.dropItems)
+      }
+    })
+    this.scene.scene.events.emit('battleFinished', { deadEnemies })
   }
 
   onKeyInput (event) {

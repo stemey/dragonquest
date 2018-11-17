@@ -17,7 +17,7 @@ export default class extends Phaser.GameObjects.Container {
     this.visible = false
   }
 
-  showMessage (text) {
+  showMessage (text, options) {
     this.text.setText(text)
     this.visible = true
     if (this.hideEvent) {

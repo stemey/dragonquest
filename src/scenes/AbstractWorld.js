@@ -7,6 +7,8 @@ import GatewayAction from '../gameplay/worldaction/GatewayAction'
 import MonsterAction from '../gameplay/worldaction/MonsterAction'
 import DiscoveryAction from '../gameplay/worldaction/DiscoveryAction'
 import EntryAction from '../gameplay/worldaction/EntryAction'
+import CharacterAction from '../gameplay/worldaction/CharacterAction'
+import ItemAction from '../gameplay/worldaction/ItemAction'
 
 export default class extends Phaser.Scene {
 
@@ -65,7 +67,9 @@ export default class extends Phaser.Scene {
 
     const smallmap = new TileLayerFactory(mapName, this)
 
+    smallmap.actions['item'] = ItemAction
     smallmap.actions['monster'] = MonsterAction
+    smallmap.actions['npc'] = CharacterAction
     smallmap.actions['entry'] = EntryAction
     smallmap.actions['discovery'] = DiscoveryAction
     smallmap.actions['gold'] = PickUpAction([100, 101], (player, gold) => {
@@ -103,12 +107,25 @@ export default class extends Phaser.Scene {
 
     // user input
     this.cursors = this.input.keyboard.createCursorKeys()
+    this.input.keyboard.on('keydown', this.onInventory, this)
 
     const entry = this.getMainEntry()
     this.player.x = entry.x
     this.player.y = entry.y
 
     this.player.body.setVelocity(0)
+
+  }
+
+  onInventory (event) {
+    if (event.code === 'KeyI') {
+      this.scene.sleep()
+      if (this.scene.isSleeping('InventoryScene')) {
+        this.scene.wake('InventoryScene', { entryWorld: this.scene.key })
+      } else {
+        this.scene.launch('InventoryScene', { entryWorld: this.scene.key })
+      }
+    }
 
   }
 
@@ -159,7 +176,7 @@ export default class extends Phaser.Scene {
   wake (sys, data) {
 
     // move player away from possibley alive enemies
-    if (data.battleFinished) {
+    if (data && data.battleFinished) {
       this.player.x = this.player.x + 100
     } else {
       const entry = this.getMainEntry()

@@ -16,12 +16,24 @@ export default class LayerObject {
     return null
   }
 
+  getKeys () {
+    return this.obj.properties.map((obj) => obj.name)
+  }
+
   getListProp (key) {
     const prop = this.getProp(key)
     if (prop !== null) {
       return prop.split(',').map((el) => el.trim())
     }
     return null
+  }
+
+  toItemJson () {
+    const item = { name: this.obj.name }
+    this.getKeys().forEach((key) => {
+      item[key] = this.getProp(key)
+    })
+    return item
   }
 
   get x () {

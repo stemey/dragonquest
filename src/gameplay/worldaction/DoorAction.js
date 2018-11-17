@@ -3,10 +3,11 @@ import Phaser from 'phaser'
 const DoorAction = (layerObject, world) => {
   const zones = world.physics.add.group({ classType: Phaser.GameObjects.Zone })
   const zone = zones.create(layerObject.x + layerObject.width / 2, layerObject.y + layerObject.height / 2, layerObject.width, layerObject.height)
-  world.graphics.fillStyle(0x031f4c, 0.5)
-  world.graphics.fillRect(layerObject.x, layerObject.y, zone.width, zone.height)
   let passingThrough = false
   world.physics.add.overlap(world.player, zone, (player, zone) => {
+    /*
+    is a key or password required?
+     */
       if (!passingThrough && !player.body.touching.none) {
         passingThrough = true
         world.stopPlayer = true
