@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import ActionsMenu from '../menu/ActionsMenu'
 import Message from '../ui/Message'
-import CharacterStats from '../menu/CharacterStats'
 
 export default class extends Phaser.Scene {
 

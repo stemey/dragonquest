@@ -1,0 +1,60 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Alle Dateien (*)",
+    "fileStates": {
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json": {
+            "scale": 1.5627,
+            "selectedLayer": 10,
+            "viewCenter": {
+                "x": 855.8904460229091,
+                "y": 690.7915786779292
+            }
+        },
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json#VX Architecture Tileset": {
+            "scaleInDock": 1
+        },
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json#VX BuildingsTileset": {
+            "scaleInDock": 1
+        },
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json#VX Plants Tileset": {
+            "scaleInDock": 1
+        },
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json#VX Scenery Tileset": {
+            "scaleInDock": 1
+        },
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json#terrain": {
+            "scaleInDock": 1
+        },
+        "road.tmx": {
+            "expandedGroupLayers": [
+                6,
+                7,
+                10
+            ],
+            "scale": 0.7053,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 444.4917056571671,
+                "y": 505.45867006947395
+            }
+        }
+    },
+    "last.imagePath": "/Users/s.meyer/projects/dragonquest/assets/tileset",
+    "map.height": 32,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 16,
+    "openFiles": [
+    ],
+    "project": "level-one.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "/Users/s.meyer/projects/dragonquest/assets/map/smallmap.json"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

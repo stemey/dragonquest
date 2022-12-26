@@ -17,7 +17,6 @@ const knight = {
       damage: 7
     }
   ]
-
 }
 
 const wizard = {

@@ -89,6 +89,7 @@ export default class extends Phaser.Scene {
 
     smallmap.actions['door'] = DoorAction
     smallmap.actions['gateway'] = GatewayAction
+    
     smallmap.create()
     const map = smallmap.map
     // TODO bring above all layers that have prop abovePlayer:false
