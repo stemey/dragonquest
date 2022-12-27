@@ -2,10 +2,9 @@
 
 ## arrival
 
-- boy on a road 
+- boy on a road
 - just has knive, food and smal sum of money
 - message explains hat he has been on a long trip to meet his uncle in a village and learn (wizardy or swordmaship)
-
 
 ## attack
 
@@ -16,18 +15,17 @@
 ## arrives at his uncle's house
 
 - conversation
-- choose your profession: 
+- choose your profession:
   - wizard
   - clergy
   - swordman
   - bow and arrow
-  
+
 ## first mission
 
 - sent on a quest
 - rescue boy from villains
 - team up with boy, who is other profession
-
 
 ### all the while
 
@@ -43,5 +41,3 @@ general stats
 hour of day:
 stamina: for search fight and so on. slowly gets back to the normal day value. Must sleep once a day
 health: decreased by wounds in fights. Must heal by sleeping or potions
-
-

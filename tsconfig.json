@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "sourceMap": true,
+        "inlineSources": true,
+        "moduleResolution": "Node16",
+        "declaration": false,
+        "strict": true,
+        "target": "ESNext"
+    },
+    "include": ["src"]
+}
