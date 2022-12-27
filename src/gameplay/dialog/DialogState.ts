@@ -1,12 +1,14 @@
 import { Dialog, Message } from "./Dialog";
 
 export class DialogState {
+
     private state = "start";
+
     private conversing = false;
 
     constructor(private readonly dialog: Dialog) {
         if (!this.dialog.start) {
-            console.error("dialog has no start note");
+            console.error("dialog has no start node");
         }
     }
 

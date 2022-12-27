@@ -45,6 +45,7 @@ export default class extends Phaser.Scene {
 
         this.load.tilemapTiledJSON("map", "assets/map/smallmap.json");
         this.load.tilemapTiledJSON("castle", "assets/map/castle.json");
+        this.load.tilemapTiledJSON("road", "assets/levels/one/map/road.json");
 
         // load resources
         this.load.spritesheet("player", "assets/RPG_assets.png", {
@@ -78,7 +79,7 @@ export default class extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("WorldScene");
+        this.scene.start("RoadScene");
     }
 
     fontsLoaded() {}

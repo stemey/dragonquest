@@ -1,8 +1,11 @@
 {
-    "activeFile": "",
+    "activeFile": "levels/one/map/road.json",
     "expandedProjectPaths": [
         ".",
-        "tileset"
+        "levels/one/map",
+        "levels/one",
+        "tileset",
+        "levels"
     ],
     "file.lastUsedOpenFilter": "Alle Dateien (*)",
     "fileStates": {
@@ -13,21 +16,28 @@
                 7
             ],
             "expandedObjectLayers": [
+                15,
                 10,
                 11
             ],
-            "scale": 0.746826171875,
+            "scale": 0.74,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 475.3448839490029,
-                "y": 275.16443282118337
+                "x": 231.08108108108107,
+                "y": 985.8108108108108
             }
+        },
+        "levels/one/map/road.json#Plants": {
+            "scaleInDock": 1
+        },
+        "levels/one/map/road.json#terrain": {
+            "scaleInDock": 1
         },
         "levels/one/map/road.tmx": {
             "scale": 0.74,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 383.78378378378375,
+                "x": 505.4054054054054,
                 "y": 512.8378378378378
             }
         },
@@ -76,6 +86,10 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tileset/terrain.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "tileset/terrain.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -86,14 +100,17 @@
     "last.objectTemplatePath": "/Users/s.meyer/projects/dragonquest/assets/levels/one/map",
     "map.lastUsedExportFilter": "JSON-Kartendateien (*.tmj *.json)",
     "openFiles": [
+        "levels/one/map/road.json",
+        "tileset/Plants.tsx"
     ],
     "project": "levels.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "levels/one/map/road.json",
-        "map/smallmap.json",
-        "levels/one/map/road.tmx",
         "tileset/Plants.tsx",
+        "tileset/terrain.json",
+        "levels/one/map/road.json",
+        "levels/one/map/road.tmx",
+        "map/smallmap.json",
         "tileset/terrain.tsx",
         "road.tmx"
     ]

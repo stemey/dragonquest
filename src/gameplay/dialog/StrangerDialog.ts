@@ -2,7 +2,7 @@ import { Dialog } from "./Dialog";
 
 export const StrangerDialog: Dialog = {
     start: {
-        actor:"player",
+        actor: "player",
         message: "hi",
         next: "hi",
     },
@@ -22,7 +22,6 @@ export const StrangerDialog: Dialog = {
             },
         ],
     },
-    end: { message: "bye", end: true, next: "askAgain" },
     secretGem: { message: "It is in the northern woods", next: "askAgain" },
     askAgain: {
         options: [
@@ -36,4 +35,5 @@ export const StrangerDialog: Dialog = {
             },
         ],
     },
+    end: { message: "bye", end: true, next: "askAgain" },
 };

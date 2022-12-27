@@ -56,8 +56,10 @@ export default class TileLayerFactory {
                             layer.name
                         } ${tileSets.map((t) => t.name).join(", ")}`
                     );
+                }else {
+                    layer.tileset = tileSets[0].name;
+
                 }
-                layer.tileset = tileSets[0].name;
             } else if (layer.type === "group") {
                 this.checkTilesets(layer.layers);
             }
