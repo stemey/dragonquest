@@ -9,17 +9,18 @@ import { EntryAction } from "../gameplay/worldaction/EntryAction";
 import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
+import { DialogAction } from "../gameplay/worldaction/DialogAction";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
     private graphics?: Phaser.GameObjects.Graphics;
-    private stopPlayer = false;
+    public stopPlayer = false;
     public player?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     preload() {}
 
-    addEntry(layerObject: LayerObject) {
-        this.entries[layerObject.name] = layerObject;
+    addEntry(entry: LayerObject) {
+        this.entries[entry.getProp("name") as string] = entry;
     }
 
     getMainEntry() {
@@ -27,6 +28,8 @@ export class AbstractWorld extends Phaser.Scene {
     }
 
     startWorld(mapName: string, x: number, y: number) {
+        this.scene.launch("WorldUiScene", { world: this.scene.key });
+
         this.entries = {};
         // initDragonQuest()
         this.graphics = this.add.graphics();
@@ -77,9 +80,10 @@ export class AbstractWorld extends Phaser.Scene {
         const smallmap = new TileLayerFactory(mapName, this);
 
         //smallmap.actions["item"] = ItemAction;
-        smallmap.actions["monster"] = MonsterAction;
+        smallmap.actions["Monster"] = MonsterAction;
         smallmap.actions["npc"] = CharacterAction;
-        smallmap.actions["entry"] = EntryAction;
+        smallmap.actions["Entry"] = EntryAction;
+        smallmap.actions["Dialog"] = DialogAction;
         //smallmap.actions["discovery"] = DiscoveryAction;
 
         smallmap.layerActions["gold"] = PickUpAction(
@@ -137,6 +141,20 @@ export class AbstractWorld extends Phaser.Scene {
         this.player.y = entry.y;
 
         this.player.body.setVelocity(0);
+        this.events.on("DialogStart", () => {
+            this.stopPlayer = true;
+        });
+        this.events.on("DialogEnd", () => {
+            this.stopPlayer = false;
+            if (!this.player || !this.cursors) {
+                return;
+            }
+            this.player.body.setVelocity(0);
+            this.cursors.right.reset();
+            this.cursors.left.reset();
+            this.cursors.up.reset();
+            this.cursors.down.reset();
+        });
     }
 
     onInventory(event: KeyboardEvent) {
@@ -156,7 +174,13 @@ export class AbstractWorld extends Phaser.Scene {
 
     update(time: number, delta: number) {
         //    this.controls.update(delta);
-        if (!this.cursors || !this.player || this.stopPlayer) {
+        if (!this.cursors || !this.player) {
+            return;
+        }
+
+        if (this.stopPlayer) {
+            this.player.body.setVelocity(0);
+            this.player.anims.stop();
             return;
         }
 

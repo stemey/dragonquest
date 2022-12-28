@@ -4,7 +4,7 @@ export const config = {
     type: Phaser.AUTO,
     parent: "content",
     width: 640,
-    height: 480,
+    height: 400,
     zoom: 2,
     pixelArt: true,
     physics: {

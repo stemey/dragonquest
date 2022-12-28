@@ -12,7 +12,7 @@ export class TextCell {
     }
 
     draw(scene: Scene, x: number, y: number, height: number, width: number) {
-        const go = scene.add.text(x, y, this.text, {
+        const text = scene.add.text(x, y, this.text, {
             color: "#ffffff",
             align: "center",
             fontSize: "13",
@@ -20,7 +20,7 @@ export class TextCell {
         });
         if (typeof this._text === "function") {
             autorun(() => {
-                go.setText(this.text);
+                text.setText(this.text);
             });
         }
     }

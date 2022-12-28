@@ -9,6 +9,7 @@ export interface BaseLayer {
     width: number;
     height: number;
     properties: Property[];
+    path:string;
 }
 
 
@@ -30,6 +31,7 @@ export interface ObjectLayer extends BaseLayer {
 
 export interface Group{
     type: "group";
+    name:string;
     layers: Layer[];
     properties: Property[];
 }

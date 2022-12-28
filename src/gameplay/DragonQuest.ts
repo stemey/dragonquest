@@ -1,8 +1,8 @@
 import { characters } from "./character/characters";
 import { IObservableValue, observable, ObservableMap } from "mobx";
-import { Character } from "./character/Character";
 import { DropItem } from "./character/DropItem";
 import { Unit } from "../sprites/Unit";
+import { IntroDialog } from "./dialog/IntroDialog";
 
 class DragonQuestType {
     private villains: Unit[];
@@ -32,6 +32,10 @@ class DragonQuestType {
 
     getNpcByName(name: string) {
         return null; //this.npc[name];
+    }
+
+    getDialog(name: string) {
+        return IntroDialog;
     }
 
     getVillainById(id: number) {

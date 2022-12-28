@@ -45,7 +45,11 @@ export default class extends Phaser.Scene {
 
         this.load.tilemapTiledJSON("map", "assets/map/smallmap.json");
         this.load.tilemapTiledJSON("castle", "assets/map/castle.json");
-        this.load.tilemapTiledJSON("road", "assets/levels/one/map/road.json");
+
+        this.load.json("tiled_meta_terrain", "assets/tileset/terrain.json");
+        this.load.json("tiled_meta_plants", "assets/tileset/Plants.json");
+
+        this.load.json("tiled_road", "assets/levels/one/map/road.json");
 
         // load resources
         this.load.spritesheet("player", "assets/RPG_assets.png", {

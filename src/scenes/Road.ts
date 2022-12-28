@@ -8,6 +8,7 @@ export default class extends AbstractWorld {
     preload() {}
 
     create() {
+
         this.startWorld("road", 100, 100);
     }
 }

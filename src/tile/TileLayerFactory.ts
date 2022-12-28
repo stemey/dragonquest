@@ -24,7 +24,19 @@ export default class TileLayerFactory {
         private readonly mapKey: string,
         private readonly scene: AbstractWorld
     ) {
-        const data = scene.cache.tilemap.get(mapKey);
+        let data = scene.cache.tilemap.get(mapKey);
+        if (!data) {
+            const dataFromJson = scene.cache.json.get("tiled_" + mapKey);
+            const tilesets = dataFromJson.tilesets.map((ts: any) => {
+                const match = ts.source.match(/([a-zA-Z_0-9]+)\.(tsx|json)/);
+                const name = match[1];
+                return {
+                    firstgid: ts.firstgid,
+                    ...scene.cache.json.get("tiled_meta_" + name.toLowerCase()),
+                };
+            });
+            data = { data: { ...dataFromJson, tilesets } };
+        }
         this.mapConfig = data.data;
         this.tileSets = this.mapConfig.tilesets.map((tileset) => {
             return {
@@ -34,10 +46,14 @@ export default class TileLayerFactory {
                 original: tileset,
             };
         });
+        this.scene.cache.tilemap.add(this.mapKey, {
+            data: this.mapConfig,
+            format: 1,
+        });
         this.checkTilesets(this.mapConfig.layers);
     }
 
-    checkTilesets(layers: Layer[]) {
+    checkTilesets(layers: Layer[], path?: string) {
         layers.forEach((layer) => {
             if (layer.type === "tilelayer") {
                 let tileSets: Tileset[] = this.findTilesetList(layer.data);
@@ -56,12 +72,14 @@ export default class TileLayerFactory {
                             layer.name
                         } ${tileSets.map((t) => t.name).join(", ")}`
                     );
-                }else {
-                    layer.tileset = tileSets[0].name;
 
+                } else {
+                    layer.tileset = tileSets[0].name;
+                    layer.path = path ? path + "/" + layer.name : layer.name;
                 }
             } else if (layer.type === "group") {
-                this.checkTilesets(layer.layers);
+                const childPath = path ? path + "/" + layer.name : layer.name;
+                this.checkTilesets(layer.layers, childPath);
             }
         });
     }
@@ -100,9 +118,21 @@ export default class TileLayerFactory {
     }
 
     create() {
+        const tilemapConfig: Phaser.Types.Tilemaps.TilemapConfig = {};
         const map = this.scene.make.tilemap({ key: this.mapKey });
         this.tileSets.forEach((ts) => {
-            this.tileSetImages[ts.name] = map.addTilesetImage(ts.name, ts.name);
+            this.tileSetImages[ts.name] = map.addTilesetImage(
+                ts.name,
+                ts.original.image.substring(
+                    0,
+                    ts.original.image.length - ".png".length
+                ),
+                ts.original.tilewidth,
+                ts.original.tileheight,
+                0,
+                0,
+                ts.first
+            );
         });
 
         this.process(map, this.mapConfig.layers);
@@ -116,7 +146,7 @@ export default class TileLayerFactory {
             } else if (layer.type === "objectgroup") {
                 layer.objects.forEach((layerObject) => {
                     const props = new LayerObject(layerObject);
-                    const type = this.getType(props) as string;
+                    const type = layerObject.class;
                     const action = this.actions[type];
                     if (action) {
                         action(props, this.scene);
@@ -127,7 +157,7 @@ export default class TileLayerFactory {
                 if (layerProps.getProp("collide")) {
                     if (this.scene?.player) {
                         const theLayer = map.createLayer(
-                            layer.name,
+                            layer.path,
                             this.tileSetImages[layer.tileset],
                             0,
                             0
@@ -144,7 +174,7 @@ export default class TileLayerFactory {
                     const action = this.layerActions[type];
                     if (action) {
                         const tiles = map.createLayer(
-                            layer.name,
+                            layer.path,
                             this.tileSetImages[layer.tileset],
                             0,
                             0
@@ -154,7 +184,7 @@ export default class TileLayerFactory {
                     }
                 } else {
                     map.createLayer(
-                        layer.name,
+                        layer.path,
                         this.tileSetImages[layer.tileset],
                         0,
                         0

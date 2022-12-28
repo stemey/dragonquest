@@ -1,63 +1,136 @@
-import { Dialog, Message } from "./Dialog";
+import { observable } from "mobx";
+import { Dialog } from "./Dialog";
 
 export class DialogState {
+    private state = observable.box("start");
+    public selectedOptionIndex = observable.box(0);
+    private dialog?: Dialog;
 
-    private state = "start";
-
-    private conversing = false;
-
-    constructor(private readonly dialog: Dialog) {
-        if (!this.dialog.start) {
-            console.error("dialog has no start node");
-        }
-    }
+    constructor() {}
 
     stop() {
-        this.conversing = false;
+        this.dialog = undefined;
+        this.state.set("")
     }
 
     chooseOption(idx: number) {
-        const currentMessage = this.dialog[this.state];
+        if (!this.dialog) {
+            console.error("not conversing");
+            return;
+        }
+        const currentMessage = this.dialog[this.state.get()];
         if ("options" in currentMessage) {
             const option = currentMessage.options[idx];
             console.log("you choose: " + option.message);
-            this.state = option.next;
+            this.state.set(option.next);
             this.resumeConversation();
         }
     }
+    startDialog(dialog: Dialog) {
+        this.dialog = dialog;
+        this.state.set("start");
+    }
 
-    resume() {
-        (window as any).gameDialog = this;
-        if (!this.conversing) {
-            this.conversing = true;
-            this.resumeConversation();
+    continueConversation() {
+        if (!this.dialog) {
+            console.error("not conversing");
+            return;
+        }
+        const currentMessage = this.dialog[this.state.get()];
+
+        if ("end" in currentMessage) {
+            this.stop();
+            return;
+        }
+        if ("next" in currentMessage) {
+            this.state.set(currentMessage.next);
         }
     }
 
     resumeConversation() {
-        const currentMessage = this.dialog[this.state];
+        if (!this.dialog) {
+            console.error("not conversing");
+            return;
+        }
+        const currentMessage = this.dialog[this.state.get()];
         if (!currentMessage) {
             console.error("cannot find state " + this.state);
+            this.stop();
             return;
         }
         if ("message" in currentMessage) {
             console.log(currentMessage.actor + ":" + currentMessage.message);
-            this.state = currentMessage.next;
-
-            if (this.conversing) {
-                this.resumeConversation();
-            }
-            if (currentMessage.end) {
-                console.log("end conversation");
-                this.conversing = false;
-            }
         }
-
         if ("options" in currentMessage) {
-            console.log("choose one of: ");
-            currentMessage.options.forEach((opt, idx) => {
-                console.log(idx + " : " + opt.message);
-            });
+            this.selectedOptionIndex.set(0);
         }
     }
+
+    onArrowUp() {
+        if (this.dialog) {
+            const currentMessage = this.dialog[this.state.get()];
+            if ("options" in currentMessage) {
+                this.selectedOptionIndex.set(
+                    (this.selectedOptionIndex.get() + 1) %
+                        currentMessage.options.length
+                );
+            }
+        }
+    }
+    onArrowDown() {
+        if (this.dialog) {
+            const currentMessage = this.dialog[this.state.get()];
+            if ("options" in currentMessage) {
+                if (this.selectedOptionIndex.get() <= 0) {
+                    this.selectedOptionIndex.set(
+                        currentMessage.options.length - 1
+                    );
+                } else {
+                    this.selectedOptionIndex.set(
+                        this.selectedOptionIndex.get() - 1
+                    );
+                }
+            }
+        }
+    }
+    onSpace() {
+        if (this.dialog) {
+            const currentMessage = this.dialog[this.state.get()];
+            if ("options" in currentMessage) {
+                this.chooseOption(this.selectedOptionIndex.get());
+            } else {
+                this.continueConversation();
+            }
+        }
+    }
+
+    public getState() {
+        if (this.dialog) {
+            const currentMessage = this.dialog[this.state.get()];
+            if ("end" in currentMessage) {
+                return undefined;
+            }
+            const state: MessageState = {
+                selectedIndex: this.selectedOptionIndex.get(),
+                text: currentMessage.message,
+            };
+            if ("options" in currentMessage) {
+                state.options = currentMessage.options.map((o, idx) => ({
+                    text: o.message,
+                    selected: idx === this.selectedOptionIndex.get(),
+                }));
+            }
+            return state;
+        }
+        return undefined;
+    }
+    public get conversing() {
+        return !!this.dialog;
+    }
+}
+
+export interface MessageState {
+    text: string;
+    selectedIndex: number;
+    options?: { text: string; selected: boolean }[];
 }

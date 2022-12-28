@@ -1,10 +1,15 @@
 import * as Phaser from "phaser";
 
-export default class extends Phaser.GameObjects.Container {
+export class MessageUi extends Phaser.GameObjects.Container {
     private text: Phaser.GameObjects.Text;
     private hideEvent?: Phaser.Time.TimerEvent;
-    constructor(scene: Phaser.Scene, events: Phaser.Events.EventEmitter) {
-        super(scene, 160, 30);
+    constructor(
+        scene: Phaser.Scene,
+        events: Phaser.Events.EventEmitter,
+        x?: number,
+        y?: number
+    ) {
+        super(scene, x || 160, y || 30);
         var graphics = this.scene.add.graphics();
         this.add(graphics);
         graphics.lineStyle(1, 0xffffff, 0.8);
@@ -40,4 +45,5 @@ export default class extends Phaser.GameObjects.Container {
         this.hideEvent = undefined;
         this.visible = false;
     }
+
 }

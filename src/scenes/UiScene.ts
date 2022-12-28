@@ -1,9 +1,9 @@
 import * as Phaser from "phaser";
 import { ActionsMenu } from "../menu/ActionsMenu";
-import Message from "../ui/Message";
 import { CharacterStats } from "../menu/CharacterStats";
 import Battle from "./Battle";
 import { Unit } from "../sprites/Unit";
+import { MessageUi } from "../ui/MessageUi";
 
 export class UiScene extends Phaser.Scene {
     private graphics?: Phaser.GameObjects.Graphics;
@@ -70,7 +70,7 @@ export class UiScene extends Phaser.Scene {
             heroesMenu
         );
 
-        const message = new Message(this, battleScene.events);
+        const message = new MessageUi(this, battleScene.events);
         this.add.existing(message);
 
         // TODO should be in battleScene

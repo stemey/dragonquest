@@ -5,12 +5,15 @@ export interface BaseMessage {
 export interface SimpleMessage extends BaseMessage {
     message: string;
     next: string;
-    end?: boolean;
+}
+export interface End extends BaseMessage {
+    end: true;
 }
 export interface Question extends BaseMessage {
+    message: string;
     options: SimpleMessage[];
 }
-export type Message = Question | SimpleMessage;
+export type Message = Question | SimpleMessage | End;
 
 export interface Dialog {
     [key: string]: Message;
