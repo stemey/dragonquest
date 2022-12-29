@@ -7,6 +7,7 @@
     "scripts": {
         "generate:dialog": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Dialog\" -o ./generated/schemas/dialog.json --required --noExtraProps",
         "generate:characters": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Characters\" -o ./generated/schemas/characters.json --required --noExtraProps",
+        "generate:level": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Level\" -o ./generated/schemas/level.json --required --noExtraProps",
         "generate:json": "node scripts/resolve-ref.js",
         "generate": "run-p generate:*",
         "start": "webpack serve",

@@ -1,11 +1,9 @@
 {
+    "$schema": "../../../../generated/schemas/level.json",
     "name": "The Road",
     "tiles": "/level/road",
-    "enemies": {
+    "monsters": {
         "wolves": ["kiri", "kiri"]
-    },
-    "loot": {
-        "small": []
     },
     "dialogs": { "intro": { "$ref": "./intro.json" } }
 }

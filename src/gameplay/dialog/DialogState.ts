@@ -1,5 +1,9 @@
 import { observable } from "mobx";
+import { executeAction } from "mobx/lib/internal";
+import { urlToHttpOptions } from "url";
+import { DragonQuest } from "../DragonQuest";
 import { Dialog } from "../types/Dialog";
+import { DialogAction } from "../types/DialogAction";
 
 export class DialogState {
     private state = observable.box("start");
@@ -10,7 +14,7 @@ export class DialogState {
 
     stop() {
         this.dialog = undefined;
-        this.state.set("")
+        this.state.set("");
     }
 
     chooseOption(idx: number) {
@@ -21,10 +25,28 @@ export class DialogState {
         const currentMessage = this.dialog[this.state.get()];
         if ("options" in currentMessage) {
             const option = currentMessage.options[idx];
+            if (option.action) {
+                this.executeAction(option.action);
+            }
             console.log("you choose: " + option.message);
             this.state.set(option.next);
             this.resumeConversation();
         }
+    }
+    executeAction(action: DialogAction) {
+        if (action.customs) {
+            action.customs.forEach((c) => {
+                const methodName = c.method;
+                if (methodName in DragonQuest.api) {
+                    const method = (DragonQuest.api as any)[c.method];
+                    if (typeof method === "function") {
+                        method.apply(DragonQuest.api, c.params);
+                    }
+                }
+            });
+        }
+        DragonQuest.foundItems(action.items)
+       
     }
     startDialog(dialog: Dialog) {
         this.dialog = dialog;

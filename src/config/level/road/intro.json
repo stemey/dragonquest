@@ -12,17 +12,21 @@
                 "next": "wizard",
                 "action": {
                     "customs": [{ "method": "setClass", "params": ["wizard"] }],
-                    "items": ["fireball", "blue potion"]
+                    "items": [
+                        { "type": "power", "name": "fireball" },
+                        { "type": "power", "name": "blue potion", "count": 2 }
+                    ]
                 }
             },
             {
-                "message": "Warrior?",
-                "next": "warrior",
+                "message": "Knight?",
+                "next": "knight",
                 "action": {
-                    "customs": [
-                        { "method": "setClass", "params": ["warrior"] }
-                    ],
-                    "items": ["short sword", "10 gold"]
+                    "customs": [{ "method": "setClass", "params": ["knight"] }],
+                    "items": [
+                        { "type": "power", "name": "short sword" },
+                        { "type": "gold", "amount": 10 }
+                    ]
                 }
             }
         ]

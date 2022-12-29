@@ -2,13 +2,12 @@ import * as Phaser from "phaser";
 import { Action } from "./Action";
 
 
-const finishedDialogs = [];
 export const DialogAction: Action = (layerObject, world) => {
     const name = layerObject.getProp("name") as string;
     const zone = new Phaser.GameObjects.Zone(
         world,
-        layerObject.x,
-        layerObject.y,
+        layerObject.x+layerObject.width/2,
+        layerObject.y+layerObject.height/2,
         layerObject.width,
         layerObject.height
     );

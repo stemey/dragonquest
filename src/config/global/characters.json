@@ -1,10 +1,18 @@
 {
     "$schema": "../../../generated/schemas/characters.json",
-    "hero": {
+    "knight": {
         "hero":true,
-        "name": "hero",
+        "name": "Knight",
         "armor": 10,
-        "image": "playerx",
+        "image": "knight",
+        "maxHp": 10,
+        "attacks": []
+    },
+    "wizard": {
+        "hero":true,
+        "name": "Wizard",
+        "armor": 10,
+        "image": "mage",
         "maxHp": 10,
         "attacks": []
     },

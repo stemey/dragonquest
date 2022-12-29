@@ -1,12 +1,8 @@
+import { DropItemRef } from "./DropItemRef";
 import { Power } from "./Power";
 
-export interface DropItemRef {
-    name: string;
-    count: number;
-}
-
 export interface Character {
-    hero?:boolean;
+    hero?: boolean;
     name: string;
     armor: number;
     image: string;

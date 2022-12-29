@@ -34,18 +34,17 @@ export default class extends Phaser.Scene {
 
     addCharacters(enemies: Unit[]) {
         const scale = 2;
-        DragonQuest.heroes.forEach(hero=> {
-            let knight = new CharacterDisplay(
+        DragonQuest.heroes.forEach((hero,idx) => {
+            const knight = new CharacterDisplay(
                 hero,
                 this,
                 scale * 250,
-                scale * 50
+                scale * 50 + scale * 60 * idx
             );
             this.add.existing(knight);
             this.characterList.push(knight);
-        })
-        
-      
+        });
+
         this.enemies = enemies;
         this.enemies.forEach((enemy, idx) => {
             const monsterEnemy = new CharacterDisplay(
@@ -59,7 +58,7 @@ export default class extends Phaser.Scene {
         });
 
         // array with heroes
-        this.heroes = Object.values(DragonQuest.heroes);
+        this.heroes = DragonQuest.heroes;
         // array with both parties, who will attack
         this.units = this.heroes.concat(this.enemies);
 

@@ -12,18 +12,19 @@ export default class MonsterActionState {
 
     onMeetEnemy(
         player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
-        monster: GameObjects.Sprite
+        monster: GameObjects.Sprite,
+        enemies: Unit[]
     ) {
         player.body.setVelocity(0);
         this.scene.scene.sleep();
         if (this.scene.scene.isSleeping("BattleScene")) {
             this.scene.scene.wake("BattleScene", {
-                enemies: (monster as any).enemies,
+                enemies: enemies,
                 entryWorld: this.scene.scene.key,
             });
         } else {
             this.scene.scene.launch("BattleScene", {
-                enemies: (monster as any).enemies,
+                enemies: enemies,
                 entryWorld: this.scene.scene.key,
             });
         }
