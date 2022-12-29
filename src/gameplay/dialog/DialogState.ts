@@ -1,5 +1,5 @@
 import { observable } from "mobx";
-import { Dialog } from "./Dialog";
+import { Dialog } from "../types/Dialog";
 
 export class DialogState {
     private state = observable.box("start");

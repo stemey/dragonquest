@@ -26,7 +26,7 @@ export default class TileLayerFactory {
     ) {
         let data = scene.cache.tilemap.get(mapKey);
         if (!data) {
-            const dataFromJson = scene.cache.json.get("tiled_" + mapKey);
+            const dataFromJson = scene.cache.json.get(mapKey);
             const tilesets = dataFromJson.tilesets.map((ts: any) => {
                 const match = ts.source.match(/([a-zA-Z_0-9]+)\.(tsx|json)/);
                 const name = match[1];

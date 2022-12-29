@@ -1,3 +1,5 @@
+import { DialogAction } from "./DialogAction";
+
 export interface BaseMessage {
     actor?: string;
 }
@@ -5,6 +7,7 @@ export interface BaseMessage {
 export interface SimpleMessage extends BaseMessage {
     message: string;
     next: string;
+    action?: DialogAction;
 }
 export interface End extends BaseMessage {
     end: true;

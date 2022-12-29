@@ -1,6 +1,6 @@
 import { BasePower } from "./Power";
 
 export interface Healing extends BasePower {
-    type: "heal";
+    type: "healing";
     healing:number;
 }

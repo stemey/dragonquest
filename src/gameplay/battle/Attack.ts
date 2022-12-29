@@ -1,6 +1,6 @@
 import { Events } from "phaser";
 import { Unit } from "../../sprites/Unit";
-import { Weapon } from "../character/Weapon";
+import { Weapon } from "../types/Weapon";
 import { BattleAction } from "./BattleAction";
 
 export class Attack implements BattleAction {

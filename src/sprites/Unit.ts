@@ -1,9 +1,9 @@
 import * as Phaser from "phaser";
 import {Attack} from "../gameplay/battle/Attack";
 import {Heal} from "../gameplay/battle/Heal";
-import { Character } from "../gameplay/character/Character";
-import { Healing } from "../gameplay/character/Healing";
-import { Power } from "../gameplay/character/Power";
+import { Character } from "../gameplay/types/Character";
+import { Healing } from "../gameplay/types/Healing";
+import { Power } from "../gameplay/types/Power";
 
 let unitId = 0;
 
@@ -35,7 +35,7 @@ export class Unit {
     }
 
     convertAction(action: Power) {
-        if (action.type && action.type === "heal") {
+        if (action.type && action.type === "healing") {
             return new Heal(action as Healing);
         } else {
             return new Attack(action);

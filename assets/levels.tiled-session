@@ -1,12 +1,12 @@
 {
     "activeFile": "levels/one/map/road.json",
     "expandedProjectPaths": [
-        ".",
-        "map",
         "levels/one/map",
         "tileset",
+        "levels",
         "levels/one",
-        "levels"
+        ".",
+        "map"
     ],
     "file.lastUsedOpenFilter": "Alle Dateien (*)",
     "fileStates": {
@@ -16,11 +16,11 @@
                 6,
                 10
             ],
-            "scale": 0.74,
+            "scale": 1.5593,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 392.56756756756755,
-                "y": 531.7567567567567
+                "x": 768.9347784262169,
+                "y": 576.8614121721284
             }
         },
         "levels/one/map/road.json#Plants": {
@@ -101,18 +101,15 @@
     "map.lastUsedExportFilter": "JSON-Kartendateien (*.tmj *.json)",
     "map.lastUsedFormat": "json",
     "openFiles": [
-        "levels/one/map/road.json",
-        "tileset/terrain.json",
-        "tileset/Plants.json",
-        "tileset/Plants.tsx"
+        "levels/one/map/road.json"
     ],
     "project": "levels.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "levels/one/map/road.json",
+        "tileset/Plants.json",
         "tileset/terrain.json",
         "tileset/Plants.tsx",
-        "tileset/Plants.json",
-        "levels/one/map/road.json",
         "tileset/terrain.tsx",
         "levels/one/map/road.tmx",
         "map/smallmap.json",

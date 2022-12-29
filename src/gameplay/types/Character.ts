@@ -1,12 +1,16 @@
-import { DropItem } from "./DropItem";
 import { Power } from "./Power";
-import { Weapon } from "./Weapon";
+
+export interface DropItemRef {
+    name: string;
+    count: number;
+}
 
 export interface Character {
+    hero?:boolean;
     name: string;
     armor: number;
     image: string;
     maxHp: number;
     attacks: Power[];
-    dropItems?: DropItem[];
+    dropItems?: DropItemRef[];
 }

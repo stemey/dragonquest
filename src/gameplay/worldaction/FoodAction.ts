@@ -15,13 +15,13 @@ export const FoodAction: Action = (layerObject, scene) => {
             classType: Phaser.GameObjects.Container,
         });
         const enemies = monsterIds
-            .map((id) => DragonQuest.getVillainByName(id))
+            .map((id) => DragonQuest.createVillainByName(id))
             .filter((villain) => !!villain);
 
         monsterIds
             .filter((monsterId) => monsterId.length > 0)
             .forEach((monsterId, idx) => {
-                const villain = DragonQuest.getVillainByName(monsterId);
+                const villain = DragonQuest.createVillainByName(monsterId);
                 if (villain) {
                     const sprite = scene.make.sprite({
                         x: layerObject.x + Math.round(idx * 30),

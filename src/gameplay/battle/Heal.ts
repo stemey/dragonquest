@@ -1,6 +1,6 @@
 import { Events } from "phaser";
 import { Unit } from "../../sprites/Unit";
-import { Healing } from "../character/Healing";
+import { Healing } from "../types/Healing";
 import { BattleAction } from "./BattleAction";
 
 export  class Heal implements BattleAction {

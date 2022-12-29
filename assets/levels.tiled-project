@@ -60,7 +60,7 @@
             "id": 6,
             "members": [
                 {
-                    "name": "name",
+                    "name": "targetScene",
                     "type": "string",
                     "value": ""
                 }

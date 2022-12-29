@@ -1,4 +1,4 @@
-import { Dialog } from "./Dialog";
+import { Dialog } from "../types/Dialog";
 
 export const StrangerDialog: Dialog = {
     start: {

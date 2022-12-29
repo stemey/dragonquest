@@ -1,14 +1,15 @@
 {
     "compilerOptions": {
         "resolveJsonModule": true,
-        "rootDir": "src",
+        "rootDir": ".",
         "outDir": "dist",
         "sourceMap": true,
         "inlineSources": true,
         "moduleResolution": "Node16",
         "declaration": false,
         "strict": true,
-        "target": "ESNext"
+        "target": "ESNext",
+        "allowSyntheticDefaultImports":true
     },
-    "include": ["src"]
+    "include": ["src","generated"]
 }

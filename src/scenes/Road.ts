@@ -2,13 +2,12 @@ import {AbstractWorld} from "./AbstractWorld";
 
 export default class extends AbstractWorld {
     constructor() {
-        super({ key: "RoadScene" });
+        super({ key: "/level/road" });
     }
 
-    preload() {}
+
 
     create() {
-
-        this.startWorld("road", 100, 100);
+        this.startWorld("", 100, 100);
     }
 }

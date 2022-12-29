@@ -29,7 +29,12 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, "assets","**/*"),
+                    from: path.resolve(__dirname, "assets", "**/*"),
+
+                    to: path.resolve(__dirname, "dist"),
+                },
+                {
+                    from: path.resolve(__dirname, "generated/config", "**/*"),
 
                     to: path.resolve(__dirname, "dist"),
                 },

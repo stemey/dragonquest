@@ -1,0 +1,11 @@
+{
+    "name": "The Road",
+    "tiles": "/level/road",
+    "enemies": {
+        "wolves": ["kiri", "kiri"]
+    },
+    "loot": {
+        "small": []
+    },
+    "dialogs": { "intro": { "$ref": "./intro.json" } }
+}

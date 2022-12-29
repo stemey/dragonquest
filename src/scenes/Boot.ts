@@ -1,6 +1,11 @@
 import * as Phaser from "phaser";
 import * as WebFont from "webfontloader";
-import { characters } from "../gameplay/character/characters";
+import characters from "../../generated/config/global/characters.json";
+import powers from "../../generated/config/global/powers.json";
+import { DragonQuest } from "../gameplay/DragonQuest";
+import { Characters } from "../gameplay/types/Characters";
+import { Powers } from "../gameplay/types/Powers";
+import { removeSchemaFromJson } from "../utils/removeSchemaFromJson";
 
 export default class extends Phaser.Scene {
     constructor() {
@@ -49,7 +54,7 @@ export default class extends Phaser.Scene {
         this.load.json("tiled_meta_terrain", "assets/tileset/terrain.json");
         this.load.json("tiled_meta_plants", "assets/tileset/Plants.json");
 
-        this.load.json("tiled_road", "assets/levels/one/map/road.json");
+        
 
         // load resources
         this.load.spritesheet("player", "assets/RPG_assets.png", {
@@ -67,12 +72,21 @@ export default class extends Phaser.Scene {
             { frameWidth: 32, frameHeight: 32 }
         );
 
-        Object.values(characters.villains).forEach((villain) => {
-            this.load.image(villain.image, "assets/" + villain.image + ".png");
+        const cleanedCharacters: Characters = removeSchemaFromJson(characters);
+        const cleanedPowers: Powers = removeSchemaFromJson(powers);
+
+        Object.values(cleanedCharacters).forEach((character) => {
+            if (!character.image) {
+                console.warn("no image for character", character.name);
+                return;
+            }
+            this.load.image(
+                character.image,
+                "assets/" + character.image + ".png"
+            );
         });
-        Object.values(characters.npc).forEach((npc) => {
-            this.load.image(npc.image, "assets/" + npc.image + ".png");
-        });
+
+        DragonQuest.init(cleanedCharacters, cleanedPowers);
 
         WebFont.load({
             google: {
@@ -83,7 +97,7 @@ export default class extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("RoadScene");
+        this.scene.start("/level/road");
     }
 
     fontsLoaded() {}

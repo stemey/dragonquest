@@ -8,7 +8,7 @@ export const CharacterAction: Action = (layerObject, world) => {
     const characters = world.physics.add.group({
         classType: Phaser.GameObjects.Container,
     });
-    const npc = DragonQuest.getNpcByName(name);
+    //const npc = DragonQuest.getNpcByName(name);
     /*if (npc) {
         const sprite = world.make.sprite({
             x: layerObject.x,

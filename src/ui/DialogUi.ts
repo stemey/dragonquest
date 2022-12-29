@@ -21,8 +21,8 @@ export class DialogUi extends Phaser.GameObjects.Container {
         this.text = new Phaser.GameObjects.Text(scene, 160, 30, "", {
             color: "#ffffff",
             align: "center",
-            fontSize: "20",
-            wordWrap: { width: 160, useAdvancedWrap: true },
+            fontSize: "20px",
+            wordWrap: { width: 400, useAdvancedWrap: true },
         });
         this.add(this.text);
         this.group = new Phaser.GameObjects.Container(this.scene);
@@ -91,8 +91,8 @@ export class DialogUi extends Phaser.GameObjects.Container {
                             {
                                 color: "#ffffff",
                                 align: "center",
-                                fontSize: "20",
-                                wordWrap: { width: 160, useAdvancedWrap: true },
+                                fontSize: "20px",
+                                wordWrap: { width: 400, useAdvancedWrap: true },
                             }
                         );
                         height += option.getBounds().height;

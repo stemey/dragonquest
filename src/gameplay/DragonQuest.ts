@@ -1,48 +1,40 @@
-import { characters } from "./character/characters";
 import { IObservableValue, observable, ObservableMap } from "mobx";
-import { DropItem } from "./character/DropItem";
+import { DropItem } from "./types/DropItem";
 import { Unit } from "../sprites/Unit";
-import { IntroDialog } from "./dialog/IntroDialog";
+import { Level } from "./types/Level";
+import { Characters } from "./types/Characters";
+import { Powers } from "./types/Powers";
+import { DropItemRef } from "./types/Character";
 
 class DragonQuestType {
-    private villains: Unit[];
-    public heroes: { [name: string]: Unit };
-     goldCount: IObservableValue<number>;
-     items: ObservableMap<string, DropItem>;
-    constructor() {
-        this.villains = characters.villains.map((v) => new Unit(v));
-        this.heroes = {};
-        this.goldCount = observable.box(0);
-        this.items = observable.map({});
+    goldCount: IObservableValue<number> = observable.box(0);
+    items: ObservableMap<string, DropItem> = observable.map({});
+    private levels: { [key: string]: Level } = {};
+    public currentLevelKey = "";
+    public heroes: Unit[] = [];
+    private characters: Characters = {};
+    private powers: Powers = {};
 
-        Object.entries(characters.heroes).forEach(([key, value]) => {
-            this.heroes[key] = new Unit(value);
-        });
-        //this.npc = characters.npc;
-
-        //this.worldActionRegistry = {};
+    init(characters: Characters, powers: Powers) {
+        this.characters = characters;
+        this.powers = powers;
+        this.heroes = Object.values(this.characters).filter(c => c.hero).map(h => new Unit(h)) 
     }
 
-    getVillainByName(name: string) {
-        const filtered = Object.values(this.villains).filter(
-            (villain, key) => villain.name === name
-        );
-        return filtered && filtered.length > 0 ? filtered[0] : undefined;
+    createVillainByName(name: string) {
+        return new Unit(this.characters[name]);
     }
 
-    getNpcByName(name: string) {
-        return null; //this.npc[name];
+    private get currentLevel() {
+        return this.levels[this.currentLevelKey];
     }
 
     getDialog(name: string) {
-        return IntroDialog;
+        return this.currentLevel.dialogs[name];
     }
 
-    getVillainById(id: number) {
-        const filtered = Object.values(this.villains).filter(
-            (villain, key) => villain.id === id
-        );
-        return filtered && filtered.length > 0 ? filtered[0] : undefined;
+    setLevel(key: string, level: Level) {
+        this.levels[key] = level;
     }
 
     foundGold(goldCount: number) {
@@ -54,7 +46,11 @@ class DragonQuestType {
         this.items.set(item.name, item);
     }
 
-    foundItems(items: DropItem[]) {
+    foundItems(itemRefs: DropItemRef[]) {
+        // TODO number not taken into account especially for gold
+        const items = itemRefs.map(
+            (itemRef) => this.currentLevel.loots[itemRef.name]
+        );
         items.forEach((item) => this.foundItem(item));
     }
 
@@ -77,29 +73,6 @@ class DragonQuestType {
         Array.from(this.items.values()).forEach((item) => {
             console.log(item.type + " " + item.name);
         });
-    }
-
-    getWorldAction() {
-        /* if (object.properties) {
-            const layerObject = new LayerObject(object);
-            if (object.type) {
-                return this.worldActionRegistry[object.type](
-                    new LayerObject(object),
-                    physics,
-                    container,
-                    scene
-                );
-            } else if (layerObject.getProp("monster")) {
-                return this.worldActionRegistry["monster"](
-                    new LayerObject(object),
-                    physics,
-                    container,
-                    scene
-                );
-            } else {
-                console.log("unknown action");
-            }
-        }*/
     }
 }
 

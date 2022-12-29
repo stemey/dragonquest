@@ -1,0 +1,39 @@
+{
+    "$schema": "../../../../generated/schemas/dialog.json",
+    "start": {
+        "message": "You were sent to your uncle to start your work as apprentice. ",
+        "next": "chooseClass"
+    },
+    "chooseClass": {
+        "message": "Which Kind of person would you like to be?",
+        "options": [
+            {
+                "message": "Wizard?",
+                "next": "wizard",
+                "action": {
+                    "customs": [{ "method": "setClass", "params": ["wizard"] }],
+                    "items": ["fireball", "blue potion"]
+                }
+            },
+            {
+                "message": "Warrior?",
+                "next": "warrior",
+                "action": {
+                    "customs": [
+                        { "method": "setClass", "params": ["warrior"] }
+                    ],
+                    "items": ["short sword", "10 gold"]
+                }
+            }
+        ]
+    },
+    "wizard": {
+        "message": "You will have to fight your way",
+        "next": "end"
+    },
+    "warrior": {
+        "message": "You will be on your road with ....",
+        "next": "end"
+    },
+    "end": { "end": true }
+}

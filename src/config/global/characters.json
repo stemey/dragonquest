@@ -1,0 +1,53 @@
+{
+    "$schema": "../../../generated/schemas/characters.json",
+    "hero": {
+        "hero":true,
+        "name": "hero",
+        "armor": 10,
+        "image": "playerx",
+        "maxHp": 10,
+        "attacks": []
+    },
+    "kiri": {
+        "name": "Kiri",
+        "image": "redmonster",
+        "armor": 30,
+        "maxHp": 20,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "claws",
+                "strength": 100,
+                "damage": 50
+            }
+        ]
+    },
+    "rumps": {
+        "name": "Rumps",
+        "image": "monster",
+        "armor": 30,
+        "maxHp": 20,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "claws",
+                "strength": 100,
+                "damage": 50
+            }
+        ]
+    },
+    "green mage": {
+        "name": "Greenie",
+        "image": "bossmagequesttempel",
+        "armor": 10,
+        "maxHp": 20,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "beam",
+                "strength": 100,
+                "damage": 10
+            }
+        ]
+    }
+}

@@ -10,6 +10,7 @@ import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
+import { Level } from "../gameplay/types/Level";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
@@ -17,7 +18,14 @@ export class AbstractWorld extends Phaser.Scene {
     public stopPlayer = false;
     public player?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    preload() {}
+    private levelConfigKey:string="";
+    private levelMapKey:string="";
+    preload() {
+        this.levelConfigKey=`/generated/config${this.scene.key}/level.json`
+        this.levelMapKey=`/assets${this.scene.key}/map.json`
+        this.load.json(this.levelConfigKey,this.levelConfigKey)
+        this.load.json(this.levelMapKey,this.levelMapKey)
+    }
 
     addEntry(entry: LayerObject) {
         this.entries[entry.getProp("name") as string] = entry;
@@ -77,7 +85,10 @@ export class AbstractWorld extends Phaser.Scene {
         this.player.scaleX = 2;
         this.player.scaleY = 2;
 
-        const smallmap = new TileLayerFactory(mapName, this);
+        const smallmap = new TileLayerFactory(this.levelMapKey, this);
+        const levelConfig = this.cache.json.get(this.levelConfigKey)
+        DragonQuest.setLevel(this.scene.key, levelConfig)
+        DragonQuest.currentLevelKey=this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
         smallmap.actions["Monster"] = MonsterAction;

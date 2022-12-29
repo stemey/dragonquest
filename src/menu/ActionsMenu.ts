@@ -1,5 +1,4 @@
 import { BattleAction } from "../gameplay/battle/BattleAction";
-import { Power } from "../gameplay/character/Power";
 import {Menu} from "./Menu";
 
 export class ActionsMenu extends Menu {

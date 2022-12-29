@@ -36,7 +36,7 @@
                                 {
                                  "name":"name",
                                  "type":"string",
-                                 "value":"intro1"
+                                 "value":"intro"
                                 }],
                          "rotation":0,
                          "visible":true,
@@ -319,11 +319,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/tileset\/terrain.json"
+         "source":"..\/..\/tileset\/terrain.json"
         }, 
         {
          "firstgid":484,
-         "source":"..\/..\/..\/tileset\/Plants.json"
+         "source":"..\/..\/tileset\/Plants.json"
         }],
  "tilewidth":32,
  "type":"map",
