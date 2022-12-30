@@ -6,11 +6,24 @@ import { BattleAction } from "./BattleAction";
 export class Attack implements BattleAction {
     constructor(private weapon: Weapon) {}
 
-    execute(events: Events.EventEmitter, actor: Unit, target: Unit) {
-        const strength = Math.random() * 20;
-        if (target.isHurt(this.weapon.strength + strength)) {
-            const strength = Math.random() * 8;
-            const totalDamage = Math.round(this.weapon.damage + strength);
+    get name() {
+        return this.weapon.name;
+    }
+
+    execute(
+        events: Events.EventEmitter,
+        actor: Unit,
+        target: Unit,
+        random = true
+    ) {
+        const extraStrength = random
+            ? ((Math.random() - 0.5) * this.weapon.strength) / 4
+            : 0;
+        if (target.isHurt(this.weapon.strength + extraStrength)) {
+            const extraDamage = random
+                ? ((Math.random() - 0.5) * this.weapon.damage) / 4
+                : 0;
+            const totalDamage = Math.round(this.weapon.damage + extraDamage);
             target.takeDamage(totalDamage);
             actor.actionPerformed(true, this.weapon.name);
             if (!target.alive) {

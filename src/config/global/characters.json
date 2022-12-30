@@ -19,14 +19,14 @@
     "kiri": {
         "name": "Kiri",
         "image": "redmonster",
-        "armor": 30,
-        "maxHp": 20,
+        "armor": 7,
+        "maxHp": 12,
         "attacks": [
             {
                 "type": "weapon",
                 "name": "claws",
-                "strength": 100,
-                "damage": 50
+                "strength": 10,
+                "damage": 5
             }
         ]
     },
