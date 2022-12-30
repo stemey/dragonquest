@@ -3,7 +3,6 @@ import { Unit } from "../sprites/Unit";
 
 export interface AttackResult {
     attack: string;
-    targetName: string;
 }
 export interface Result {
     rounds: number;
@@ -16,6 +15,8 @@ export interface Result {
 }
 export interface AttackEfficiency extends AttackResult {
     efficiency: number;
+    attacker:string;
+
 }
 export type chooseAttacks = (
     h: Unit,
@@ -46,8 +47,8 @@ export const fight = (
                 const hp2 = getTotal(enemyUnits, (unit) => unit.hp);
                 return {
                     attack: result.attack,
-                    targetName: result.targetName,
-                    efficiency: hp2 < hp1 ? 1 : 0,
+                    attacker: h.name,
+                    efficiency: Math.abs(hp2-hp1)/hp1,
                 };
             })
             .forEach((a) => attackEfficiencies.push(a));
@@ -55,12 +56,19 @@ export const fight = (
         enemyUnits
             .filter((h) => h.alive)
             .forEach((h) => {
-                chooseAttack(
+                const hp1 = getTotal(heroUnits, (unit) => unit.hp);
+                const result = chooseAttack(
                     h,
-                    heroUnits.filter((h) => h.alive),
+                    heroUnits.filter((e) => e.alive),
                     enemyUnits.filter((h1) => h1 !== h)
                 );
-            });
+                const hp2 = getTotal(heroUnits, (unit) => unit.hp);
+                return {
+                    attack: result.attack,
+                    attacker: h.name,
+                    efficiency: Math.abs(hp2-hp1)/hp1,
+                };
+            })
     }
 
     const winnerUnits = isAlive(heroUnits) ? heroUnits : enemyUnits;

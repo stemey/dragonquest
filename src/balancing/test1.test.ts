@@ -2,6 +2,8 @@ import { Character } from "../gameplay/types/Character";
 import { Weapon } from "../gameplay/types/Weapon";
 import { testScenarios } from "./testScenarios";
 
+let characterId=0;
+
 function character(
     props: { armor: number; maxHp: number },
     ...as: { damage: number; strength: number }[]
@@ -17,7 +19,7 @@ function character(
             } as Weapon)
     );
     return {
-        name: "none",
+        name: "c"+characterId++,
         attacks,
         ...props,
     } as Character;
