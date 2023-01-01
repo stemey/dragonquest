@@ -83,6 +83,9 @@ export class AbstractWorld extends Phaser.Scene {
 
         // our player sprite created through the physics system
         this.player = this.physics.add.sprite(100, 100, "player", 6);
+        this.player.setSize(9,3)
+        this.player.setOffset(4,13)
+        
         this.player.scaleX = 2;
         this.player.scaleY = 2;
 

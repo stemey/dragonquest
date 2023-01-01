@@ -42,6 +42,15 @@
         {
          "class":"Tile",
          "id":152,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":0
+                }]
+        }, 
+        {
+         "id":153,
          "objectgroup":
             {
              "draworder":"index",
@@ -50,48 +59,21 @@
              "objects":[
                     {
                      "class":"",
-                     "height":0,
-                     "id":2,
+                     "height":14.75,
+                     "id":9,
                      "name":"",
-                     "polygon":[
-                            {
-                             "x":0,
-                             "y":0
-                            }, 
-                            {
-                             "x":0.25,
-                             "y":9
-                            }, 
-                            {
-                             "x":9.75,
-                             "y":19.25
-                            }, 
-                            {
-                             "x":15.5,
-                             "y":23.5
-                            }, 
-                            {
-                             "x":15.25,
-                             "y":0
-                            }],
                      "rotation":0,
                      "visible":true,
-                     "width":0,
-                     "x":16.75,
-                     "y":0.5
+                     "width":22.5,
+                     "x":4.25,
+                     "y":17
                     }],
              "opacity":1,
              "type":"objectgroup",
              "visible":true,
              "x":0,
              "y":0
-            },
-         "properties":[
-                {
-                 "name":"height",
-                 "type":"int",
-                 "value":0
-                }]
+            }
         }, 
         {
          "class":"Tile",
@@ -108,18 +90,19 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
                      "class":"",
-                     "height":21,
+                     "height":10.75,
                      "id":1,
                      "name":"collision",
                      "rotation":0,
                      "visible":true,
-                     "width":27,
-                     "x":4,
-                     "y":1
+                     "width":22.5,
+                     "x":5,
+                     "y":11
                     }],
              "opacity":1,
              "type":"objectgroup",

@@ -1,5 +1,8 @@
 import * as Phaser from "phaser";
 
+
+const debug = new URLSearchParams(window.location.search).get("debug")==="true"
+
 export const config = {
     type: Phaser.AUTO,
     parent: "content",
@@ -10,7 +13,7 @@ export const config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: true,
+            debug,
             gravity: { y: 0 },
         },
     },

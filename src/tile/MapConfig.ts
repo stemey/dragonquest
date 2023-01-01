@@ -16,13 +16,25 @@ export interface OriginalTileset {
     tiles: Tile[]
 }
 
-export type Tile  = TileConfig | ObjectGroupConfig;
-export interface TileConfig {
+export interface Tile {
     class:string;
     properties:Property[];
     id:number;
-}
-export interface ObjectGroupConfig {
-    objectgroup:any
+    objectgroup?:{
+        objects:TileObject[]
+    }
 
+}
+
+export type TileObject = TileRectangle | TilePolygon;
+
+export interface TileRectangle {
+    width:number;
+    height:number;
+    x:number;
+    y:number;
+}
+export interface TilePolygon{
+    polygon:{x:number,y:number}[]
+   
 }

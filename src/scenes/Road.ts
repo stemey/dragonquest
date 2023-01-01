@@ -1,11 +1,11 @@
-import {AbstractWorld} from "./AbstractWorld";
+import { AbstractWorld } from "./AbstractWorld";
 
 export default class extends AbstractWorld {
     constructor() {
-        super({ key: "/level/road" });
+        super({
+            key: "/level/road",
+        });
     }
-
-
 
     create() {
         this.startWorld("", 100, 100);
