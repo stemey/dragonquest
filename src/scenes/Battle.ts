@@ -3,6 +3,7 @@ import CharacterDisplay from "../sprites/CharacterDisplay";
 import { DragonQuest } from "../gameplay/DragonQuest";
 import { Unit } from "../sprites/Unit";
 import { BattleAction } from "../gameplay/battle/BattleAction";
+import { BattleEntry } from "./WorldEntryParameter";
 
 export default class extends Phaser.Scene {
     private entryWorld = "";
@@ -192,13 +193,14 @@ export default class extends Phaser.Scene {
     goToWorld() {
         this.scene.sleep("BattleScene");
         this.scene.sleep("UIScene");
-        this.scene.wake(this.entryWorld, { battleFinished: true });
         const deadEnemies = this.enemies.filter((enemy) => !enemy.alive);
         deadEnemies.forEach((enemy) => {
             if (enemy.dropItems) {
                 DragonQuest.foundItems(enemy.dropItems);
             }
         });
+        const win = deadEnemies.length==this.enemies.length;
+        this.scene.wake(this.entryWorld, { type:"battle", win } as BattleEntry);
         this.scene.scene.events.emit("battleFinished", { deadEnemies });
     }
 

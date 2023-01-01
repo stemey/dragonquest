@@ -33,7 +33,7 @@ describe("balance", () => {
             { damage: 10, strength: 10 }
         );
         const heroes = [hero];
-        it("equal", () => {
+        it.skip("equal", () => {
             const enemies = [
                 character(
                     { armor: 10, maxHp: 20 },

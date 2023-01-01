@@ -1,14 +1,18 @@
 import * as Phaser from "phaser";
+import { GatewayEntry } from "../../scenes/WorldEntryParameter";
 import { Action } from "./Action";
 
 const GatewayAction: Action = (layerObject, world) => {
     const target = layerObject.getProp("target") as string;
-    const zone = new Phaser.GameObjects.Zone(world, layerObject.x,
+    const zone = new Phaser.GameObjects.Zone(
+        world,
+        layerObject.x,
         layerObject.y,
         layerObject.width,
-        layerObject.height)
+        layerObject.height
+    );
     const zones = world.physics.add.group([zone]);
-    
+
     if (!world.player) {
         return;
     }
@@ -18,9 +22,15 @@ const GatewayAction: Action = (layerObject, world) => {
         (player, zone) => {
             world.scene.sleep();
             if (world.scene.isSleeping(target)) {
-                world.scene.wake(target);
+                world.scene.wake(target, {
+                    type: "gateway",
+                    entry: "main",
+                } as GatewayEntry);
             } else {
-                world.scene.launch(target);
+                world.scene.launch(target, {
+                    type: "gateway",
+                    entry: "main",
+                } as GatewayEntry);
             }
         },
         this

@@ -37,7 +37,7 @@ export class Tester {
         1
     );
 
-    test(enemy: Character, hero: Character) {
+   test(enemy: Character, hero: Character) {
         const vector = this.space.getVector(enemy);
         let count = 0;
         const queue: Vector[] = [vector];

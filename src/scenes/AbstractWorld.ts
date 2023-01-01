@@ -10,7 +10,7 @@ import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
-import { Level } from "../gameplay/types/Level";
+import { WorldEntryParameter } from "./WorldEntryParameter";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
@@ -18,13 +18,13 @@ export class AbstractWorld extends Phaser.Scene {
     public stopPlayer = false;
     public player?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private levelConfigKey:string="";
-    private levelMapKey:string="";
+    private levelConfigKey: string = "";
+    private levelMapKey: string = "";
     preload() {
-        this.levelConfigKey=`/generated/config${this.scene.key}/level.json`
-        this.levelMapKey=`/assets${this.scene.key}/map.json`
-        this.load.json(this.levelConfigKey,this.levelConfigKey)
-        this.load.json(this.levelMapKey,this.levelMapKey)
+        this.levelConfigKey = `/generated/config${this.scene.key}/level.json`;
+        this.levelMapKey = `/assets${this.scene.key}/map.json`;
+        this.load.json(this.levelConfigKey, this.levelConfigKey);
+        this.load.json(this.levelMapKey, this.levelMapKey);
     }
 
     addEntry(entry: LayerObject) {
@@ -86,9 +86,9 @@ export class AbstractWorld extends Phaser.Scene {
         this.player.scaleY = 2;
 
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
-        const levelConfig = this.cache.json.get(this.levelConfigKey)
-        DragonQuest.setLevel(this.scene.key, levelConfig)
-        DragonQuest.currentLevelKey=this.scene.key;
+        const levelConfig = this.cache.json.get(this.levelConfigKey);
+        DragonQuest.setLevel(this.scene.key, levelConfig);
+        DragonQuest.currentLevelKey = this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
         smallmap.actions["Monster"] = MonsterAction;
@@ -225,17 +225,25 @@ export class AbstractWorld extends Phaser.Scene {
         } else {
             this.player.anims.stop();
         }
+
+        DragonQuest.updatePlayerPosition(
+            this.scene.key,
+            this.player.x,
+            this.player.y
+        );
     }
 
-    wake(sys: any, data: any) {
+    wake(sys: any, data: WorldEntryParameter) {
         if (!this.player || !this.cursors) {
             return;
         }
-        // move player away from possibley alive enemies
-        if (data && data.battleFinished) {
-            this.player.x = this.player.x + 100;
-        } else {
-            const entry = this.getMainEntry();
+        // move player a way from possibley alive enemies
+        if (data && data.type == "battle" && !data.win) {
+            const c = DragonQuest.getLastSafePlayerPosition();
+            this.player.x = c.x;
+            this.player.y = c.y;
+        } else if (data && data.type == "gateway" && data.entry) {
+            const entry = this.entries[data.entry];
             this.player.x = entry.x;
             this.player.y = entry.y;
         }

@@ -8,6 +8,35 @@ import { DropItemRef } from "./types/DropItemRef";
 import { CustomApi } from "./CustomApi";
 import { Attack } from "./battle/Attack";
 import { Heal } from "./battle/Heal";
+interface Coordinate {
+    x: number;
+    y: number;
+}
+
+class PlayerState {
+    scene: string = "";
+    path: Coordinate[] = [];
+    update(scene: string, x: number, y: number) {
+        if (scene !== this.scene) {
+            this.path = [];
+            this.scene = scene;
+        }
+        const c = { x: Math.round(x), y: Math.round(y) };
+        if (
+            this.path.length === 0 ||
+            (c.x !== this.path[0].x && c.y !== this.path[0].y)
+        ) {
+            this.path.splice(0, 0, c);
+            while (this.path.length > 40) {
+                this.path.pop();
+            }
+        }
+    }
+    getLastSafePlayerPosition() {
+        const index = Math.min(10, this.path.length);
+        return this.path[index];
+    }
+}
 
 export class DragonQuestType {
     goldCount: IObservableValue<number> = observable.box(0);
@@ -19,6 +48,8 @@ export class DragonQuestType {
     private powers: Powers = {};
     api = new CustomApi(this);
 
+    private playerState: PlayerState = new PlayerState();
+
     init(characters: Characters, powers: Powers) {
         this.characters = characters;
         this.powers = powers;
@@ -29,12 +60,20 @@ export class DragonQuestType {
         return new Unit(this.characters[name]);
     }
 
+    getLastSafePlayerPosition() {
+        return this.playerState.getLastSafePlayerPosition();
+    }
+
     createVillains(name: string) {
         const monsterIds = this.currentLevel.monsters[name];
         return monsterIds
             .map((id) => this.characters[id])
             .filter((c) => !!c)
             .map((c) => new Unit(c));
+    }
+
+    public updatePlayerPosition(scene: string, x: number, y: number) {
+        this.playerState?.update(scene, x, y);
     }
 
     private get currentLevel() {
