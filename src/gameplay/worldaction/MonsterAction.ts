@@ -11,19 +11,20 @@ export const MonsterAction: Action = (layerObject, scene) => {
     const monsters: Phaser.GameObjects.Sprite[] = [];
     const monsterName = layerObject.getProp("name") as string;
     const monsterUnits = DragonQuest.createVillains(monsterName);
+
     if (monsterUnits && monsterUnits.length > 0) {
-        const container = scene.physics.add.group({
-            classType: Phaser.GameObjects.Container,
-        });
+        const container = scene.physics.add.group();
 
         monsterUnits.forEach((monster, idx) => {
-            const sprite = scene.make.sprite({
-                x: layerObject.x + Math.round(idx * 30),
-                y: layerObject.y + Math.round(idx * 5),
-                key: monster.image,
-            });
+            const sprite = scene.make.sprite(
+                {
+                    x: layerObject.x + Math.round(idx * 30),
+                    y: layerObject.y + Math.round(idx * 5),
+                    key: monster.image,
+                }
+            );
             monsters.push(sprite);
-            container.add(sprite);
+            container.add(sprite, true);
             (sprite as any).enemies = monster;
             (sprite as any).enemyId = monster.id;
         });

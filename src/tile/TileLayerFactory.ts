@@ -72,7 +72,6 @@ export default class TileLayerFactory {
                             layer.name
                         } ${tileSets.map((t) => t.name).join(", ")}`
                     );
-
                 } else {
                     layer.tileset = tileSets[0].name;
                     layer.path = path ? path + "/" + layer.name : layer.name;
@@ -144,14 +143,7 @@ export default class TileLayerFactory {
             if (layer.type === "group") {
                 this.process(map, layer.layers);
             } else if (layer.type === "objectgroup") {
-                layer.objects.forEach((layerObject) => {
-                    const props = new LayerObject(layerObject);
-                    const type = layerObject.class;
-                    const action = this.actions[type];
-                    if (action) {
-                        action(props, this.scene);
-                    }
-                });
+                // do it later
             } else {
                 const layerProps = new LayerObject(layer);
                 if (layerProps.getProp("collide")) {
@@ -190,6 +182,20 @@ export default class TileLayerFactory {
                         0
                     );
                 }
+            }
+        });
+        layers.forEach((layer) => {
+            if (layer.type === "group") {
+                this.process(map, layer.layers);
+            } else if (layer.type === "objectgroup") {
+                layer.objects.forEach((layerObject) => {
+                    const props = new LayerObject(layerObject);
+                    const type = layerObject.class;
+                    const action = this.actions[type];
+                    if (action) {
+                        action(props, this.scene);
+                    }
+                });
             }
         });
     }
