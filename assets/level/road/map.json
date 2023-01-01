@@ -283,6 +283,12 @@
                  "id":9,
                  "name":"Kachelebene 5",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"depthSorting",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "type":"tilelayer",
                  "visible":true,
                  "width":24,
@@ -327,7 +333,7 @@
                  "name":"Steine",
                  "opacity":1,
                  "type":"tilelayer",
-                 "visible":false,
+                 "visible":true,
                  "width":24,
                  "x":0,
                  "y":0

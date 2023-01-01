@@ -133,6 +133,29 @@
                 "wangcolor",
                 "wangset"
             ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 9,
+            "members": [
+                {
+                    "name": "height",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Tile",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset"
+            ]
         }
     ]
 }

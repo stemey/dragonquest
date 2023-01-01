@@ -31,9 +31,13 @@ export default class extends Phaser.Scene {
             "VX Interior Tileset",
             "assets/tileset/VX Interior Tileset.png"
         );
-        this.load.image(
+        this.load.spritesheet(
             "VX Plants Tileset",
-            "assets/tileset/VX Plants Tileset.png"
+            "assets/tileset/VX Plants Tileset.png",
+            {
+                frameWidth: 32,
+                frameHeight: 32,
+            }
         );
         this.load.image(
             "VX Scenery Tileset",
@@ -53,8 +57,6 @@ export default class extends Phaser.Scene {
 
         this.load.json("tiled_meta_terrain", "assets/tileset/terrain.json");
         this.load.json("tiled_meta_plants", "assets/tileset/Plants.json");
-
-        
 
         // load resources
         this.load.spritesheet("player", "assets/RPG_assets.png", {

@@ -5,6 +5,7 @@ import { MapConfig, OriginalTileset } from "./MapConfig";
 import { Layer } from "./Layer";
 import { AbstractWorld } from "../scenes/AbstractWorld";
 import { LayerAction } from "../gameplay/worldaction/LayerAction";
+import { buildMap } from "./buildMap";
 
 interface Tileset {
     name: string;
@@ -159,6 +160,13 @@ export default class TileLayerFactory {
                             this.scene.player,
                             theLayer
                         );
+                    }
+                } else if (layerProps.getProp("depthSorting") as boolean) {
+                    const tileSet = this.mapConfig.tilesets.find(
+                        (t) => t.name == layer.tileset
+                    );
+                    if (this.scene?.player && tileSet) {
+                        buildMap(this.scene, 0, 0, layer, tileSet);
                     }
                 } else if (layerProps.getProp("type")) {
                     const type = layerProps.getProp("type") as string;

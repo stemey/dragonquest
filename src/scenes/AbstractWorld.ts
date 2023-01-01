@@ -20,6 +20,7 @@ export class AbstractWorld extends Phaser.Scene {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private levelConfigKey: string = "";
     private levelMapKey: string = "";
+    private map?:Phaser.Tilemaps.Tilemap;
     preload() {
         this.levelConfigKey = `/generated/config${this.scene.key}/level.json`;
         this.levelMapKey = `/assets${this.scene.key}/map.json`;
@@ -86,6 +87,7 @@ export class AbstractWorld extends Phaser.Scene {
         this.player.scaleY = 2;
 
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
+        
         const levelConfig = this.cache.json.get(this.levelConfigKey);
         DragonQuest.setLevel(this.scene.key, levelConfig);
         DragonQuest.currentLevelKey = this.scene.key;
@@ -124,6 +126,7 @@ export class AbstractWorld extends Phaser.Scene {
         //smallmap.actions["gateway"] = GatewayAction;
 
         const map = smallmap.create();
+        this.map=map;
         // TODO bring above all layers that have prop abovePlayer:false
         this.children.bringToTop(this.player);
         this.children.bringToTop(this.graphics);
@@ -225,6 +228,18 @@ export class AbstractWorld extends Phaser.Scene {
         } else {
             this.player.anims.stop();
         }
+
+        if (this.map) {
+            const depth = (this.player.y-this.map.tileHeight/2)/this.map.tileHeight;
+            if (depth!==this.player.depth) {
+                console.log("depth",this.player.y-this.map.tileHeight/2,this.map.tileHeight, depth)
+            }
+            this.player.depth=depth;
+            
+        }
+
+        
+            
 
         DragonQuest.updatePlayerPosition(
             this.scene.key,

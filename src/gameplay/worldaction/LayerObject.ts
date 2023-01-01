@@ -11,6 +11,16 @@ export interface Property {
     value: number | string | boolean;
 }
 
+export function getProp(key: string, properties: Property[]) {
+    const props = properties.filter((prop) => prop.name === key);
+    if (props.length > 0) {
+        const prop = props[0];
+
+        return prop.value;
+    }
+    return null;
+}
+
 export class LayerObject {
     constructor(private readonly obj: LayerProperties) {}
 

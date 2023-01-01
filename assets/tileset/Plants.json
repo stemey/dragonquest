@@ -10,11 +10,104 @@
  "tileheight":32,
  "tiles":[
         {
-         "id":219,
+         "class":"Tile",
+         "id":136,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":1
+                }]
+        }, 
+        {
+         "class":"Tile",
+         "id":137,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":1
+                }]
+        }, 
+        {
+         "class":"Tile",
+         "id":138,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":1
+                }]
+        }, 
+        {
+         "class":"Tile",
+         "id":152,
          "objectgroup":
             {
              "draworder":"index",
              "id":2,
+             "name":"",
+             "objects":[
+                    {
+                     "class":"",
+                     "height":0,
+                     "id":2,
+                     "name":"",
+                     "polygon":[
+                            {
+                             "x":0,
+                             "y":0
+                            }, 
+                            {
+                             "x":0.25,
+                             "y":9
+                            }, 
+                            {
+                             "x":9.75,
+                             "y":19.25
+                            }, 
+                            {
+                             "x":15.5,
+                             "y":23.5
+                            }, 
+                            {
+                             "x":15.25,
+                             "y":0
+                            }],
+                     "rotation":0,
+                     "visible":true,
+                     "width":0,
+                     "x":16.75,
+                     "y":0.5
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":0
+                }]
+        }, 
+        {
+         "class":"Tile",
+         "id":154,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":0
+                }]
+        }, 
+        {
+         "id":219,
+         "objectgroup":
+            {
+             "draworder":"index",
              "name":"",
              "objects":[
                     {

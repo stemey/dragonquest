@@ -1,3 +1,4 @@
+import { Property } from "../gameplay/worldaction/LayerObject";
 import { Layer } from "./Layer";
 
 export interface MapConfig {
@@ -12,4 +13,16 @@ export interface OriginalTileset {
     tileheight: number;
     tilewidth: number;
     image:string;
+    tiles: Tile[]
+}
+
+export type Tile  = TileConfig | ObjectGroupConfig;
+export interface TileConfig {
+    class:string;
+    properties:Property[];
+    id:number;
+}
+export interface ObjectGroupConfig {
+    objectgroup:any
+
 }
