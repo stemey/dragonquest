@@ -89,6 +89,16 @@
             }
         }, 
         {
+         "class":"Tile",
+         "id":438,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":-1
+                }]
+        }, 
+        {
          "id":439,
          "objectgroup":
             {

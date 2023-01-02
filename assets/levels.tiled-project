@@ -162,6 +162,11 @@
             "id": 9,
             "members": [
                 {
+                    "name": "collide",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "height",
                     "type": "int",
                     "value": 0

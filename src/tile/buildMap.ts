@@ -54,7 +54,26 @@ export const buildMap = (
                             ) as number;
                             height = heightProp || 0;
                         }
+                        const collide = getProp(
+                            "collide",
+                            tileConfig.properties
+                        ) as boolean;
+                        if (collide) {
+                            const poly = new Phaser.GameObjects.Rectangle(
+                                scene,
+                                Math.round(x0 + tx - tilewidth / 2),
+                                Math.round(y0 + ty - tileheight / 2),
+                                Math.round(tilewidth),
+                                Math.round(tileheight),
+                                123
+                            );
+                            //scene.add.existing(poly);
+                            poly.visible = false;
+
+                            statics.add(poly, true);
+                        }
                     }
+
                     if (tileConfig?.objectgroup?.objects) {
                         tileConfig.objectgroup.objects.forEach((p) => {
                             if ("polygon" in p) {
@@ -94,7 +113,7 @@ export const buildMap = (
                                 //scene.add.existing(poly);
                                 poly.visible = false;
 
-                                 statics.add(poly, true);
+                                statics.add(poly, true);
                             }
                         });
                     }

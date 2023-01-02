@@ -26,6 +26,8 @@ export interface Tile {
 
 }
 
+
+
 export type TileObject = TileRectangle | TilePolygon;
 
 export interface TileRectangle {

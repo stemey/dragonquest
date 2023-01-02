@@ -12,6 +12,9 @@ export interface Property {
 }
 
 export function getProp(key: string, properties: Property[]) {
+    if (!properties) {
+        return null;
+    }
     const props = properties.filter((prop) => prop.name === key);
     if (props.length > 0) {
         const prop = props[0];
