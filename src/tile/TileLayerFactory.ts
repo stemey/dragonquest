@@ -136,6 +136,7 @@ export default class TileLayerFactory {
         });
 
         this.process(map, this.mapConfig.layers);
+        this.processObjects(map, this.mapConfig.layers);
         return map;
     }
 
@@ -192,9 +193,12 @@ export default class TileLayerFactory {
                 }
             }
         });
+    }
+
+    processObjects(map: Phaser.Tilemaps.Tilemap, layers: Layer[]) {
         layers.forEach((layer) => {
             if (layer.type === "group") {
-                this.process(map, layer.layers);
+                this.processObjects(map, layer.layers);
             } else if (layer.type === "objectgroup") {
                 layer.objects.forEach((layerObject) => {
                     const props = new LayerObject(layerObject);
