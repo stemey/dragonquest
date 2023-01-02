@@ -14,7 +14,10 @@ export default class extends Phaser.Scene {
 
     preload() {
         // map tiles
-        this.load.image("terrain", "assets/tileset/terrain.png");
+        this.load.spritesheet("terrain", "assets/tileset/terrain.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
         this.load.image(
             "VX Architecture Tileset",
             "assets/tileset/VX Architecture Tileset.png"

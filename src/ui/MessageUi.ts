@@ -45,5 +45,4 @@ export class MessageUi extends Phaser.GameObjects.Container {
         this.hideEvent = undefined;
         this.visible = false;
     }
-
 }

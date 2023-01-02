@@ -80,6 +80,29 @@
         },
         {
             "color": "#ffa0a0a4",
+            "id": 10,
+            "members": [
+                {
+                    "name": "depthSorting",
+                    "type": "bool",
+                    "value": false
+                }
+            ],
+            "name": "Layer",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
             "id": 4,
             "members": [
                 {

@@ -117,7 +117,7 @@
         "level/road/map.json"
     ],
     "project": "levels.tiled-project",
-    "property.type": "int",
+    "property.type": "bool",
     "recentFiles": [
         "level/road/map.json",
         "levels/one/map/road.json",
