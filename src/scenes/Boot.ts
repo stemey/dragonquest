@@ -46,9 +46,13 @@ export default class extends Phaser.Scene {
             "VX Scenery Tileset",
             "assets/tileset/VX Scenery Tileset.png"
         );
-        this.load.image(
+        this.load.spritesheet(
             "VX Shop Tileset",
-            "assets/tileset/VX Shop Tileset.png"
+            "assets/tileset/VX Shop Tileset.png",
+            {
+                frameWidth: 32,
+                frameHeight: 32,
+            }
         );
         this.load.image(
             "VX Winter Tileset",

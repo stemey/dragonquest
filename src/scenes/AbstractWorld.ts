@@ -11,6 +11,7 @@ import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
 import { WorldEntryParameter } from "./WorldEntryParameter";
+import { ChestAction } from "../gameplay/worldaction/ChestAction";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
@@ -100,6 +101,7 @@ export class AbstractWorld extends Phaser.Scene {
         smallmap.actions["npc"] = CharacterAction;
         smallmap.actions["Entry"] = EntryAction;
         smallmap.actions["Dialog"] = DialogAction;
+        smallmap.actions["Loot"] = ChestAction;
         //smallmap.actions["discovery"] = DiscoveryAction;
 
         smallmap.layerActions["gold"] = PickUpAction(

@@ -1,4 +1,9 @@
-import { IObservableValue, observable, ObservableMap } from "mobx";
+import {
+    IObservableArray,
+    IObservableValue,
+    observable,
+    ObservableMap,
+} from "mobx";
 import { DropItem } from "./types/DropItem";
 import { Unit } from "../sprites/Unit";
 import { Level } from "./types/Level";
@@ -8,6 +13,7 @@ import { DropItemRef } from "./types/DropItemRef";
 import { CustomApi } from "./CustomApi";
 import { Attack } from "./battle/Attack";
 import { Heal } from "./battle/Heal";
+import { Tilemaps } from "phaser";
 interface Coordinate {
     x: number;
     y: number;
@@ -40,7 +46,7 @@ class PlayerState {
 
 export class DragonQuestType {
     goldCount: IObservableValue<number> = observable.box(0);
-    items: ObservableMap<string, DropItem> = observable.map({});
+    items: IObservableArray<DropItem> = observable.array([]);
     private levels: { [key: string]: Level } = {};
     public currentLevelKey = "";
     public heroes: Unit[] = [];
@@ -79,7 +85,9 @@ export class DragonQuestType {
     private get currentLevel() {
         return this.levels[this.currentLevelKey];
     }
-
+    getLoot(lootName: any): DropItemRef[] {
+        return this.currentLevel.loots[lootName];
+    }
     getDialog(name: string) {
         return this.currentLevel.dialogs[name];
     }
@@ -93,13 +101,9 @@ export class DragonQuestType {
         console.log("gold " + this.goldCount);
     }
 
-    foundItem(item: DropItem) {
-        this.items.set(item.name, item);
-    }
-
     foundItems(itemRefs: DropItemRef[]) {
         // TODO number not taken into account especially for gold
-        const items = itemRefs.forEach((itemRef) => {
+        itemRefs.forEach((itemRef) => {
             if (itemRef.type === "gold") {
                 this.foundGold(itemRef.amount);
             } else if (itemRef.type === "power") {
@@ -110,16 +114,14 @@ export class DragonQuestType {
                 } else {
                     this.heroes[0].attacks.push(new Attack(power));
                 }
+                const item = this.powers[itemRef.name];
+                if (item) {
+                    this.items.push(item);
+                }
+            } else if (itemRef.type === "key") {
+                this.items.push(itemRef);
             }
         });
-    }
-
-    getItem(name: string) {
-        return this.items.get(name);
-    }
-
-    hasItem(name: string) {
-        return this.items.has(name);
     }
 
     foundFood(foodCount: number) {
@@ -131,7 +133,7 @@ export class DragonQuestType {
 
     logInventory() {
         Array.from(this.items.values()).forEach((item) => {
-            console.log(item.type + " " + item.name);
+            console.log(item.type);
         });
     }
 

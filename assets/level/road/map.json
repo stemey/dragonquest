@@ -7,6 +7,34 @@
          "layers":[
                 {
                  "draworder":"topdown",
+                 "id":18,
+                 "name":"Loot",
+                 "objects":[
+                        {
+                         "class":"Loot",
+                         "height":32.4324324324325,
+                         "id":14,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"name",
+                                 "type":"string",
+                                 "value":"bronceKeyAndGold"
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":43.9189189189189,
+                         "x":95.9459459459459,
+                         "y":1000
+                        }],
+                 "opacity":1,
+                 "type":"objectgroup",
+                 "visible":true,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "draworder":"topdown",
                  "id":15,
                  "name":"enemies",
                  "objects":[
@@ -457,8 +485,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":18,
- "nextobjectid":14,
+ "nextlayerid":19,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

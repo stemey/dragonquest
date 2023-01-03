@@ -16,5 +16,11 @@ export const config = {
             debug,
             gravity: { y: 0 },
         },
+        matter: {
+            debug,
+            gravity: {
+                y: 0.3
+            },
+        }
     },
 };

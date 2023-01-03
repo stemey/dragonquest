@@ -5,5 +5,19 @@
     "monsters": {
         "wolves": ["kiri", "kiri"]
     },
-    "dialogs": { "intro": { "$ref": "./intro.json" } }
+    "dialogs": { "intro": { "$ref": "./intro.json" } },
+    "loots": {
+        "bronceKeyAndGold": [
+            {
+                "type": "key",
+                "name": "bronce key",
+                "description": "A simple bronce key. No inscriptions.",
+                "image": "key.png"
+            },
+            {
+                "type": "gold",
+                "amount": 20
+            }
+        ]
+    }
 }
