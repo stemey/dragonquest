@@ -2,6 +2,7 @@ import * as Phaser from "phaser";
 import { DialogState } from "../gameplay/dialog/DialogState";
 import { DragonQuest } from "../gameplay/DragonQuest";
 import { autorun } from "mobx";
+import { Dialog } from "../gameplay/types/Dialog";
 
 export class DialogUi extends Phaser.GameObjects.Container {
     private text: Phaser.GameObjects.Text;
@@ -68,11 +69,19 @@ export class DialogUi extends Phaser.GameObjects.Container {
         }
     }
 
-    startDialog = (dialogId: string) => {
+    startDialog = (dialogId: string | Dialog) => {
         if (this.dialogState?.conversing) {
             return;
         }
-        const dialog = DragonQuest.getDialog(dialogId);
+        this.visible = true
+
+        let dialog: Dialog;
+        if (typeof dialogId === "string") {
+            dialog = DragonQuest.getDialog(dialogId);
+        } else {
+            dialog = dialogId;
+        }
+
         this.dialogState.startDialog(dialog);
 
         autorun(() => {

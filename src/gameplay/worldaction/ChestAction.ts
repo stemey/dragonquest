@@ -2,6 +2,7 @@ import * as Phaser from "phaser";
 import { Action } from "./Action";
 import { DropItemRef } from "../types/DropItemRef";
 import { DragonQuest } from "../DragonQuest";
+import { Dialog } from "../types/Dialog";
 
 export const ChestAction: Action = (layerObject, world) => {
     const lootName = layerObject.getProp("name") as any;
@@ -36,12 +37,10 @@ export const ChestAction: Action = (layerObject, world) => {
             13123
         );
         world.physics.add.existing(zone);
-        //world.add.existing(platform);
         world.matter.add.gameObject(platform, { isStatic: true });
         const chestGame = world.matter.add.gameObject(
             chest
         ) as Phaser.Physics.Matter.Sprite;
-        //world.physics.add.existing(chest) as Phaser.Physics.Matter.Sprite;
 
         let collided = false;
         world.physics.add.overlap(
@@ -52,32 +51,48 @@ export const ChestAction: Action = (layerObject, world) => {
                     return;
                 }
                 collided = true;
-                const originalY = chest.y;
                 chest.depth = 50;
-                //chest.setY(chest.y - 50);
                 chestGame.setVelocityY(-3);
                 chestGame.setAngularVelocity(0.01);
-                //chestGame.displayOriginY.gr
-                chestGame.setIgnoreGravity(false);
-                //chest.visible=true
-                chestGame.on;
 
                 world.add.tween({
                     targets: chest,
                     alpha: { value: 1, duration: 1000, ease: "Power1" },
-                    //y: { value: originalY, duration: 5000, ease: "Power1" },
                     onStart: () => {
                         world.stopPlayer = true;
                         world.player?.body.setVelocity(0);
                     },
-                }); //.to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+                });
                 world.time.addEvent({
                     delay: 1000,
                     callback: () => {
                         world.stopPlayer = false;
                         DragonQuest.foundItems(itemRefs);
-                        
-                        chest.destroy();
+                        const items = itemRefs
+                            .map((i) => {
+                                switch (i.type) {
+                                    case "gold": {
+                                        return `${i.amount} gold`;
+                                    }
+                                    default: {
+                                        return `${i.name}`;
+                                    }
+                                }
+                            })
+                            .join("\n");
+                        const dialog: Dialog = {
+                            start: {
+                                message: `You have found a chest with ${itemRefs.length} items:\n ${items}`,
+                                next: "end",
+                            },
+                            end: {
+                                end: true,
+                            },
+                        };
+                        world.events.emit("DialogStart", dialog);
+                        world.events.on("DialogEnd", () => {
+                            chest.destroy();
+                        });
                     },
                     callbackScope: this,
                 });

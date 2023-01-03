@@ -236,9 +236,7 @@ export class AbstractWorld extends Phaser.Scene {
 
         if (this.map) {
             const depth = (this.player.y-this.map.tileHeight/2)/this.map.tileHeight;
-            if (depth!==this.player.depth) {
-                console.log("depth",this.player.y-this.map.tileHeight/2,this.map.tileHeight, depth)
-            }
+            
             this.player.depth=depth;
             
         }
