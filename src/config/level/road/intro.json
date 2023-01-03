@@ -35,7 +35,7 @@
         "message": "You will have to fight your way",
         "next": "end"
     },
-    "warrior": {
+    "knight": {
         "message": "You will be on your road with ....",
         "next": "end"
     },

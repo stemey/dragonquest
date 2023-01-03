@@ -12,6 +12,7 @@ export class DialogState {
 
     stop() {
         this.dialog = undefined;
+        this.selectedOptionIndex.set(0);
         this.state.set("");
     }
 
@@ -58,12 +59,13 @@ export class DialogState {
         }
         const currentMessage = this.dialog[this.state.get()];
 
-        if ("end" in currentMessage) {
-            this.stop();
-            return;
-        }
         if ("next" in currentMessage) {
             this.state.set(currentMessage.next);
+        }
+        const nextMessage = this.dialog[this.state.get()];
+        if ("end" in nextMessage) {
+            this.stop();
+            return;
         }
     }
 
