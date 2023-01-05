@@ -87,4 +87,8 @@ export class Unit {
     get dropItems() {
         return this.character.dropItems;
     }
+
+    get className() {
+        return this.character.className;
+    }
 }

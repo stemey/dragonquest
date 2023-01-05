@@ -26,12 +26,30 @@
         ],
         "someWeapons": [
             {
-                "type": "power",
-                "name": "mighty sparks"
+                "condition": {
+                    "playerState": {
+                        "className": "Wizard"
+                    }
+                },
+                "dropItemRefs": [
+                    {
+                        "type": "power",
+                        "name": "mighty sparks"
+                    }
+                ]
             },
             {
-                "type": "power",
-                "name": "long sword"
+                "condition": {
+                    "playerState": {
+                        "className": "Knight"
+                    }
+                },
+                "dropItemRefs": [
+                    {
+                        "type": "power",
+                        "name": "long sword"
+                    }
+                ]
             }
         ]
     },

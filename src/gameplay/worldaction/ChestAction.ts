@@ -3,10 +3,11 @@ import { Action } from "./Action";
 import { DropItemRef } from "../types/DropItemRef";
 import { DragonQuest } from "../DragonQuest";
 import { Dialog } from "../types/Dialog";
+import { AnyDropItemRef } from "../types/AnyDropItemRef";
 
 export const ChestAction: Action = (layerObject, world) => {
     const lootName = layerObject.getProp("name") as any;
-    const itemRefs: DropItemRef[] = DragonQuest.getLoot(lootName);
+    const itemRefs: AnyDropItemRef[] = DragonQuest.getLoot(lootName);
 
     if (itemRefs && world.player) {
         const chest = world.make.sprite(
@@ -69,8 +70,8 @@ export const ChestAction: Action = (layerObject, world) => {
                     delay: 1000,
                     callback: () => {
                         world.stopPlayer = false;
-                        DragonQuest.foundItems(itemRefs);
-                        const items = itemRefs
+                        const dropItemRefs = DragonQuest.foundItems(itemRefs);
+                        const items = dropItemRefs
                             .map((i) => {
                                 switch (i.type) {
                                     case "gold": {

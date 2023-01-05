@@ -1,3 +1,5 @@
+import { AnyDropItemRef } from "./AnyDropItemRef";
+import { ConditionalDropItemRef } from "./ConditionalDropItemRef";
 import { Dialog } from "./Dialog";
 import { DropItemRef } from "./DropItemRef";
 import { GameEvent } from "./GameEvent";
@@ -9,6 +11,6 @@ export interface Level {
     dialogs: {
         [key: string]: Dialog;
     };
-    loots: { [key: string]: DropItemRef[] };
+    loots: { [key: string]: AnyDropItemRef[] };
     events: { [name: string]: GameEvent };
 }

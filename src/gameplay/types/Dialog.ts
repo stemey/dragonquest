@@ -1,5 +1,6 @@
 import { LevelState } from "../GameState";
 import { DialogAction } from "./DialogAction";
+import { PlayerState } from "./PlayerState";
 
 export interface BaseMessage {
     actor?: string;
@@ -29,6 +30,7 @@ export interface Dialog {
 }
 
 export interface Expression {
-    requiredItems: string[];
-    levelState: LevelState;
+    requiredItems?: string[];
+    levelState?: Partial<LevelState>;
+    playerState?: Partial<PlayerState>;
 }

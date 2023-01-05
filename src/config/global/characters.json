@@ -6,7 +6,8 @@
         "armor": 10,
         "image": "knight",
         "maxHp": 10,
-        "attacks": []
+        "attacks": [],
+        "className":"Knight"
     },
     "wizard": {
         "hero":true,
@@ -14,7 +15,8 @@
         "armor": 10,
         "image": "mage",
         "maxHp": 10,
-        "attacks": []
+        "attacks": [],
+        "className":"Wizard"
     },
     "tristran": {
         "name": "Tristran",

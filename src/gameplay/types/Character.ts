@@ -9,4 +9,5 @@ export interface Character {
     maxHp: number;
     attacks: Power[];
     dropItems?: DropItemRef[];
+    className?: "Knight" | "Wizard";
 }

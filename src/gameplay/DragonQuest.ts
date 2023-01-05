@@ -9,13 +9,17 @@ import { CustomApi } from "./CustomApi";
 import { Attack } from "./battle/Attack";
 import { Heal } from "./battle/Heal";
 import { BattleOutcome, GameState, LevelState } from "./GameState";
+import { ConditionalDropItemRef } from "./types/ConditionalDropItemRef";
+import { AnyDropItemRef } from "./types/AnyDropItemRef";
+import { PlayerState } from "./types/PlayerState";
+import { evaluateExpression } from "./evaluateExpression";
 
 interface Coordinate {
     x: number;
     y: number;
 }
 
-class PlayerState {
+class PlayerProgress {
     scene: string = "";
     path: Coordinate[] = [];
     update(scene: string, x: number, y: number) {
@@ -41,6 +45,19 @@ class PlayerState {
 }
 
 export class DragonQuestType {
+    matchesLevelState(levelState: Partial<LevelState>) {
+        return matches(this.gameState.currentLevel, levelState);
+    }
+    hasItem(name: string): unknown {
+        return (
+            this.items.filter((i) => {
+                if ("name" in i) {
+                    return i.name === name;
+                }
+                return false;
+            }).length > 0
+        );
+    }
     goldCount: IObservableValue<number> = observable.box(0);
     items: IObservableArray<DropItem> = observable.array([]);
     private levels: { [key: string]: Level } = {};
@@ -50,13 +67,21 @@ export class DragonQuestType {
     private powers: Powers = {};
     public api = new CustomApi(this);
     private gameState = new GameState();
-    public playerState: PlayerState = new PlayerState();
+    public playerState: PlayerProgress = new PlayerProgress();
     private levelEmitter?: Phaser.Events.EventEmitter;
 
     init(characters: Characters, powers: Powers) {
         this.characters = characters;
         this.powers = powers;
         this.heroes = []; //Object.values(this.characters).filter(c => c.hero).map(h => new Unit(h))
+    }
+
+    getPlayerState() {
+        const className = this.heroes[0].className;
+        return {
+            className,
+            level: 1,
+        } as PlayerState;
     }
 
     createVillainByName(name: string) {
@@ -86,7 +111,7 @@ export class DragonQuestType {
     private get currentLevel() {
         return this.levels[this.currentLevelKey];
     }
-    getLoot(lootName: any): DropItemRef[] {
+    getLoot(lootName: any): (ConditionalDropItemRef | DropItemRef)[] {
         return this.currentLevel.loots[lootName];
     }
     getDialog(name: string) {
@@ -109,8 +134,19 @@ export class DragonQuestType {
         this.onChanged();
     }
 
-    foundItems(itemRefs: DropItemRef[]) {
+    foundItems(anyItemRefs: AnyDropItemRef[]) {
         // TODO number not taken into account especially for gold
+        const itemRefs = anyItemRefs.reduce((refs, ref) => {
+            if ("condition" in ref) {
+                if (evaluateExpression(ref.condition)) {
+                    refs = refs.concat(ref.dropItemRefs);
+                }
+            } else {
+                refs.push(ref);
+            }
+
+            return refs;
+        }, [] as DropItemRef[]);
         itemRefs.forEach((itemRef) => {
             if (itemRef.type === "gold") {
                 this.foundGold(itemRef.amount);
@@ -131,6 +167,7 @@ export class DragonQuestType {
             }
         });
         this.onChanged();
+        return itemRefs;
     }
 
     foundFood(foodCount: number) {
