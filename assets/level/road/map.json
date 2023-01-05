@@ -206,7 +206,12 @@
                                 {
                                  "name":"name",
                                  "type":"string",
-                                 "value":"village"
+                                 "value":"main"
+                                }, 
+                                {
+                                 "name":"targetScene",
+                                 "type":"string",
+                                 "value":"Village"
                                 }],
                          "rotation":0,
                          "visible":true,

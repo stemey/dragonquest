@@ -1,4 +1,9 @@
 export interface PlayerState {
-    className: string;
+    className: ClassName;
     level: number;
+}
+
+export enum ClassName {
+    Wizard = "Wizard",
+    Knight = "Knight",
 }
