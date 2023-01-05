@@ -1,7 +1,7 @@
 import * as Phaser from "phaser";
 
-
-const debug = new URLSearchParams(window.location.search).get("debug")==="true"
+const debug =
+    new URLSearchParams(window.location.search).get("debug") === "true";
 
 export const config = {
     type: Phaser.AUTO,
@@ -19,8 +19,8 @@ export const config = {
         matter: {
             debug,
             gravity: {
-                y: 0.3
+                y: 0.3,
             },
-        }
+        },
     },
 };

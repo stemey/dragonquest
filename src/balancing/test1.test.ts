@@ -3,7 +3,7 @@ import { Weapon } from "../gameplay/types/Weapon";
 import { Tester } from "./ai/Tester";
 import { testScenarios } from "./testScenarios";
 
-let characterId=0;
+let characterId = 0;
 
 function character(
     props: { armor: number; maxHp: number },
@@ -20,7 +20,7 @@ function character(
             } as Weapon)
     );
     return {
-        name: "c"+characterId++,
+        name: "c" + characterId++,
         attacks,
         ...props,
     } as Character;
@@ -41,9 +41,8 @@ describe("balance", () => {
                 ),
             ];
             const tester = new Tester();
-            const enemy = tester.test(enemies[0],hero);
+            const enemy = tester.test(enemies[0], hero);
             expect(enemy).toBeDefined();
-            
         });
         it.skip("vs weaker", () => {
             const enemies = [

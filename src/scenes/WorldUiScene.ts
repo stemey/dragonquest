@@ -7,10 +7,9 @@ export class WorldUiScene extends Phaser.Scene {
     }
 
     private worldScene: string = "";
-    private  dialog?:DialogUi;
+    private dialog?: DialogUi;
 
     create(data: { world: string }) {
-
         this.worldScene = data.world;
         const scene = this.scene.get(this.worldScene);
         if (scene) {
@@ -18,12 +17,9 @@ export class WorldUiScene extends Phaser.Scene {
             this.add.existing(this.dialog);
             this.input.keyboard.on("keydown", this.dialog.onKey, this.dialog);
         }
-
     }
 
     update() {
         this.dialog?.update();
     }
-
-
 }

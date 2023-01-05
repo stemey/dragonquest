@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
-import {Attack} from "../gameplay/battle/Attack";
-import {Heal} from "../gameplay/battle/Heal";
+import { Attack } from "../gameplay/battle/Attack";
+import { Heal } from "../gameplay/battle/Heal";
 import { Character } from "../gameplay/types/Character";
 import { Healing } from "../gameplay/types/Healing";
 import { Power } from "../gameplay/types/Power";
@@ -24,11 +24,11 @@ export class Unit {
     public attacks: (Heal | Attack)[];
     public armor: number;
     public hp: number;
-    public id:number;
+    public id: number;
     constructor(private character: Character) {
         this.armor = character.armor;
         this.hp = character.maxHp;
-        this.id=unitId++;
+        this.id = unitId++;
         this.attacks = character.attacks.map((action) =>
             this.convertAction(action)
         );
@@ -73,7 +73,7 @@ export class Unit {
     get image() {
         return this.character.image;
     }
-    
+
     get maxHp() {
         return this.character.maxHp;
     }
@@ -81,8 +81,6 @@ export class Unit {
     get name() {
         return this.character.name;
     }
-
-   
 
     get dropItems() {
         return this.character.dropItems;

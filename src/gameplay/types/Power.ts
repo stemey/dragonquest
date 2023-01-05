@@ -3,7 +3,7 @@ import { Weapon } from "./Weapon";
 
 export interface BasePower {
     name: string;
-    type: "healing"|"weapon";
+    type: "healing" | "weapon";
 }
 
 export type Power = Weapon | Healing;

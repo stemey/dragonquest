@@ -10,9 +10,11 @@ import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
-import { WorldEntryParameter } from "./WorldEntryParameter";
+import { GatewayEntry, WorldEntryParameter } from "./WorldEntryParameter";
 import { ChestAction } from "../gameplay/worldaction/ChestAction";
 import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
+import GatewayAction from "../gameplay/worldaction/GatewayAction";
+import { dragonQuestConfiguration } from "./DragonQuestConfiguration";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
@@ -22,7 +24,8 @@ export class AbstractWorld extends Phaser.Scene {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private levelConfigKey: string = "";
     private levelMapKey: string = "";
-    private map?:Phaser.Tilemaps.Tilemap;
+    private map?: Phaser.Tilemaps.Tilemap;
+
     preload() {
         this.levelConfigKey = `/generated/config${this.scene.key}/level.json`;
         this.levelMapKey = `/assets${this.scene.key}/map.json`;
@@ -34,11 +37,11 @@ export class AbstractWorld extends Phaser.Scene {
         this.entries[entry.getProp("name") as string] = entry;
     }
 
-    getMainEntry() {
-        return this.entries["main"] || { x: 100, y: 100 };
+    getEntry(name: string = "main") {
+        return this.entries[name] || this.entries["main"] || { x: 100, y: 100 };
     }
 
-    startWorld(mapName: string, x: number, y: number) {
+    startWorld(data?: GatewayEntry) {
         this.scene.launch("WorldUiScene", { world: this.scene.key });
 
         this.entries = {};
@@ -85,16 +88,16 @@ export class AbstractWorld extends Phaser.Scene {
 
         // our player sprite created through the physics system
         this.player = this.physics.add.sprite(100, 100, "player", 6);
-        this.player.setSize(9,3)
-        this.player.setOffset(4,13)
-        
+        this.player.setSize(9, 3);
+        this.player.setOffset(4, 13);
+
         this.player.scaleX = 2;
         this.player.scaleY = 2;
 
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
-        
+
         const levelConfig = this.cache.json.get(this.levelConfigKey);
-        DragonQuest.setLevel(this.scene.key, levelConfig,this.events);
+        DragonQuest.setLevel(this.scene.key, levelConfig, this.events);
         DragonQuest.currentLevelKey = this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
@@ -105,6 +108,10 @@ export class AbstractWorld extends Phaser.Scene {
         smallmap.actions["Loot"] = ChestAction;
         smallmap.actions["ObstacleObject"] = ObstacleAction;
         //smallmap.actions["discovery"] = DiscoveryAction;
+        Object.keys(dragonQuestConfiguration.actions).forEach(
+            (key) =>
+                (smallmap.actions[key] = dragonQuestConfiguration.actions[key])
+        );
 
         smallmap.layerActions["gold"] = PickUpAction(
             "VX Scenery Tileset",
@@ -130,10 +137,10 @@ export class AbstractWorld extends Phaser.Scene {
         );
 
         //smallmap.actions["door"] = DoorAction;
-        //smallmap.actions["gateway"] = GatewayAction;
+        //smallmap.actions["Gateway"] = GatewayAction;
 
         const map = smallmap.create();
-        this.map=map;
+        this.map = map;
         // TODO bring above all layers that have prop abovePlayer:false
         this.children.bringToTop(this.player);
         this.children.bringToTop(this.graphics);
@@ -157,7 +164,7 @@ export class AbstractWorld extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.input.keyboard.on("keydown", this.onInventory, this);
 
-        const entry = this.getMainEntry();
+        const entry = this.getEntry(data?.entry);
         this.player.x = entry.x;
         this.player.y = entry.y;
 
@@ -237,14 +244,11 @@ export class AbstractWorld extends Phaser.Scene {
         }
 
         if (this.map) {
-            const depth = (this.player.y-this.map.tileHeight/2)/this.map.tileHeight;
-            
-            this.player.depth=depth;
-            
-        }
+            const depth =
+                (this.player.y - this.map.tileHeight / 2) / this.map.tileHeight;
 
-        
-            
+            this.player.depth = depth;
+        }
 
         DragonQuest.updatePlayerPosition(
             this.scene.key,

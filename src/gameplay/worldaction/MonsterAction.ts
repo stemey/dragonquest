@@ -10,10 +10,10 @@ export const MonsterAction: Action = (layerObject, scene) => {
     }
     const monsters: Phaser.GameObjects.Sprite[] = [];
     const monsterName = layerObject.getProp("name") as string;
-    
+
     const monsterUnits = DragonQuest.createVillains(monsterName);
     let platform;
-    let monsterCoords = {x:layerObject.x,y:layerObject.y}
+    let monsterCoords = { x: layerObject.x, y: layerObject.y };
     if (layerObject.width) {
         platform = new Phaser.GameObjects.Rectangle(
             scene,
@@ -23,7 +23,10 @@ export const MonsterAction: Action = (layerObject, scene) => {
             layerObject.height,
             13123
         );
-        monsterCoords={x:layerObject.x+layerObject.width/2,y:layerObject.y+layerObject.height/2}
+        monsterCoords = {
+            x: layerObject.x + layerObject.width / 2,
+            y: layerObject.y + layerObject.height / 2,
+        };
         scene.physics.add.existing(platform);
     }
 

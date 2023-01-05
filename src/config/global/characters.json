@@ -1,29 +1,29 @@
 {
     "$schema": "../../../generated/schemas/characters.json",
     "knight": {
-        "hero":true,
+        "hero": true,
         "name": "Knight",
         "armor": 10,
         "image": "knight",
         "maxHp": 10,
         "attacks": [],
-        "className":"Knight"
+        "className": "Knight"
     },
     "wizard": {
-        "hero":true,
+        "hero": true,
         "name": "Wizard",
         "armor": 10,
         "image": "mage",
         "maxHp": 10,
         "attacks": [],
-        "className":"Wizard"
+        "className": "Wizard"
     },
     "tristran": {
         "name": "Tristran",
         "armor": 10,
         "image": "knight",
         "maxHp": 10,
-        "attacks": [{"$ref":"./powers.json#/axe"}]
+        "attacks": [{ "$ref": "./powers.json#/axe" }]
     },
     "kiri": {
         "name": "Kiri",

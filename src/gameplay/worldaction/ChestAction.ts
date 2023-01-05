@@ -55,7 +55,7 @@ export const ChestAction: Action = (layerObject, world) => {
                 chest.depth = 50;
                 chestGame.setVelocityY(-3);
                 chestGame.setAngularVelocity(0.01);
-                chest.scale=0.5
+                chest.scale = 0.5;
 
                 world.add.tween({
                     targets: chest,

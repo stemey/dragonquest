@@ -1,5 +1,5 @@
 import { BattleAction } from "../gameplay/battle/BattleAction";
-import {Menu} from "./Menu";
+import { Menu } from "./Menu";
 
 export class ActionsMenu extends Menu {
     confirm() {

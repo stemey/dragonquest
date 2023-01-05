@@ -15,8 +15,7 @@ export interface Result {
 }
 export interface AttackEfficiency extends AttackResult {
     efficiency: number;
-    attacker:string;
-
+    attacker: string;
 }
 export type chooseAttacks = (
     h: Unit,
@@ -48,7 +47,7 @@ export const fight = (
                 return {
                     attack: result.attack,
                     attacker: h.name,
-                    efficiency: Math.abs(hp2-hp1)/hp1,
+                    efficiency: Math.abs(hp2 - hp1) / hp1,
                 };
             })
             .forEach((a) => attackEfficiencies.push(a));
@@ -66,9 +65,9 @@ export const fight = (
                 return {
                     attack: result.attack,
                     attacker: h.name,
-                    efficiency: Math.abs(hp2-hp1)/hp1,
+                    efficiency: Math.abs(hp2 - hp1) / hp1,
                 };
-            })
+            });
     }
 
     const winnerUnits = isAlive(heroUnits) ? heroUnits : enemyUnits;

@@ -39,7 +39,10 @@ export const FoodAction: Action = (layerObject, scene) => {
     }
     const state = new MonsterActionState(monsters, scene);
     monsters.forEach((child) => {
-        scene.physics.add.overlap(player, child, state.onMeetEnemy as ArcadePhysicsCallback);
+        scene.physics.add.overlap(
+            player,
+            child,
+            state.onMeetEnemy as ArcadePhysicsCallback
+        );
     });
 };
-

@@ -10,8 +10,8 @@ export const ObstacleAction: Action = (layerObject, world) => {
     if (collide && world.player) {
         const platform = new Phaser.GameObjects.Rectangle(
             world,
-            layerObject.x+layerObject.width/2,
-            layerObject.y+layerObject.height/2,
+            layerObject.x + layerObject.width / 2,
+            layerObject.y + layerObject.height / 2,
             layerObject.width,
             layerObject.height,
             13123
@@ -19,9 +19,6 @@ export const ObstacleAction: Action = (layerObject, world) => {
 
         world.physics.add.existing(platform);
 
-        world.physics.add.collider(
-            world.player,
-            platform
-        );
+        world.physics.add.collider(world.player, platform);
     }
 };

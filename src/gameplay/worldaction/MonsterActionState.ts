@@ -8,17 +8,15 @@ export default class MonsterActionState {
         private scene: AbstractWorld
     ) {
         this.scene.events.on("wake", this.wake, this);
-       
-
     }
 
     onMeetEnemy(
         player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
         monster: GameObjects.Sprite,
         enemies: Unit[],
-        enemyName:string
+        enemyName: string
     ) {
-        if (enemies.filter(e=>e.alive).length===0) {
+        if (enemies.filter((e) => e.alive).length === 0) {
             return;
         }
         player.body.setVelocity(0);
@@ -27,13 +25,13 @@ export default class MonsterActionState {
             this.scene.scene.wake("BattleScene", {
                 enemies: enemies,
                 entryWorld: this.scene.scene.key,
-                enemyName
+                enemyName,
             });
         } else {
             this.scene.scene.launch("BattleScene", {
                 enemies: enemies,
                 entryWorld: this.scene.scene.key,
-                enemyName
+                enemyName,
             });
         }
     }

@@ -105,7 +105,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
                 if (!messageState.actor) {
                     this.text.setY(0);
                 } else {
-                    this.text.setY(this.actor.getBounds().height+20);
+                    this.text.setY(this.actor.getBounds().height + 20);
                 }
                 if (messageState.options) {
                     const bounds = this.text.getBounds();

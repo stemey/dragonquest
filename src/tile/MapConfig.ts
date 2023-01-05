@@ -12,31 +12,27 @@ export interface OriginalTileset {
     tilecount: string;
     tileheight: number;
     tilewidth: number;
-    image:string;
-    tiles: Tile[]
+    image: string;
+    tiles: Tile[];
 }
 
 export interface Tile {
-    class:string;
-    properties:Property[];
-    id:number;
-    objectgroup?:{
-        objects:TileObject[]
-    }
-
+    class: string;
+    properties: Property[];
+    id: number;
+    objectgroup?: {
+        objects: TileObject[];
+    };
 }
-
-
 
 export type TileObject = TileRectangle | TilePolygon;
 
 export interface TileRectangle {
-    width:number;
-    height:number;
-    x:number;
-    y:number;
+    width: number;
+    height: number;
+    x: number;
+    y: number;
 }
-export interface TilePolygon{
-    polygon:{x:number,y:number}[]
-   
+export interface TilePolygon {
+    polygon: { x: number; y: number }[];
 }

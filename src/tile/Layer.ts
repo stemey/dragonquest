@@ -1,4 +1,4 @@
-import {  Property } from "../gameplay/worldaction/LayerObject";
+import { Property } from "../gameplay/worldaction/LayerObject";
 
 export type Layer = Group | TileLayer | ObjectLayer;
 export interface BaseLayer {
@@ -9,15 +9,13 @@ export interface BaseLayer {
     width: number;
     height: number;
     properties: Property[];
-    path:string;
+    path: string;
 }
-
-
 
 export interface TileLayer extends BaseLayer {
     type: "tilelayer";
     data: number[];
-    tileset:string;
+    tileset: string;
 }
 
 export interface Object extends BaseLayer {
@@ -29,9 +27,9 @@ export interface ObjectLayer extends BaseLayer {
     objects: Object[];
 }
 
-export interface Group{
+export interface Group {
     type: "group";
-    name:string;
+    name: string;
     layers: Layer[];
     properties: Property[];
 }

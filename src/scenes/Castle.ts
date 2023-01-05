@@ -1,4 +1,4 @@
-import {AbstractWorld} from "./AbstractWorld";
+import { AbstractWorld } from "./AbstractWorld";
 
 export default class extends AbstractWorld {
     constructor() {
@@ -6,6 +6,6 @@ export default class extends AbstractWorld {
     }
 
     create() {
-        this.startWorld("castle", 100, 100);
+        this.startWorld();
     }
 }

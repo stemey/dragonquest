@@ -1,9 +1,12 @@
 import * as Phaser from "phaser";
+import { GeneralLevel } from "../../scenes/GeneralLevel";
 import { GatewayEntry } from "../../scenes/WorldEntryParameter";
 import { Action } from "./Action";
 
 const GatewayAction: Action = (layerObject, world) => {
-    const target = layerObject.getProp("target") as string;
+    const entry = (layerObject.getProp("name") as string) || "main";
+    const targetScene = ("/level/" +
+        layerObject.getProp("targetScene")) as string;
     const zone = new Phaser.GameObjects.Zone(
         world,
         layerObject.x,
@@ -11,7 +14,7 @@ const GatewayAction: Action = (layerObject, world) => {
         layerObject.width,
         layerObject.height
     );
-    const zones = world.physics.add.group([zone]);
+    world.physics.add.group([zone]);
 
     if (!world.player) {
         return;
@@ -20,16 +23,23 @@ const GatewayAction: Action = (layerObject, world) => {
         world.player,
         zone,
         (player, zone) => {
+            if (!world.scene.get(targetScene)) {
+                const newLevel = new GeneralLevel({
+                    key: targetScene,
+                    physics: { matter: {}, arcade: {} },
+                });
+                world.scene.add(targetScene, newLevel);
+            }
             world.scene.sleep();
-            if (world.scene.isSleeping(target)) {
-                world.scene.wake(target, {
+            if (world.scene.isSleeping(targetScene)) {
+                world.scene.wake(targetScene, {
                     type: "gateway",
-                    entry: "main",
+                    entry,
                 } as GatewayEntry);
             } else {
-                world.scene.launch(target, {
+                world.scene.launch(targetScene, {
                     type: "gateway",
-                    entry: "main",
+                    entry,
                 } as GatewayEntry);
             }
         },

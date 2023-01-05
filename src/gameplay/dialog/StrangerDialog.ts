@@ -11,7 +11,7 @@ export const StrangerDialog: Dialog = {
         next: "question",
     },
     question: {
-        "message":"",
+        message: "",
         options: [
             {
                 message: "Where is the secret gem?",
@@ -25,7 +25,7 @@ export const StrangerDialog: Dialog = {
     },
     secretGem: { message: "It is in the northern woods", next: "askAgain" },
     askAgain: {
-        "message":"",
+        message: "",
         options: [
             {
                 message: "Can you explain it to me again?",

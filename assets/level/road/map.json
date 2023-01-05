@@ -206,18 +206,18 @@
                                 {
                                  "name":"name",
                                  "type":"string",
-                                 "value":"main"
+                                 "value":"village"
                                 }, 
                                 {
                                  "name":"targetScene",
                                  "type":"string",
-                                 "value":"Village"
+                                 "value":"village"
                                 }],
                          "rotation":0,
                          "visible":true,
                          "width":211.25,
-                         "x":438.75,
-                         "y":23.75
+                         "x":248.700638691405,
+                         "y":861.3526819259
                         }, 
                         {
                          "class":"Dialog",

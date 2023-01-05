@@ -10,10 +10,7 @@ export const testScenarios = (heroes: Character[], enemies: Character[]) => {
         iterationCount++;
         enemies = varyEnemyStats(enemies, result);
         result = fight(enemies, heroes, chooseAttacksRandom);
-        if (
-            result.outcome == "hero" &&
-            result.rounds/(enemies.length) > 3
-        ) {
+        if (result.outcome == "hero" && result.rounds / enemies.length > 3) {
             return enemies;
         }
     } while (iterationCount < 100);
@@ -67,7 +64,7 @@ function varyAttack(
     if (makeBetter) {
         newWeapon.damage += Math.round(weapon.damage * remainingHp);
     }
-   /* if (prolong) {
+    /* if (prolong) {
         newWeapon.damage += Math.round(weapon.damage * remainingHp);
     }*/
     return newWeapon;

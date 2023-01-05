@@ -4,8 +4,13 @@ import MenuItem from "./MenuItem";
 
 export class Menu extends Phaser.GameObjects.Container {
     public menuItemIndex = 0;
-    private menuItems:MenuItem[]=[];
-    constructor(x: number, y: number, scene: Phaser.Scene, private heroes: Unit[]) {
+    private menuItems: MenuItem[] = [];
+    constructor(
+        x: number,
+        y: number,
+        scene: Phaser.Scene,
+        private heroes: Unit[]
+    ) {
         super(scene, x, y);
         this.menuItems = [];
         this.menuItemIndex = 0;
@@ -14,7 +19,7 @@ export class Menu extends Phaser.GameObjects.Container {
         this.build();
     }
 
-    addMenuItem(unit:string) {
+    addMenuItem(unit: string) {
         const scale = 2;
         var menuItem = new MenuItem(
             0,
@@ -45,7 +50,7 @@ export class Menu extends Phaser.GameObjects.Container {
     }
 
     // select the menu as a whole and an element with index from it
-    select(index:number) {
+    select(index: number) {
         if (!index) {
             index = 0;
         }

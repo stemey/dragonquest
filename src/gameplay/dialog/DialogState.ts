@@ -173,8 +173,8 @@ export class DialogState {
         return !!this.dialog;
     }
     initializeDeltaX(dialog: Dialog) {
-        this.deltaX={};
-        const actors = new Set<string>()
+        this.deltaX = {};
+        const actors = new Set<string>();
         let noActorPresent = false;
         Object.values(dialog).forEach((m) => {
             if ("end" in m) {
@@ -182,20 +182,20 @@ export class DialogState {
             }
             const theActor = m.actor || "";
             if (!theActor) {
-                noActorPresent=true;
+                noActorPresent = true;
                 this.deltaX[theActor] = 0;
-            }else {
-                actors.add(theActor)
+            } else {
+                actors.add(theActor);
             }
         });
-        
-        let x = -((actors.size-1)/2);
-        Array.from(actors).forEach((actor,index) => {
-            if (noActorPresent && x==0) {
-                x+=1;
+
+        let x = -((actors.size - 1) / 2);
+        Array.from(actors).forEach((actor, index) => {
+            if (noActorPresent && x == 0) {
+                x += 1;
             }
-            this.deltaX[actor]=x;
-            x+=1;
+            this.deltaX[actor] = x;
+            x += 1;
         });
     }
 }

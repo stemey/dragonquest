@@ -8,7 +8,7 @@
     "more": {
         "actor": "Hidden person",
         "message": "Please, help me. Those wolves chased me up this tree. Can you drive them away?",
-        "next":"answer"
+        "next": "answer"
     },
     "answer": {
         "actor": "Hero",

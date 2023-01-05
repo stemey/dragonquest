@@ -50,7 +50,6 @@ export class SectorGroup<T> {
             sectorCount,
             depth - 1
         );
-
     }
     private sectors: (Sector<T> | SectorGroup<T>)[] = [];
 
@@ -134,19 +133,17 @@ export class SectorGroup<T> {
             }, 0);
     }
 
-
     addVector(vector: Vector, measurement: T) {
         const index = this.getSectorIndex(vector);
 
         this.sectors[index].addVector(vector, measurement);
     }
 
-
     public get vectors() {
-        let vectors:Measurement<T>[] = []
-        this.sectors.forEach(s=> {
-            vectors=vectors.concat(s.vectors);
-        })
+        let vectors: Measurement<T>[] = [];
+        this.sectors.forEach((s) => {
+            vectors = vectors.concat(s.vectors);
+        });
         return vectors;
     }
 }
@@ -174,7 +171,6 @@ index0*sectorCount^2+index1*sectorCount+index2
 */
 
 export class Space<T> extends SectorGroup<T> {
-
     public constructor(
         dimensions: Dimension[],
         sectorCount: number,
@@ -182,7 +178,6 @@ export class Space<T> extends SectorGroup<T> {
     ) {
         super(dimensions, sectorCount, depth);
     }
-
 
     distance(v1: Vector, v2: Vector) {
         return v1.subtract(v2).length();
@@ -201,9 +196,7 @@ export class Space<T> extends SectorGroup<T> {
     }
 
     getVector(character: Character) {
-        return new Vector(
-            this.dimensions.map((d) => d.getValue(character))
-        );
+        return new Vector(this.dimensions.map((d) => d.getValue(character)));
     }
 
     createUnitVector(index: number, length: number) {
@@ -231,16 +224,13 @@ export class Space<T> extends SectorGroup<T> {
     findNextVectors(vector: Vector) {
         const distance = 2;
         return this.dimensions.reduce((vectors, dimension, index) => {
-            [-distance,distance].forEach((dir) => {
+            [-distance, distance].forEach((dir) => {
                 const unitVector = this.createUnitVector(index, dir);
                 const newVector = vector.add(unitVector);
                 if (this.isInBounds(newVector)) {
                     if (
-                        this.getCloseMeasurements(
-                            newVector,
-                            distance ,
-                            vector
-                        ).length === 0
+                        this.getCloseMeasurements(newVector, distance, vector)
+                            .length === 0
                     ) {
                         vectors.push(newVector);
                     } else {
@@ -258,7 +248,6 @@ export class Space<T> extends SectorGroup<T> {
             d.setValue(character, vector.get(idx))
         );
     }
-
 }
 
 export interface Dimension {
@@ -275,8 +264,8 @@ export class Vector {
         return this.values[index];
     }
 
-    public equals(vector?:Vector) {
-        return vector && !this.values.some((v1,idx) => v1!==vector.get(idx));
+    public equals(vector?: Vector) {
+        return vector && !this.values.some((v1, idx) => v1 !== vector.get(idx));
     }
 
     changeLength(factor: number) {
@@ -286,7 +275,7 @@ export class Vector {
     length() {
         return Math.sqrt(
             this.values
-                .map((v) => Math.pow(v,2))
+                .map((v) => Math.pow(v, 2))
                 .reduce((acc, v) => {
                     acc += v;
                     return acc;
