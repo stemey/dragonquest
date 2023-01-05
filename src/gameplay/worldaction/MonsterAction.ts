@@ -10,19 +10,32 @@ export const MonsterAction: Action = (layerObject, scene) => {
     }
     const monsters: Phaser.GameObjects.Sprite[] = [];
     const monsterName = layerObject.getProp("name") as string;
+    
     const monsterUnits = DragonQuest.createVillains(monsterName);
+    let platform;
+    let monsterCoords = {x:layerObject.x,y:layerObject.y}
+    if (layerObject.width) {
+        platform = new Phaser.GameObjects.Rectangle(
+            scene,
+            layerObject.x + layerObject.width / 2,
+            layerObject.y + layerObject.height / 2,
+            layerObject.width,
+            layerObject.height,
+            13123
+        );
+        monsterCoords={x:layerObject.x+layerObject.width/2,y:layerObject.y+layerObject.height/2}
+        scene.physics.add.existing(platform);
+    }
 
     if (monsterUnits && monsterUnits.length > 0) {
         const container = scene.physics.add.group();
 
         monsterUnits.forEach((monster, idx) => {
-            const sprite = scene.make.sprite(
-                {
-                    x: layerObject.x + Math.round(idx * 30),
-                    y: layerObject.y + Math.round(idx * 5),
-                    key: monster.image,
-                }
-            );
+            const sprite = scene.make.sprite({
+                x: monsterCoords.x + Math.round(idx * 30),
+                y: monsterCoords.y + Math.round(idx * 5),
+                key: monster.image,
+            });
             monsters.push(sprite);
             container.add(sprite, true);
             (sprite as any).enemies = monster;
@@ -30,25 +43,37 @@ export const MonsterAction: Action = (layerObject, scene) => {
         });
     }
     const state = new MonsterActionState(monsters, scene);
+
     monsters.forEach((child) => {
         scene.physics.add.overlap(player, child, ((
             player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
             monster: Phaser.GameObjects.Sprite
         ) => {
-            state.onMeetEnemy(player, monster, monsterUnits);
+            state.onMeetEnemy(player, monster, monsterUnits, monsterName);
         }) as unknown as ArcadePhysicsCallback);
-        scene.events.on(
-            "battleFinished",
-            (data: { deadEnemies: number[] }) => {
-                if (data && data.deadEnemies) {
-                    data.deadEnemies.forEach((enemy) => {
-                        if ((child as any).enemyId === enemy) {
-                            (child as any).destroy();
-                        }
-                    });
-                }
-            },
-            this
-        );
     });
+    if (platform) {
+        scene.physics.add.overlap(player, platform, ((
+            player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
+            monster: Phaser.GameObjects.Sprite
+        ) => {
+            state.onMeetEnemy(player, monster, monsterUnits, monsterName);
+        }) as unknown as ArcadePhysicsCallback);
+    }
+    scene.events.on(
+        "battleFinished",
+        (data: { deadEnemies: number[] }) => {
+            if (data && data.deadEnemies) {
+                data.deadEnemies.forEach((enemy) => {
+                    const monster = monsters.find(
+                        (u) => (u as any).enemyId === enemy
+                    );
+                    if (monster) {
+                        monster.destroy();
+                    }
+                });
+            }
+        },
+        this
+    );
 };

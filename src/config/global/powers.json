@@ -9,13 +9,25 @@
         "type": "weapon",
         "name": "axe",
         "strength": 20,
-        "damage": 7
+        "damage": 10
     },
     "fireball": {
         "type": "weapon",
         "name": "fireball",
         "strength": 5,
         "damage": 50
+    },
+    "mighty sparks": {
+        "type": "weapon",
+        "name": "mighty sparks",
+        "strength": 15,
+        "damage": 20
+    },
+    "long sword": {
+        "type": "weapon",
+        "name": "long sword",
+        "strength": 15,
+        "damage": 20
     },
     "healing": {
         "type": "healing",

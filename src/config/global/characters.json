@@ -16,6 +16,13 @@
         "maxHp": 10,
         "attacks": []
     },
+    "tristran": {
+        "name": "Tristran",
+        "armor": 10,
+        "image": "knight",
+        "maxHp": 10,
+        "attacks": [{"$ref":"./powers.json#/axe"}]
+    },
     "kiri": {
         "name": "Kiri",
         "image": "redmonster",
@@ -33,14 +40,14 @@
     "rumps": {
         "name": "Rumps",
         "image": "monster",
-        "armor": 30,
-        "maxHp": 20,
+        "armor": 12,
+        "maxHp": 30,
         "attacks": [
             {
                 "type": "weapon",
                 "name": "claws",
-                "strength": 100,
-                "damage": 50
+                "strength": 15,
+                "damage": 10
             }
         ]
     },

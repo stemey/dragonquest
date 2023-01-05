@@ -3,9 +3,14 @@
     "name": "The Road",
     "tiles": "/level/road",
     "monsters": {
-        "wolves": ["kiri", "kiri"]
+        "wolves": ["kiri", "kiri"],
+        "mighty enemies": ["rumps"]
     },
-    "dialogs": { "intro": { "$ref": "./intro.json" } },
+    "dialogs": {
+        "intro": { "$ref": "./intro.json" },
+        "rescue": { "$ref": "./rescue.json" },
+        "wolvesFinished": { "$ref": "./wolvesFinished.json" }
+    },
     "loots": {
         "bronceKeyAndGold": [
             {
@@ -18,6 +23,24 @@
                 "type": "gold",
                 "amount": 20
             }
+        ],
+        "someWeapons": [
+            {
+                "type": "power",
+                "name": "mighty sparks"
+            },
+            {
+                "type": "power",
+                "name": "long sword"
+            }
         ]
+    },
+    "events": {
+        "wolvesFinished": {
+            "trigger": {
+                "levelState": { "monsters": { "wolves": { "dead": true } } }
+            },
+            "dialog": "wolvesFinished"
+        }
     }
 }

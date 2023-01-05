@@ -14,12 +14,14 @@ export default class extends Phaser.Scene {
     private index = -1;
     private selectedIndex = 0;
     private playersTurn = false;
+    private enemyName="";
     constructor() {
         super({ key: "BattleScene" });
     }
 
-    create(data: { entryWorld: string; enemies: Unit[] }) {
+    create(data: { entryWorld: string; enemyName:string, enemies: Unit[] }) {
         this.entryWorld = data.entryWorld;
+        this.enemyName=data.enemyName;
         // change the background to green
         this.cameras.main.setBackgroundColor("rgba(0, 200, 0, 0.5)");
 
@@ -68,12 +70,14 @@ export default class extends Phaser.Scene {
         this.playersTurn = false;
     }
 
-    wake(sys: any, data: { entryWorld: string; enemies: Unit[] }) {
+    wake(sys: any, data: { entryWorld: string; enemyName:string, enemies: Unit[] }) {
+        this.entryWorld = data.entryWorld;
         this.entryWorld = data.entryWorld;
         this.scene.wake("UIScene");
         this.characterList.forEach((child) => {
             child.destroy();
         });
+        this.characterList=[];
         this.addCharacters(data.enemies);
 
         this.time.addEvent({
@@ -90,6 +94,7 @@ export default class extends Phaser.Scene {
         }
         if (this.enemies.filter((enemy) => enemy.alive).length === 0) {
             this.events.emit("Message", "Heroes win");
+            DragonQuest.finishedBattle({heroWin:true,deadEnemy:this.enemyName})
             this.time.addEvent({
                 delay: 3000,
                 callback: this.goToWorld,
@@ -200,8 +205,8 @@ export default class extends Phaser.Scene {
             }
         });
         const win = deadEnemies.length==this.enemies.length;
+        this.scene.get(this.entryWorld).events.emit("battleFinished", { deadEnemies });
         this.scene.wake(this.entryWorld, { type:"battle", win } as BattleEntry);
-        this.scene.scene.events.emit("battleFinished", { deadEnemies });
     }
 
     onKeyInput(event: KeyboardEvent) {

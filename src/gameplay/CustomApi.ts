@@ -8,4 +8,8 @@ export class CustomApi {
     setClass(name: "wizard" | "warrior") {
         this.dragonQuest.addHero(name);
     }
+
+    addHero(name: string) {
+        this.dragonQuest.addHero(name);
+    }
 }

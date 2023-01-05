@@ -159,6 +159,29 @@
         },
         {
             "color": "#ffa0a0a4",
+            "id": 11,
+            "members": [
+                {
+                    "name": "collide",
+                    "type": "bool",
+                    "value": true
+                }
+            ],
+            "name": "ObstacleObject",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
             "id": 9,
             "members": [
                 {

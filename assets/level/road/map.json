@@ -7,25 +7,138 @@
          "layers":[
                 {
                  "draworder":"topdown",
+                 "id":19,
+                 "name":"obstacles",
+                 "objects":[
+                        {
+                         "class":"ObstacleObject",
+                         "height":104.72972972973,
+                         "id":17,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":42.5675675675676,
+                         "x":224.324324324324,
+                         "y":685.135135135135
+                        }, 
+                        {
+                         "class":"ObstacleObject",
+                         "height":141.216216216216,
+                         "id":18,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":46.6216216216216,
+                         "x":251.351351351351,
+                         "y":543.918918918919
+                        }, 
+                        {
+                         "class":"ObstacleObject",
+                         "height":76.3513513513514,
+                         "id":19,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":45.9459459459459,
+                         "x":288.513513513513,
+                         "y":464.864864864865
+                        }, 
+                        {
+                         "class":"ObstacleObject",
+                         "height":179.72972972973,
+                         "id":20,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":202.702702702703,
+                         "x":8.78378378378378,
+                         "y":738.513513513514
+                        }, 
+                        {
+                         "class":"ObstacleObject",
+                         "height":135.810810810811,
+                         "id":21,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":137.162162162162,
+                         "x":628.378378378378,
+                         "y":475.675675675676
+                        }, 
+                        {
+                         "class":"ObstacleObject",
+                         "height":42.5675675675675,
+                         "id":22,
+                         "name":"",
+                         "properties":[
+                                {
+                                 "name":"collide",
+                                 "type":"bool",
+                                 "value":true
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":70.2702702702702,
+                         "x":555.405405405405,
+                         "y":535.810810810811
+                        }],
+                 "opacity":1,
+                 "type":"objectgroup",
+                 "visible":true,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "draworder":"topdown",
                  "id":18,
                  "name":"Loot",
                  "objects":[
                         {
                          "class":"Loot",
-                         "height":32.4324324324325,
+                         "height":16.2162162162162,
                          "id":14,
                          "name":"",
                          "properties":[
                                 {
                                  "name":"name",
                                  "type":"string",
-                                 "value":"bronceKeyAndGold"
+                                 "value":"someWeapons"
                                 }],
                          "rotation":0,
                          "visible":true,
-                         "width":43.9189189189189,
-                         "x":95.9459459459459,
-                         "y":1000
+                         "width":14.1891891891892,
+                         "x":425,
+                         "y":704.054054054054
                         }],
                  "opacity":1,
                  "type":"objectgroup",
@@ -42,7 +155,7 @@
                          "class":"Monster",
                          "height":0,
                          "id":13,
-                         "name":"",
+                         "name":"wolves",
                          "point":true,
                          "properties":[
                                 {
@@ -53,8 +166,25 @@
                          "rotation":0,
                          "visible":true,
                          "width":0,
-                         "x":498.947368421053,
-                         "y":817.894736842105
+                         "x":582.055476529161,
+                         "y":772.624466571835
+                        }, 
+                        {
+                         "class":"Monster",
+                         "height":113.513513513514,
+                         "id":23,
+                         "name":"mighty enemies",
+                         "properties":[
+                                {
+                                 "name":"name",
+                                 "type":"string",
+                                 "value":"mighty enemies"
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":240.540540540541,
+                         "x":315.540540540541,
+                         "y":468.243243243243
                         }],
                  "opacity":1,
                  "type":"objectgroup",
@@ -71,7 +201,7 @@
                          "class":"Gateway",
                          "height":42.5,
                          "id":5,
-                         "name":"",
+                         "name":"gw to north",
                          "properties":[
                                 {
                                  "name":"name",
@@ -86,26 +216,26 @@
                         }, 
                         {
                          "class":"Dialog",
-                         "height":131.081081081081,
+                         "height":195.27027027027,
                          "id":9,
-                         "name":"",
+                         "name":"rescue",
                          "properties":[
                                 {
                                  "name":"name",
                                  "type":"string",
-                                 "value":"intro"
+                                 "value":"rescue"
                                 }],
                          "rotation":0,
                          "visible":true,
-                         "width":191.891891891892,
-                         "x":278.378378378378,
-                         "y":816.216216216216
+                         "width":220.27027027027,
+                         "x":477.702702702702,
+                         "y":638.513513513513
                         }, 
                         {
                          "class":"Entry",
                          "height":0,
                          "id":11,
-                         "name":"",
+                         "name":"main entry",
                          "point":true,
                          "properties":[
                                 {
@@ -118,6 +248,23 @@
                          "width":0,
                          "x":304.054054054054,
                          "y":964.864864864865
+                        }, 
+                        {
+                         "class":"Dialog",
+                         "height":156.081,
+                         "id":16,
+                         "name":"intro",
+                         "properties":[
+                                {
+                                 "name":"name",
+                                 "type":"string",
+                                 "value":"intro"
+                                }],
+                         "rotation":0,
+                         "visible":true,
+                         "width":297.297,
+                         "x":243.919067567568,
+                         "y":820.608148648649
                         }],
                  "opacity":1,
                  "type":"objectgroup",
@@ -299,8 +446,8 @@
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 620, 621, 622, 0, 508, 509, 508, 509, 621,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 636, 637, 638, 0, 0, 0, 0, 636, 637,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 620, 621, 622, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 636, 637, 638, 0, 0, 0, 0, 0, 703, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 636, 637, 638, 620, 621, 622, 0, 0, 703, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 636, 637, 638, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 703,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 719, 720,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -485,8 +632,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
- "nextobjectid":16,
+ "nextlayerid":20,
+ "nextobjectid":25,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

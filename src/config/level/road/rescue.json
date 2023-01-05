@@ -1,0 +1,24 @@
+{
+    "$schema": "../../../../generated/schemas/dialog.json",
+    "start": {
+        "actor": "Hidden person",
+        "message": "Help me! Help!",
+        "next": "more"
+    },
+    "more": {
+        "actor": "Hidden person",
+        "message": "Please, help me. Those wolves chased me up this tree. Can you drive them away?",
+        "next":"answer"
+    },
+    "answer": {
+        "actor": "Hero",
+        "message": "They seem pretty dangerous. I am not sure that I can help you.",
+        "next": "idea"
+    },
+    "idea": {
+        "actor": "Hidden person",
+        "message": "I left some weapons behind that rock along the path to the north. With those you should be able to do so.",
+        "next": "end"
+    },
+    "end": { "end": true }
+}

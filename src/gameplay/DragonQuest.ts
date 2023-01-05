@@ -1,9 +1,4 @@
-import {
-    IObservableArray,
-    IObservableValue,
-    observable,
-    ObservableMap,
-} from "mobx";
+import { IObservableArray, IObservableValue, observable } from "mobx";
 import { DropItem } from "./types/DropItem";
 import { Unit } from "../sprites/Unit";
 import { Level } from "./types/Level";
@@ -13,7 +8,8 @@ import { DropItemRef } from "./types/DropItemRef";
 import { CustomApi } from "./CustomApi";
 import { Attack } from "./battle/Attack";
 import { Heal } from "./battle/Heal";
-import { Tilemaps } from "phaser";
+import { BattleOutcome, GameState, LevelState } from "./GameState";
+
 interface Coordinate {
     x: number;
     y: number;
@@ -52,9 +48,10 @@ export class DragonQuestType {
     public heroes: Unit[] = [];
     private characters: Characters = {};
     private powers: Powers = {};
-    api = new CustomApi(this);
-
-    private playerState: PlayerState = new PlayerState();
+    public api = new CustomApi(this);
+    private gameState = new GameState();
+    public playerState: PlayerState = new PlayerState();
+    private levelEmitter?: Phaser.Events.EventEmitter;
 
     init(characters: Characters, powers: Powers) {
         this.characters = characters;
@@ -64,6 +61,10 @@ export class DragonQuestType {
 
     createVillainByName(name: string) {
         return new Unit(this.characters[name]);
+    }
+    updateLevelFlags(flags: { [key: string]: boolean }) {
+        this.gameState.updateLevelFlags(flags);
+        this.onChanged();
     }
 
     getLastSafePlayerPosition() {
@@ -92,13 +93,20 @@ export class DragonQuestType {
         return this.currentLevel.dialogs[name];
     }
 
-    setLevel(key: string, level: Level) {
+    setLevel(
+        key: string,
+        level: Level,
+        levelEmitter: Phaser.Events.EventEmitter
+    ) {
         this.levels[key] = level;
+        this.gameState.enterLevel(key);
+        this.levelEmitter = levelEmitter;
     }
 
     foundGold(goldCount: number) {
         this.goldCount.set(this.goldCount.get() + goldCount);
         console.log("gold " + this.goldCount);
+        this.onChanged();
     }
 
     foundItems(itemRefs: DropItemRef[]) {
@@ -122,6 +130,7 @@ export class DragonQuestType {
                 this.items.push(itemRef);
             }
         });
+        this.onChanged();
     }
 
     foundFood(foodCount: number) {
@@ -129,6 +138,7 @@ export class DragonQuestType {
         Object.values(this.heroes).forEach((hero) => {
             hero.foundFood(foodShare);
         });
+        this.onChanged();
     }
 
     logInventory() {
@@ -140,7 +150,58 @@ export class DragonQuestType {
     addHero(name: string) {
         const hero = this.characters[name];
         this.heroes.push(new Unit(hero));
+        this.onChanged();
     }
+
+    onChanged() {
+        Object.keys(this.currentLevel.events).forEach((name) => {
+            const event = this.currentLevel.events[name];
+            if (
+                this.gameState.currentLevel.firedEvents.indexOf(name) < 0 &&
+                matches(this.gameState.currentLevel, event.trigger.levelState)
+            ) {
+                this.gameState.currentLevel.firedEvents.push(name);
+                this.levelEmitter?.emit("DialogStart", event.dialog);
+            }
+        });
+    }
+    finishedBattle(outcome: BattleOutcome) {
+        this.gameState.finishedBattle(outcome);
+        this.onChanged();
+    }
+}
+
+export function matches(level: LevelState, trigger: Partial<LevelState>) {
+    let matches = true;
+    const flags = trigger.flags;
+    if (flags) {
+        matches =
+            matches &&
+            Object.keys(flags).every(
+                (key) => key in level.flags && flags[key] === level.flags[key]
+            );
+    }
+    const monsters = trigger.monsters;
+    if (monsters) {
+        matches =
+            matches &&
+            Object.keys(monsters).every(
+                (key) =>
+                    key in level.monsters &&
+                    monsters[key]?.dead === level.monsters[key]?.dead
+            );
+    }
+    const dialogs = trigger.dialogs;
+    if (dialogs) {
+        matches =
+            matches &&
+            Object.keys(dialogs).every(
+                (key) =>
+                    key in level.dialogs &&
+                    dialogs[key]?.finished === level.dialogs[key]?.finished
+            );
+    }
+    return matches;
 }
 
 export const DragonQuest = new DragonQuestType();

@@ -12,6 +12,7 @@ import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
 import { WorldEntryParameter } from "./WorldEntryParameter";
 import { ChestAction } from "../gameplay/worldaction/ChestAction";
+import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject } = {};
@@ -93,7 +94,7 @@ export class AbstractWorld extends Phaser.Scene {
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
         
         const levelConfig = this.cache.json.get(this.levelConfigKey);
-        DragonQuest.setLevel(this.scene.key, levelConfig);
+        DragonQuest.setLevel(this.scene.key, levelConfig,this.events);
         DragonQuest.currentLevelKey = this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
@@ -102,6 +103,7 @@ export class AbstractWorld extends Phaser.Scene {
         smallmap.actions["Entry"] = EntryAction;
         smallmap.actions["Dialog"] = DialogAction;
         smallmap.actions["Loot"] = ChestAction;
+        smallmap.actions["ObstacleObject"] = ObstacleAction;
         //smallmap.actions["discovery"] = DiscoveryAction;
 
         smallmap.layerActions["gold"] = PickUpAction(

@@ -54,10 +54,12 @@ export const ChestAction: Action = (layerObject, world) => {
                 chest.depth = 50;
                 chestGame.setVelocityY(-3);
                 chestGame.setAngularVelocity(0.01);
+                chest.scale=0.5
 
                 world.add.tween({
                     targets: chest,
-                    alpha: { value: 1, duration: 1000, ease: "Power1" },
+                    alpha: { value: 1, duration: 500, ease: "Power1" },
+                    scale: { value: 0.8, duration: 500, ease: "Power1" },
                     onStart: () => {
                         world.stopPlayer = true;
                         world.player?.body.setVelocity(0);
@@ -82,7 +84,7 @@ export const ChestAction: Action = (layerObject, world) => {
                             .join("\n");
                         const dialog: Dialog = {
                             start: {
-                                message: `You have found a chest with ${itemRefs.length} items:\n ${items}`,
+                                message: `You have found a chest with ${itemRefs.length} items:\n\n ${items}`,
                                 next: "end",
                             },
                             end: {

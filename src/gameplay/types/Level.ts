@@ -1,5 +1,6 @@
 import { Dialog } from "./Dialog";
 import { DropItemRef } from "./DropItemRef";
+import { GameEvent } from "./GameEvent";
 
 export interface Level {
     name: string;
@@ -9,4 +10,5 @@ export interface Level {
         [key: string]: Dialog;
     };
     loots: { [key: string]: DropItemRef[] };
+    events: { [name: string]: GameEvent };
 }
