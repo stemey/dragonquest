@@ -1,71 +1,82 @@
-# Phaser + ES6 + Webpack.
-#### A bootstrap project to create games with Phaser + ES6 + Webpack.
+# DragonQuest
 
-![Phaser+ES6+Webpack](https://raw.githubusercontent.com/lean/phaser-es6-webpack/master/assets/images/phaser-es6-webpack.jpg)
+## Development
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+1. start the continuous build:
 
+`yarn watch`
 
-## Features
-- ESLINT with JavaScript Standard Style configuration
-- Next generation of Javascript
-- Browsers are automatically updated as you change project files
-- Webpack ready
-- WebFont Loader
+This will do the following:
+- generate json schema from typescript
+- resolve references n json files and copy to generated folder
+- removes $schema refs from json files
 
-## Typescript 
-If you need typescript support checkout the ```typescript``` branch. Thanks to @MatsMaker
+2. Start the game:
 
-# Setup
-To use this bootstrap you’ll need to install a few things before you have a working copy of the project.
-
-## 1. Clone this repo:
-
-Navigate into your workspace directory.
-
-Run:
-
-```git clone https://github.com/lean/phaser-es6-webpack.git```
-
-## 2. Install node.js and npm:
-
-https://nodejs.org/en/
+`yarn start`
 
 
-## 3. Install dependencies (optionally you could install [yarn](https://yarnpkg.com/)):
-
-Navigate to the cloned repo’s directory.
-
-Run:
-
-```npm install``` 
-
-or if you choose yarn, just run ```yarn```
-
-## 4. Run the development server:
-
-Run:
-
-```npm run dev```
-
-This will run a server so you can run the game in a browser.
-
-Open your browser and enter localhost:3000 into the address bar.
-
-Also this will start a watch process, so you can change the source and the process will recompile and refresh the browser
+3. Open the Browser in `localhost:3000`. Append `?debug=true` to display debug information.
 
 
-## Build for deployment:
+# Game development
 
-Run:
+## Level
 
-```npm run deploy```
+### Add a new level
 
-This will optimize and minimize the compiled bundle.
+1. To add a new level run `yarn add:level -n NAME`
 
-## Credits
-Big thanks to this great repos:
+2. Open Tiled to work on the new level map which is located in __/assets/level/NAME/map.json__.
 
-https://github.com/belohlavek/phaser-es6-boilerplate
 
-https://github.com/cstuncsik/phaser-es6-demo
+3. Start editing the level configuration located in __/src/config/level/NAME/level.json__
+
+### Contents of levels
+
+Levels contain the following named objects, which are usually referenced in tile maps created by tiled:
+
+-  Loot is an array of drop items (e.g. weapons, gold or keys). Weapons are defined in the global powers configuration.
+-  Monsters are a list of character names from the global characters configuration.
+-  Dialogs define communication which include:
+   -  messages
+   -  user input
+   -  actions which change the game state
+- Events are triggered when the game state changes (e.g. a named enemy was killed or an item acquired)
+
+
+__Tools:__
+
+Level configurations can be split into multiple files arbitrarily by replacing the sub tree of the json document with a ref `{"$ref":"./extracted-sub-doc.json"}`
+
+Each json doc should start with the json schema references to enable validation in an editor (e.g. `"$schema":"../../../../generated/schemas/level.json"`)
+
+
+
+## Global
+
+Characters and Powers are defined globally in __src/config/gobal__
+
+
+# Game state
+
+The game state is important to trigger events (e.g. freeing a person by killing an enemy triggers a dialog). The items found in chests and other available interactive elements can also depend on game state. The game state consists of multiple components:
+
+1. Player state
+
+The main character has a class (e.g. Wizard or Knight) and a level.
+
+2. Level state
+
+Level state contains the following components:
+
+- firedEvents is the list of events already fired
+- flags is just a collection of flags which can be set in a Dialog
+- monsters contains the state of the monsters (e.g. dead)
+- dialogs contains the state of dialogs (e.g. finished)
+
+
+# Gotchas
+
+- Currently only one tileset per layer is supported. 
+

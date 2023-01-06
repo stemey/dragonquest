@@ -1,0 +1,43 @@
+{
+    "$schema": "../../../../generated/schemas/dialog.json",
+    "start": {
+        "message": "You were sent to your uncle to start your work as an apprentice.",
+        "next": "chooseClass"
+    },
+    "chooseClass": {
+        "message": "Which profession will you choose?",
+        "options": [
+            {
+                "message": "Wizard",
+                "next": "wizard",
+                "action": {
+                    "customs": [{ "method": "setClass", "params": ["wizard"] }],
+                    "items": [
+                        { "type": "power", "name": "fireball" },
+                        { "type": "power", "name": "blue potion", "count": 2 }
+                    ]
+                }
+            },
+            {
+                "message": "Knight",
+                "next": "knight",
+                "action": {
+                    "customs": [{ "method": "setClass", "params": ["knight"] }],
+                    "items": [
+                        { "type": "power", "name": "short sword" },
+                        { "type": "gold", "amount": 10 }
+                    ]
+                }
+            }
+        ]
+    },
+    "wizard": {
+        "message": "Swords and Pikes it is. Bring them on!",
+        "next": "end"
+    },
+    "knight": {
+        "message": "Wielding magic from a far requires mental strength and a calm head.",
+        "next": "end"
+    },
+    "end": { "end": true }
+}

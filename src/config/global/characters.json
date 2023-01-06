@@ -1,0 +1,70 @@
+{
+    "$schema": "../../../generated/schemas/characters.json",
+    "knight": {
+        "hero": true,
+        "name": "Knight",
+        "armor": 10,
+        "image": "knight",
+        "maxHp": 10,
+        "attacks": [],
+        "className": "Knight"
+    },
+    "wizard": {
+        "hero": true,
+        "name": "Wizard",
+        "armor": 10,
+        "image": "mage",
+        "maxHp": 10,
+        "attacks": [],
+        "className": "Wizard"
+    },
+    "tristran": {
+        "name": "Tristran",
+        "armor": 10,
+        "image": "knight",
+        "maxHp": 10,
+        "attacks": [{ "$ref": "./powers.json#/axe" }]
+    },
+    "kiri": {
+        "name": "Kiri",
+        "image": "redmonster",
+        "armor": 7,
+        "maxHp": 12,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "claws",
+                "strength": 10,
+                "damage": 5
+            }
+        ]
+    },
+    "rumps": {
+        "name": "Rumps",
+        "image": "monster",
+        "armor": 12,
+        "maxHp": 30,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "claws",
+                "strength": 15,
+                "damage": 10
+            }
+        ]
+    },
+    "green mage": {
+        "name": "Greenie",
+        "image": "bossmagequesttempel",
+        "armor": 10,
+        "maxHp": 20,
+        "attacks": [
+            {
+                "type": "weapon",
+                "name": "beam",
+                "strength": 100,
+                "damage": 10
+            }
+        ]
+    }
+}

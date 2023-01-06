@@ -1,0 +1,8 @@
+{
+    "$schema": "../../../../generated/schemas/level.json",
+    "name": "Template",
+    "monsters": {},
+    "dialogs": {},
+    "loots": {},
+    "events": {}
+}
