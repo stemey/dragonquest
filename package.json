@@ -16,7 +16,8 @@
         "watch": "run-p watch:*",
         "format:verify": "prettier --list-different '**/*.{js,json,ts}'",
         "format": "prettier --write 'src/**/*.{js,json,ts}'",
-        "test": "jest"
+        "test": "jest",
+        "add:level":"node scripts/add-level.js"
     },
     "watch": {
         "generate": "src/config/**/*.json"

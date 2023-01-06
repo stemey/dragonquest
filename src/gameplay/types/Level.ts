@@ -6,7 +6,6 @@ import { GameEvent } from "./GameEvent";
 
 export interface Level {
     name: string;
-    tiles: string;
     monsters: { [name: string]: string[] };
     dialogs: {
         [key: string]: Dialog;
