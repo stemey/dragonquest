@@ -9,12 +9,12 @@ const GatewayAction: Action = (layerObject, world) => {
         layerObject.getProp("targetScene")) as string;
     const zone = new Phaser.GameObjects.Zone(
         world,
-        layerObject.x,
-        layerObject.y,
+        layerObject.x + layerObject.width / 2,
+        layerObject.y + layerObject.height / 2,
         layerObject.width,
         layerObject.height
     );
-    world.physics.add.group([zone]);
+    world.physics.add.existing(zone, true);
 
     if (!world.player) {
         return;

@@ -1,8 +1,5 @@
 import * as Phaser from "phaser";
 import { Action } from "./Action";
-import { DropItemRef } from "../types/DropItemRef";
-import { DragonQuest } from "../DragonQuest";
-import { Dialog } from "../types/Dialog";
 
 export const ObstacleAction: Action = (layerObject, world) => {
     const collide = layerObject.getProp("collide") as boolean;
@@ -17,7 +14,7 @@ export const ObstacleAction: Action = (layerObject, world) => {
             13123
         );
 
-        world.physics.add.existing(platform);
+        world.physics.add.existing(platform, true);
 
         world.physics.add.collider(world.player, platform);
     }

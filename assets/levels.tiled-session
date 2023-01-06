@@ -24,6 +24,7 @@
             ],
             "expandedObjectLayers": [
                 18,
+                19,
                 15,
                 10,
                 11
@@ -31,19 +32,23 @@
             "scale": 0.75,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 517.3333333333334,
-                "y": 174
+                "x": 551.3333333333334,
+                "y": 64.66666666666663
             }
         },
         "level/village/map.json": {
+            "expandedGroupLayers": [
+                4,
+                3
+            ],
             "expandedObjectLayers": [
                 2
             ],
             "scale": 1.260234375,
-            "selectedLayer": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 455.0740809621226,
-                "y": 346.3641435744839
+                "x": 686.777013204389,
+                "y": 429.6819787985866
             }
         },
         "levels/one/map/road.json": {
