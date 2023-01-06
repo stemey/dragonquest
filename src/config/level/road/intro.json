@@ -1,14 +1,14 @@
 {
     "$schema": "../../../../generated/schemas/dialog.json",
     "start": {
-        "message": "You were sent to your uncle to start your work as apprentice. ",
+        "message": "You were sent to your uncle to start your work as an apprentice.",
         "next": "chooseClass"
     },
     "chooseClass": {
-        "message": "Which Kind of person would you like to be?",
+        "message": "Which profession will you choose?",
         "options": [
             {
-                "message": "Wizard?",
+                "message": "Wizard",
                 "next": "wizard",
                 "action": {
                     "customs": [{ "method": "setClass", "params": ["wizard"] }],
@@ -19,7 +19,7 @@
                 }
             },
             {
-                "message": "Knight?",
+                "message": "Knight",
                 "next": "knight",
                 "action": {
                     "customs": [{ "method": "setClass", "params": ["knight"] }],
@@ -32,11 +32,11 @@
         ]
     },
     "wizard": {
-        "message": "You will have to fight your way",
+        "message": "Swords and Pikes it is. Bring them on!",
         "next": "end"
     },
     "knight": {
-        "message": "You will be on your road with ....",
+        "message": "Wielding magic from a far requires mental strength and a calm head.",
         "next": "end"
     },
     "end": { "end": true }
