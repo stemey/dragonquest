@@ -22,9 +22,9 @@ dirs.forEach((dir) => {
 resolve("/global/powers.json", sourcePath, targetPath);
 
 function resolve(name, source, target) {
-    console.log("resolve", name, source, target);
+    //console.log("resolve", name, source, target);
     JsonRefs.resolveRefsAt(source + name).then((rs) => {
-        console.log("success", source, target);
+        // console.log("success", source, target);
         removeSchemaRefs(rs.resolved);
         fs.writeFileSync(
             target + name,

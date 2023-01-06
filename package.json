@@ -5,22 +5,24 @@
     "author": "leandro cabrera <leandcabrera@gmail.com>",
     "main": "index.js",
     "scripts": {
-        "generate:schema-dialog": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Dialog\" -o ./generated/schemas/dialog.json --required --noExtraProps",
-        "generate:schema-characters": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Characters\" -o ./generated/schemas/characters.json --required --noExtraProps",
-        "generate:schema-level": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Level\" -o ./generated/schemas/level.json --required --noExtraProps",
+        "generate:schema-dialog": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Dialog\" -o ./generated/schemas/dialog.json --required --noExtraProps --titles",
+        "generate:schema-characters": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Characters\" -o ./generated/schemas/characters.json --required --noExtraProps --titles",
+        "generate:schema-level": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Level\" -o ./generated/schemas/level.json --required --noExtraProps --titles",
         "generate:resolve-json-refs": "node scripts/resolve-ref.js",
         "generate": "run-p generate:*",
         "start": "webpack serve",
         "watch:webpack": "webpack --watch",
         "watch:general": "npm-watch",
         "watch": "run-p watch:*",
-        "format:verify": "prettier --list-different '**/*.{js,json,ts}'",
+        "format:verify": "prettier --list-different 'src/**/*.{js,json,ts}'",
         "format": "prettier --write 'src/**/*.{js,json,ts}'",
         "test": "jest",
-        "add:level":"node scripts/add-level.js"
+        "add:level": "node scripts/add-level.js",
+        "validate:json": "node scripts/validate-json.js"
     },
     "watch": {
-        "generate": "src/config/**/*.json"
+        "generate": "src/config/**/*.json",
+        "validate:json": "generated/config/**/*.json"
     },
     "license": "MIT",
     "devDependencies": {
@@ -29,6 +31,7 @@
         "@babel/preset-typescript": "^7.18.6",
         "@types/jest": "^29.2.4",
         "@types/webfontloader": "^1.6.35",
+        "ajv": "^8.12.0",
         "babel-eslint": "^9.0.0",
         "babel-jest": "^29.3.1",
         "babel-loader": "8.0.2",
@@ -46,7 +49,6 @@
         "html-webpack-plugin": "^5.5.0",
         "jest": "^29.3.1",
         "json-refs": "^3.0.15",
-        "json-schema": "^0.4.0",
         "npm-run-all": "^4.1.5",
         "npm-watch": "^0.11.0",
         "prettier": "^2.8.1",

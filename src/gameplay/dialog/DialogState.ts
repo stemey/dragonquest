@@ -1,5 +1,6 @@
 import { observable } from "mobx";
 import { DragonQuest } from "../DragonQuest";
+import { evaluateExpression } from "../evaluateExpression";
 import { Dialog } from "../types/Dialog";
 import { DialogAction } from "../types/DialogAction";
 
@@ -71,10 +72,19 @@ export class DialogState {
         if ("action" in currentMessage && currentMessage.action) {
             this.executeAction(currentMessage.action);
         }
+
         const nextMessage = this.dialog[this.state.get()];
         if ("end" in nextMessage) {
             this.stop();
             return;
+        }
+        if ("test" in nextMessage) {
+            const result = evaluateExpression(nextMessage.test);
+            if (result) {
+                this.state.set(nextMessage.success);
+            } else {
+                this.state.set(nextMessage.failure);
+            }
         }
     }
 
@@ -139,6 +149,9 @@ export class DialogState {
         if (this.dialog) {
             const currentMessage = this.dialog[this.state.get()];
             if ("end" in currentMessage) {
+                return undefined;
+            }
+            if ("test" in currentMessage) {
                 return undefined;
             }
             const deltaX = this.getDeltaX(currentMessage.actor);
