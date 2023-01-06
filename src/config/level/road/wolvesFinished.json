@@ -1,0 +1,22 @@
+{
+    "$schema": "../../../../generated/schemas/dialog.json",
+    "start": {
+        "actor": "Tristran",
+        "message": "Thank you so much!",
+        "next": "more"
+    },
+    "more": {
+        "actor": "Hero",
+        "message": "Hi, I am Hero. What is your name?",
+        "next": "answer"
+    },
+    "answer": {
+        "actor": "Tristran",
+        "message": "I am Tristran and pledge my loyalty to you. I will follow you to the end of the world.",
+        "next": "end",
+        "action": {
+            "customs": [{ "method": "addHero", "params": ["tristran"] }]
+        }
+    },
+    "end": { "end": true }
+}

@@ -1,0 +1,42 @@
+{
+    "short sword": {
+        "type": "weapon",
+        "name": "short sword",
+        "strength": 10,
+        "damage": 10
+    },
+    "axe": {
+        "type": "weapon",
+        "name": "axe",
+        "strength": 20,
+        "damage": 10
+    },
+    "fireball": {
+        "type": "weapon",
+        "name": "fireball",
+        "strength": 5,
+        "damage": 50
+    },
+    "mighty sparks": {
+        "type": "weapon",
+        "name": "mighty sparks",
+        "strength": 15,
+        "damage": 20
+    },
+    "long sword": {
+        "type": "weapon",
+        "name": "long sword",
+        "strength": 15,
+        "damage": 20
+    },
+    "healing": {
+        "type": "healing",
+        "name": "healing",
+        "healing": 10
+    },
+    "blue potion": {
+        "type": "healing",
+        "name": "healing",
+        "healing": 30
+    }
+}
