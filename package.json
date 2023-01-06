@@ -18,11 +18,12 @@
         "format": "prettier --write 'src/**/*.{js,json,ts}'",
         "test": "jest",
         "add:level": "node scripts/add-level.js",
-        "validate:json": "node scripts/validate-json.js"
+        "validate:json:watch": "node scripts/validate-json.js watch",
+        "validate:json": "node scripts/validate-json.js validate"
     },
     "watch": {
         "generate": "src/config/**/*.json",
-        "validate:json": "generated/config/**/*.json"
+        "validate:json:watch": "generated/config/**/*.json"
     },
     "license": "MIT",
     "devDependencies": {

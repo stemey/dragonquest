@@ -5,8 +5,11 @@ const fs = require("fs");
 const JsonRefs = require("json-refs");
 
 const sourcePath = __dirname + "/../src/config";
-const targetPath = __dirname + "/../generated/config";
+const baseTargetPath = __dirname + "/../generated";
+const targetPath = baseTargetPath+"/config";
 
+ensureDir(baseTargetPath);
+ensureDir(targetPath);
 ensureDir(targetPath);
 ensureDir(targetPath + "/global");
 ensureDir(targetPath + "/level");
