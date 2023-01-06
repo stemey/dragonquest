@@ -3,14 +3,12 @@ const cli = require("cli");
 const Ajv = require("ajv");
 const ajv = new Ajv({ strict: false }); // options can be passed, e.g. {allErrors: true}
 
+const options = cli.parse({}, ["watch", "validate"]);
 
-const options = cli.parse({
-},["fail"]);
-
-const fail = cli.command;
+const fail = cli.command === "validate";
 
 const baseDir = __dirname + "/..";
-let invalid=false;
+let invalid = false;
 try {
     const levelSchema = JSON.parse(
         fs.readFileSync(baseDir + "/generated/schemas/level.json").toString()
@@ -29,15 +27,14 @@ try {
         );
         const valid = validate(level);
         if (!valid) {
-            invalid=true;
+            invalid = true;
             console.error("error in " + name, validate.errors);
-
         }
     });
 } catch (e) {
     console.warn("cannot validate", e);
 }
 
-if (fail && invalid ){
-    process.exit(1)
+if (fail && invalid) {
+    process.exit(1);
 }
