@@ -6,34 +6,35 @@
     "activeFile": "level/road/map.json",
     "expandedProjectPaths": [
         "levels/one",
-        "level",
         "level/road",
-        ".",
-        "map",
         "levels/one/map",
+        "level",
+        "level/village",
         "levels",
-        "tileset"
+        "map",
+        "tileset",
+        "."
     ],
     "file.lastUsedOpenFilter": "Alle Dateien (*)",
     "fileStates": {
         "level/road/map.json": {
             "expandedGroupLayers": [
+                10,
                 7,
-                19,
-                10
+                19
             ],
             "expandedObjectLayers": [
+                10,
+                11,
                 18,
                 19,
-                15,
-                10,
-                11
+                15
             ],
             "scale": 0.75,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 551.3333333333334,
-                "y": 64.66666666666663
+                "x": 385.3333333333333,
+                "y": 514
             }
         },
         "level/village/map.json": {
@@ -47,8 +48,8 @@
             "scale": 1.260234375,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 686.777013204389,
-                "y": 429.6819787985866
+                "x": 479.27592833674294,
+                "y": 319.38503502572684
             }
         },
         "levels/one/map/road.json": {
@@ -146,11 +147,13 @@
     "map.lastUsedExportFilter": "JSON-Kartendateien (*.tmj *.json)",
     "map.lastUsedFormat": "json",
     "openFiles": [
-        "level/road/map.json"
+        "level/road/map.json",
+        "level/village/map.json"
     ],
     "project": "levels.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "level/village/map.json",
         "level/road/map.json",
         "tileset/pokehouse.json",
         "levels/one/map/road.json",

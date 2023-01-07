@@ -1,11 +1,29 @@
+import { Storable } from "../store/Storable";
+
 export interface BattleOutcome {
     heroWin: boolean;
     deadEnemy: string;
 }
 
-export class GameState {
+export class GameState
+    implements
+        Storable<{ levels: { [key: string]: LevelState }; levelKey: string }>
+{
+    serialize(): { levels: { [key: string]: LevelState }; levelKey: string } {
+        return {
+            levels: this.levels,
+            levelKey: this.levelKey,
+        };
+    }
+    deserialize(serializedData: {
+        levels: { [key: string]: LevelState };
+        levelKey: string;
+    }): void {
+        this.levels = serializedData.levels;
+        this.levelKey = this.levelKey;
+    }
     public levels: { [key: string]: LevelState } = {};
-    private levelKey: string = "";
+    public levelKey: string = "";
 
     get currentLevel() {
         return this.levels[this.levelKey];
@@ -20,8 +38,20 @@ export class GameState {
             flags: {},
             monsters: {},
             dialogs: {},
+            actionStates: {},
         };
         this.levelKey = key;
+    }
+    addActionState(type: string, data: any) {
+        const actionState = this.currentLevel.actionStates[type];
+        if (!actionState) {
+            this.currentLevel.actionStates[type] = [];
+        }
+        this.currentLevel.actionStates[type].push(data);
+    }
+
+    getActionStates(type: string): any[] {
+        return this.currentLevel.actionStates[type] || [];
     }
 
     updateLevelFlags(flags: { [key: string]: boolean }) {
@@ -42,6 +72,7 @@ export interface LevelState {
     monsters: { [key: string]: EnemyState };
     dialogs: { [key: string]: DialogState };
     firedEvents: string[];
+    actionStates: { [type: string]: any[] };
 }
 
 export interface EnemyState {

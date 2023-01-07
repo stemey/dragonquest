@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { GeneralLevel } from "../../scenes/GeneralLevel";
+import { AbstractWorld } from "../../scenes/AbstractWorld";
 import { GatewayEntry } from "../../scenes/WorldEntryParameter";
 import { Action } from "./Action";
 
@@ -24,7 +24,7 @@ const GatewayAction: Action = (layerObject, world) => {
         zone,
         (player, zone) => {
             if (!world.scene.get(targetScene)) {
-                const newLevel = new GeneralLevel({
+                const newLevel = new AbstractWorld({
                     key: targetScene,
                     physics: { matter: {}, arcade: {} },
                 });

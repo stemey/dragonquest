@@ -13,12 +13,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
     private graphics: Phaser.GameObjects.Graphics;
     private group: Phaser.GameObjects.Container;
     private all: Phaser.GameObjects.Container;
-    constructor(
-        scene: Phaser.Scene,
-        private events: Phaser.Events.EventEmitter,
-        x?: number,
-        y?: number
-    ) {
+    constructor(scene: Phaser.Scene, x?: number, y?: number) {
         super(scene, 0, 0);
         this.graphics = this.scene.add.graphics();
 
@@ -43,7 +38,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
         this.group = new Phaser.GameObjects.Container(this.scene, 0, 0);
         this.all.add(this.group);
         //this.text.setOrigin(1);
-        this.events.on("DialogStart", this.startDialog, this);
+        this.scene.game.events.on("DialogStart", this.startDialog, this);
         this.visible = false;
         this.dialogState = new DialogState();
     }
@@ -137,7 +132,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
                 this.text.setText(text);
             } else {
                 this.visible = false;
-                this.events.emit("DialogEnd");
+                this.scene.game.events.emit("DialogEnd");
                 console.log("finished conversation");
             }
         });
