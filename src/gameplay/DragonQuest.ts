@@ -13,6 +13,7 @@ import { PlayerState } from "./types/PlayerState";
 import { evaluateExpression } from "./evaluateExpression";
 import { Inventory } from "./Inventory";
 import { Store } from "../store/Store";
+import { Game } from "phaser";
 
 interface Coordinate {
     x: number;
@@ -74,14 +75,15 @@ export class DragonQuestType {
     public api = new CustomApi(this);
     private gameState = new GameState();
     public playerState: PlayerProgress = new PlayerProgress();
-    private levelEmitter?: Phaser.Events.EventEmitter;
+    private game?: Game;
     private store = new Store();
     public loadedStorePoint?: number;
 
-    init(characters: Characters, powers: Powers) {
+    init(characters: Characters, powers: Powers, game: Game) {
         this.characters = characters;
         this.powers = powers;
         this.heroes = []; //Object.values(this.characters).filter(c => c.hero).map(h => new Unit(h))
+        this.game = game;
     }
 
     getPlayerState() {
@@ -126,14 +128,9 @@ export class DragonQuestType {
         return this.currentLevel.dialogs[name];
     }
 
-    setLevel(
-        key: string,
-        level: Level,
-        levelEmitter: Phaser.Events.EventEmitter
-    ) {
+    setLevel(key: string, level: Level) {
         this.levels[key] = level;
         this.gameState.enterLevel(key);
-        this.levelEmitter = levelEmitter;
     }
 
     foundGold(goldCount: number) {
@@ -199,7 +196,7 @@ export class DragonQuestType {
                 matches(this.gameState.currentLevel, event.trigger.levelState)
             ) {
                 this.gameState.currentLevel.firedEvents.push(name);
-                this.levelEmitter?.emit("DialogStart", event.dialog);
+                this.game?.events.emit("DialogStart", event.dialog);
             }
         });
     }
@@ -243,7 +240,7 @@ export class DragonQuestType {
         const { x, y } = storePoint.player;
         this.inventory.deserialize(storePoint.inventory);
         this.gameState.deserialize(storePoint.game);
-        this.levelEmitter?.emit("LoadGame", {
+        this.game?.events.emit("LoadGame", {
             scene: this.gameState.levelKey,
             x,
             y,

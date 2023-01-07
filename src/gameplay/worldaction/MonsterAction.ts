@@ -64,20 +64,4 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
             state.onMeetEnemy(player, monster, monsterUnits, monsterName);
         }) as unknown as ArcadePhysicsCallback);
     }
-    scene.events.on(
-        "battleFinished",
-        (data: { deadEnemies: number[] }) => {
-            if (data && data.deadEnemies) {
-                data.deadEnemies.forEach((enemy) => {
-                    const monster = monsters.find(
-                        (u) => (u as any).enemyId === enemy
-                    );
-                    if (monster) {
-                        monster.destroy();
-                    }
-                });
-            }
-        },
-        this
-    );
 };

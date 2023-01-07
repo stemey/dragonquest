@@ -95,7 +95,7 @@ export default class extends Phaser.Scene {
             );
         });
 
-        DragonQuest.init(cleanedCharacters, cleanedPowers);
+        DragonQuest.init(cleanedCharacters, cleanedPowers, this.game);
 
         WebFont.load({
             google: {

@@ -130,7 +130,7 @@ export class AbstractWorld extends Phaser.Scene {
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
 
         const levelConfig = this.cache.json.get(this.levelConfigKey);
-        DragonQuest.setLevel(this.scene.key, levelConfig, this.events);
+        DragonQuest.setLevel(this.scene.key, levelConfig);
         DragonQuest.currentLevelKey = this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
@@ -226,7 +226,7 @@ export class AbstractWorld extends Phaser.Scene {
             this.cursors.down.reset();
         });
 
-        this.events.on(
+        this.game.events.on(
             "LoadGame",
             (data: {
                 x: number;

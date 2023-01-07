@@ -24,6 +24,9 @@ export default class MonsterActionState {
         player.body.setVelocity(0);
         this.scene.scene.sleep();
         this.scene.scene.sleep("WorldUiScene");
+        this.scene.game.events.on("battleFinished", (data: any) =>
+            this.wake(data)
+        );
         if (this.scene.scene.isSleeping("BattleScene")) {
             this.scene.scene.wake("BattleScene", {
                 enemies: enemies,
@@ -39,18 +42,11 @@ export default class MonsterActionState {
         }
     }
 
-    wake(data: { deadEnemies: Unit[] }) {
-        if (data.deadEnemies && data.deadEnemies.length > 0) {
-            this.monsters
-                .filter(
-                    (sprite) =>
-                        data.deadEnemies.filter(
-                            (enemy) => (sprite as any).enemyId === enemy.id
-                        ).length > 0
-                )
-                .forEach((sprite) => {
-                    sprite.destroy();
-                });
+    wake(data: { heroWin: boolean }) {
+        if (data.heroWin) {
+            this.monsters.forEach((sprite) => {
+                sprite.destroy();
+            });
         }
     }
 }

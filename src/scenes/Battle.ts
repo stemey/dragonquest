@@ -211,9 +211,7 @@ export default class extends Phaser.Scene {
             }
         });
         const win = deadEnemies.length == this.enemies.length;
-        this.scene
-            .get(this.entryWorld)
-            .events.emit("battleFinished", { deadEnemies });
+        this.game.events.emit("battleFinished", { heroWin: win });
         this.scene.wake(this.entryWorld, {
             type: "battle",
             win,
