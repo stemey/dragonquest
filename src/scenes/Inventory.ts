@@ -30,8 +30,8 @@ export class Inventory extends Phaser.Scene {
         });
         const row1 = table.addRow();
         row1.addCell(new TextCell("gold"));
-        row1.addCell(new TextCell(() => String(DragonQuest.goldCount.get())));
-        for (let item of DragonQuest.items.values()) {
+        row1.addCell(new TextCell(() => String(DragonQuest.inventory.goldCount.get())));
+        for (let item of DragonQuest.inventory.items.values()) {
             const row2 = table.addRow();
             row2.addCell(new TextCell(item.name));
             row2.addCell(new TextCell("1"));

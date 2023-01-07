@@ -1,5 +1,3 @@
-import { IObservableArray, IObservableValue, observable } from "mobx";
-import { DropItem } from "./types/DropItem";
 import { Unit } from "../sprites/Unit";
 import { Level } from "./types/Level";
 import { Characters } from "./types/Characters";
@@ -13,6 +11,8 @@ import { ConditionalDropItemRef } from "./types/ConditionalDropItemRef";
 import { AnyDropItemRef } from "./types/AnyDropItemRef";
 import { PlayerState } from "./types/PlayerState";
 import { evaluateExpression } from "./evaluateExpression";
+import { Inventory } from "./Inventory";
+import { Store } from "../store/Store";
 
 interface Coordinate {
     x: number;
@@ -22,6 +22,13 @@ interface Coordinate {
 class PlayerProgress {
     scene: string = "";
     path: Coordinate[] = [];
+
+    get x() {
+        return this.path[0].x;
+    }
+    get y() {
+        return this.path[0].y;
+    }
     update(scene: string, x: number, y: number) {
         if (scene !== this.scene) {
             this.path = [];
@@ -49,17 +56,9 @@ export class DragonQuestType {
         return matches(this.gameState.currentLevel, levelState);
     }
     hasItem(name: string): unknown {
-        return (
-            this.items.filter((i) => {
-                if ("name" in i) {
-                    return i.name === name;
-                }
-                return false;
-            }).length > 0
-        );
+        return this.inventory.hasItem(name);
     }
-    goldCount: IObservableValue<number> = observable.box(0);
-    items: IObservableArray<DropItem> = observable.array([]);
+    public inventory = new Inventory();
     private levels: { [key: string]: Level } = {};
     public currentLevelKey = "";
     public heroes: Unit[] = [];
@@ -69,6 +68,7 @@ export class DragonQuestType {
     private gameState = new GameState();
     public playerState: PlayerProgress = new PlayerProgress();
     private levelEmitter?: Phaser.Events.EventEmitter;
+    private store = new Store();
 
     init(characters: Characters, powers: Powers) {
         this.characters = characters;
@@ -129,8 +129,7 @@ export class DragonQuestType {
     }
 
     foundGold(goldCount: number) {
-        this.goldCount.set(this.goldCount.get() + goldCount);
-        console.log("gold " + this.goldCount);
+        this.inventory.foundGold(goldCount);
         this.onChanged();
     }
 
@@ -160,10 +159,10 @@ export class DragonQuestType {
                 }
                 const item = this.powers[itemRef.name];
                 if (item) {
-                    this.items.push(item);
+                    this.inventory.addItem(item);
                 }
             } else if (itemRef.type === "key") {
-                this.items.push(itemRef);
+                this.inventory.addItem(itemRef);
             }
         });
         this.onChanged();
@@ -176,12 +175,6 @@ export class DragonQuestType {
             hero.foundFood(foodShare);
         });
         this.onChanged();
-    }
-
-    logInventory() {
-        Array.from(this.items.values()).forEach((item) => {
-            console.log(item.type);
-        });
     }
 
     addHero(name: string) {
@@ -205,6 +198,44 @@ export class DragonQuestType {
     finishedBattle(outcome: BattleOutcome) {
         this.gameState.finishedBattle(outcome);
         this.onChanged();
+    }
+
+    async save() {
+        await this.store.store({
+            game: this.gameState.serialize(),
+            inventory: this.inventory.serialize(),
+            player: { x: this.playerState.x, y: this.playerState.y },
+            date: Date.now(),
+            name:
+                this.gameState.levelKey +
+                " " +
+                new Date().toLocaleDateString() +
+                " " +
+                new Date().toLocaleTimeString(),
+        });
+    }
+    async list() {
+        return await this.store.list();
+    }
+    async load(id: number) {
+        const allLevels = Object.keys(this.gameState.levels)
+        const storePoint = await this.store.load(id);
+        const { x, y } = storePoint.player;
+        this.inventory.deserialize(storePoint.inventory);
+        this.gameState.deserialize(storePoint.game);
+        this.levelEmitter?.emit("LoadGame", {
+            scene: this.gameState.levelKey,
+            x,
+            y,
+            allLevels
+        });
+    }
+
+    addActionState(type: string, data: any) {
+        this.gameState.addActionState(type, data);
+    }
+    getActionStates(type: string) {
+        return this.gameState.getActionStates(type);
     }
 }
 

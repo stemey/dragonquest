@@ -1,6 +1,5 @@
 import * as Phaser from "phaser";
 import { Action } from "./Action";
-import { DropItemRef } from "../types/DropItemRef";
 import { DragonQuest } from "../DragonQuest";
 import { Dialog } from "../types/Dialog";
 import { AnyDropItemRef } from "../types/AnyDropItemRef";
@@ -8,6 +7,11 @@ import { AnyDropItemRef } from "../types/AnyDropItemRef";
 export const ChestAction: Action = (layerObject, world) => {
     const lootName = layerObject.getProp("name") as any;
     const itemRefs: AnyDropItemRef[] = DragonQuest.getLoot(lootName);
+
+    const foundChests = DragonQuest.getActionStates("Gateway") as string[];
+    if (foundChests.indexOf(lootName) >= 0) {
+        return;
+    }
 
     if (itemRefs && world.player) {
         const chest = world.make.sprite(
@@ -71,6 +75,7 @@ export const ChestAction: Action = (layerObject, world) => {
                     callback: () => {
                         world.stopPlayer = false;
                         const dropItemRefs = DragonQuest.foundItems(itemRefs);
+                        DragonQuest.addActionState("Gateway", lootName);
                         const items = dropItemRefs
                             .map((i) => {
                                 switch (i.type) {
@@ -92,8 +97,8 @@ export const ChestAction: Action = (layerObject, world) => {
                                 end: true,
                             },
                         };
-                        world.events.emit("DialogStart", dialog);
-                        world.events.on("DialogEnd", () => {
+                        world.game.events.emit("DialogStart", dialog);
+                        world.game.events.on("DialogEnd", () => {
                             chest.destroy();
                         });
                     },

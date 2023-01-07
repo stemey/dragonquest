@@ -9,9 +9,10 @@ import Road from "./scenes/Road";
 import { WorldUiScene } from "./scenes/WorldUiScene";
 import { dragonQuestConfiguration } from "./scenes/DragonQuestConfiguration";
 import GatewayAction from "./gameplay/worldaction/GatewayAction";
+import { LoadGame } from "./scenes/LoadGame";
 
 const gameConfig = Object.assign(config, {
-    scene: [Boot, Road, Battle, UiScene, Inventory, WorldUiScene],
+    scene: [Boot, Road, LoadGame, Battle, UiScene, Inventory, WorldUiScene],
 });
 dragonQuestConfiguration.actions["Gateway"] = GatewayAction;
 

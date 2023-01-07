@@ -10,10 +10,13 @@ import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
-import { GatewayEntry, WorldEntryParameter } from "./WorldEntryParameter";
+import {
+    GatewayEntry,
+    LoadEntry,
+    WorldEntryParameter,
+} from "./WorldEntryParameter";
 import { ChestAction } from "../gameplay/worldaction/ChestAction";
 import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
-import GatewayAction from "../gameplay/worldaction/GatewayAction";
 import { dragonQuestConfiguration } from "./DragonQuestConfiguration";
 
 export class AbstractWorld extends Phaser.Scene {
@@ -25,6 +28,10 @@ export class AbstractWorld extends Phaser.Scene {
     private levelConfigKey: string = "";
     private levelMapKey: string = "";
     private map?: Phaser.Tilemaps.Tilemap;
+
+    create(data?: GatewayEntry | LoadEntry) {
+        this.startWorld(data);
+    }
 
     preload() {
         this.levelConfigKey = `/generated/config${this.scene.key}/level.json`;
@@ -41,8 +48,18 @@ export class AbstractWorld extends Phaser.Scene {
         return this.entries[name] || this.entries["main"] || { x: 100, y: 100 };
     }
 
-    startWorld(data?: GatewayEntry) {
-        this.scene.launch("WorldUiScene", { world: this.scene.key });
+    startWorld(data?: GatewayEntry | LoadEntry) {
+        const worldUiScene = this.scene.get("WorldUiScene");
+        if (worldUiScene) {
+            if (worldUiScene.scene.isSleeping("WorldUiScene")) {
+                worldUiScene.scene.wake();
+            }
+            if (!worldUiScene.scene.isActive("WorldUiScene")) {
+                this.scene.launch("WorldUiScene", { world: this.scene.key });
+            }
+        } else {
+            this.scene.launch("WorldUiScene", { world: this.scene.key });
+        }
 
         this.entries = {};
         // initDragonQuest()
@@ -164,15 +181,24 @@ export class AbstractWorld extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.input.keyboard.on("keydown", this.onInventory, this);
 
-        const entry = this.getEntry(data?.entry);
-        this.player.x = entry.x;
-        this.player.y = entry.y;
+        switch (data?.type) {
+            case "load": {
+                this.player.x = data.x;
+                this.player.y = data.y;
+                break;
+            }
+            default: {
+                const entry = this.getEntry(data?.entry);
+                this.player.x = entry.x;
+                this.player.y = entry.y;
+            }
+        }
 
         this.player.body.setVelocity(0);
-        this.events.on("DialogStart", () => {
+        this.game.events.on("DialogStart", () => {
             this.stopPlayer = true;
         });
-        this.events.on("DialogEnd", () => {
+        this.game.events.on("DialogEnd", () => {
             this.stopPlayer = false;
             if (!this.player || !this.cursors) {
                 return;
@@ -183,6 +209,24 @@ export class AbstractWorld extends Phaser.Scene {
             this.cursors.up.reset();
             this.cursors.down.reset();
         });
+
+        this.events.on(
+            "LoadGame",
+            (data: {
+                x: number;
+                y: number;
+                scene: string;
+                allLevels: string[];
+            }) => {
+                this.scene.sleep();
+
+                if (this.scene.isSleeping("LoadGame")) {
+                    this.scene.wake("LoadGame", data);
+                } else {
+                    this.scene.launch("LoadGame", data);
+                }
+            }
+        );
     }
 
     onInventory(event: KeyboardEvent) {
@@ -270,6 +314,9 @@ export class AbstractWorld extends Phaser.Scene {
             const entry = this.entries[data.entry];
             this.player.x = entry.x;
             this.player.y = entry.y;
+        } else if (data && data.type == "load") {
+            this.player.x = data.x;
+            this.player.y = data.y;
         }
         this.player.body.setVelocity(0);
         this.cursors.right.reset();
@@ -277,4 +324,5 @@ export class AbstractWorld extends Phaser.Scene {
         this.cursors.up.reset();
         this.cursors.down.reset();
     }
+
 }

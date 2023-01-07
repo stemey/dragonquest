@@ -20,7 +20,7 @@ export const DialogAction: Action = (layerObject, world) => {
         zone,
         (player, zone) => {
             zone.destroy();
-            world.events.emit("DialogStart", name);
+            world.game.events.emit("DialogStart", name);
         },
         this
     );
