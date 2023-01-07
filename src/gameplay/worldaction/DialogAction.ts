@@ -1,8 +1,16 @@
 import * as Phaser from "phaser";
+import { DragonQuest } from "../DragonQuest";
 import { Action } from "./Action";
 
 export const DialogAction: Action = (layerObject, world) => {
     const name = layerObject.getProp("name") as string;
+
+    if (
+        (DragonQuest.getActionStates("Dialog") as string[]).indexOf(name) >= 0
+    ) {
+        return;
+    }
+
     const zone = new Phaser.GameObjects.Zone(
         world,
         layerObject.x + layerObject.width / 2,
@@ -21,6 +29,7 @@ export const DialogAction: Action = (layerObject, world) => {
         (player, zone) => {
             zone.destroy();
             world.game.events.emit("DialogStart", name);
+            DragonQuest.addActionState("Dialog", name);
         },
         this
     );

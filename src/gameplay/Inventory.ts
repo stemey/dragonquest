@@ -25,7 +25,7 @@ export class Inventory
     serialize(): { goldCount: number; items: DropItem[] } {
         return {
             goldCount: this.goldCount.get(),
-            items: this.items.map((x) => ({...x})),
+            items: this.items.map((x) => ({ ...x })),
         };
     }
     deserialize(serializedData: {

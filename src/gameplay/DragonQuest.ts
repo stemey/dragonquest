@@ -69,6 +69,7 @@ export class DragonQuestType {
     public playerState: PlayerProgress = new PlayerProgress();
     private levelEmitter?: Phaser.Events.EventEmitter;
     private store = new Store();
+    public loadedStorePoint?: number;
 
     init(characters: Characters, powers: Powers) {
         this.characters = characters;
@@ -218,7 +219,7 @@ export class DragonQuestType {
         return await this.store.list();
     }
     async load(id: number) {
-        const allLevels = Object.keys(this.gameState.levels)
+        this.loadedStorePoint = id;
         const storePoint = await this.store.load(id);
         const { x, y } = storePoint.player;
         this.inventory.deserialize(storePoint.inventory);
@@ -227,7 +228,6 @@ export class DragonQuestType {
             scene: this.gameState.levelKey,
             x,
             y,
-            allLevels
         });
     }
 

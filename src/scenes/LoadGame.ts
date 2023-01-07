@@ -4,7 +4,6 @@ import { LoadEntry } from "./WorldEntryParameter";
 
 export interface LoadGameParameters {
     scene: string;
-    allLevels: string[];
     x: number;
     y: number;
 }
@@ -23,21 +22,28 @@ export class LoadGame extends Phaser.Scene {
     }
 
     startWorld(data: LoadGameParameters) {
-        const { x, y, scene, allLevels } = data;
-        allLevels.forEach((name) => this.scene.remove(name));
-
-        const newLevel = new AbstractWorld({
-            key: data.scene,
-            physics: { matter: {}, arcade: {} },
-        });
-        this.scene.add(scene, newLevel);
+        const { x, y, scene } = data;
 
         this.scene.sleep();
 
-        this.scene.launch(data.scene, {
-            type: "load",
-            x,
-            y,
-        } as LoadEntry);
+        const existingScene = this.scene.get(scene);
+        if (existingScene) {
+            this.scene.wake(scene, {
+                type: "load",
+                x,
+                y,
+            } as LoadEntry);
+        } else {
+            const newLevel = new AbstractWorld({
+                key: scene,
+                physics: { matter: {}, arcade: {} },
+            });
+            this.scene.add(scene, newLevel);
+            this.scene.launch(scene, {
+                type: "load",
+                x,
+                y,
+            } as LoadEntry);
+        }
     }
 }

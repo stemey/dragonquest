@@ -28,6 +28,7 @@ export class AbstractWorld extends Phaser.Scene {
     private levelConfigKey: string = "";
     private levelMapKey: string = "";
     private map?: Phaser.Tilemaps.Tilemap;
+    private storePoint?: number;
 
     create(data?: GatewayEntry | LoadEntry) {
         this.startWorld(data);
@@ -48,17 +49,26 @@ export class AbstractWorld extends Phaser.Scene {
         return this.entries[name] || this.entries["main"] || { x: 100, y: 100 };
     }
 
+    mustRestart(data?: WorldEntryParameter) {
+        if (data?.type === "battle") {
+            return false;
+        }
+        const loadedStorePoint = DragonQuest.loadedStorePoint;
+        if (this.storePoint !== loadedStorePoint) {
+            this.storePoint = loadedStorePoint;
+            this.scene.restart(data);
+            return true;
+        }
+        return false;
+    }
+
     startWorld(data?: GatewayEntry | LoadEntry) {
+        if (this.mustRestart(data)) return;
         const worldUiScene = this.scene.get("WorldUiScene");
-        if (worldUiScene) {
-            if (worldUiScene.scene.isSleeping("WorldUiScene")) {
-                worldUiScene.scene.wake();
-            }
-            if (!worldUiScene.scene.isActive("WorldUiScene")) {
-                this.scene.launch("WorldUiScene", { world: this.scene.key });
-            }
-        } else {
+        if (!worldUiScene || !this.scene.isActive("WorldUiScene")) {
             this.scene.launch("WorldUiScene", { world: this.scene.key });
+        } else {
+            this.scene.bringToTop(worldUiScene);
         }
 
         this.entries = {};
@@ -305,6 +315,8 @@ export class AbstractWorld extends Phaser.Scene {
         if (!this.player || !this.cursors) {
             return;
         }
+        if (this.mustRestart(data)) return;
+
         // move player a way from possibley alive enemies
         if (data && data.type == "battle" && !data.win) {
             const c = DragonQuest.getLastSafePlayerPosition();
@@ -324,5 +336,4 @@ export class AbstractWorld extends Phaser.Scene {
         this.cursors.up.reset();
         this.cursors.down.reset();
     }
-
 }

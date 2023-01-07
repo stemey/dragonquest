@@ -20,9 +20,7 @@ export class WorldUiScene extends Phaser.Scene {
         }
     }
 
-    wake(sys: number, data: { world: string }) {
-        
-    }
+    wake(sys: number, data: { world: string }) {}
 
     update() {
         this.dialog?.update();

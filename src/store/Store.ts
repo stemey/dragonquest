@@ -92,7 +92,7 @@ export class Store {
         return new Promise((resolve, reject) => {
             cursorRequest.onsuccess = (event) => {
                 const cursor = cursorRequest.result;
-                
+
                 if (!cursor || cursor == null) {
                     resolve(storePoints);
                 } else {
