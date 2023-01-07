@@ -28,6 +28,13 @@
                 "condition": {
                     "playerState": {
                         "className": "Wizard"
+                    },
+                    "levelState": {
+                        "dialogs": {
+                            "rescue": {
+                                "finished": true
+                            }
+                        }
                     }
                 },
                 "dropItemRefs": [
@@ -41,6 +48,13 @@
                 "condition": {
                     "playerState": {
                         "className": "Knight"
+                    },
+                    "levelState": {
+                        "dialogs": {
+                            "rescue": {
+                                "finished": true
+                            }
+                        }
                     }
                 },
                 "dropItemRefs": [

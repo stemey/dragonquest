@@ -91,7 +91,10 @@ export class DialogUi extends Phaser.GameObjects.Container {
             dialog = dialogId;
         }
 
-        this.dialogState.startDialog(dialog);
+        this.dialogState.startDialog(
+            dialog,
+            typeof dialogId === "string" ? dialogId : undefined
+        );
 
         autorun(() => {
             const messageState = this.dialogState?.getState();

@@ -71,6 +71,10 @@ export class AbstractWorld extends Phaser.Scene {
             this.scene.bringToTop(worldUiScene);
         }
 
+        if (this.scene.isSleeping("WorldUiScene")) {
+            this.scene.wake("WorldUiScene");
+        }
+
         this.entries = {};
         // initDragonQuest()
         this.graphics = this.add.graphics();
@@ -315,13 +319,15 @@ export class AbstractWorld extends Phaser.Scene {
         if (!this.player || !this.cursors) {
             return;
         }
+
         if (this.mustRestart(data)) return;
+        if (this.scene.isSleeping("WorldUiScene")) {
+            this.scene.wake("WorldUiScene");
+        }
 
         // move player a way from possibley alive enemies
         if (data && data.type == "battle" && !data.win) {
-            const c = DragonQuest.getLastSafePlayerPosition();
-            this.player.x = c.x;
-            this.player.y = c.y;
+            DragonQuest.loadLastStorePoint();
         } else if (data && data.type == "gateway" && data.entry) {
             const entry = this.entries[data.entry];
             this.player.x = entry.x;

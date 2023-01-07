@@ -65,6 +65,9 @@ export class GameState
             this.currentLevel.monsters[outcome.deadEnemy] = { dead: true };
         }
     }
+    finishedDialog(dialog: string) {
+        this.currentLevel.dialogs[dialog] = { finished: true };
+    }
 }
 
 export interface LevelState {

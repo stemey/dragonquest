@@ -8,12 +8,15 @@ export class DialogState {
     private state = observable.box("start");
     public selectedOptionIndex = observable.box(0);
     private dialog?: Dialog;
+    private dialogId?: string;
     private deltaX: { [actor: string]: number } = {};
 
     constructor() {}
 
     stop() {
+        if (this.dialogId) DragonQuest.finishedDialog(this.dialogId);
         this.dialog = undefined;
+        this.dialogId = undefined;
         this.selectedOptionIndex.set(0);
         this.state.set("");
     }
@@ -53,7 +56,8 @@ export class DialogState {
             DragonQuest.foundItems(action.items);
         }
     }
-    startDialog(dialog: Dialog) {
+    startDialog(dialog: Dialog, dialogId?: string) {
+        this.dialogId = dialogId;
         this.dialog = dialog;
         this.initializeDeltaX(dialog);
         this.state.set("start");

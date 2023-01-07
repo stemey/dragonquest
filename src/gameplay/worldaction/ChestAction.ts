@@ -55,6 +55,10 @@ export const ChestAction: Action = (layerObject, world) => {
                 if (collided) {
                     return;
                 }
+                const dropItemRefs = DragonQuest.foundItems(itemRefs);
+                if (dropItemRefs.length == 0) {
+                    return;
+                }
                 collided = true;
                 chest.depth = 50;
                 chestGame.setVelocityY(-3);
@@ -74,7 +78,6 @@ export const ChestAction: Action = (layerObject, world) => {
                     delay: 1000,
                     callback: () => {
                         world.stopPlayer = false;
-                        const dropItemRefs = DragonQuest.foundItems(itemRefs);
                         DragonQuest.addActionState("Gateway", lootName);
                         const items = dropItemRefs
                             .map((i) => {

@@ -52,6 +52,13 @@ class PlayerProgress {
 }
 
 export class DragonQuestType {
+    async loadLastStorePoint() {
+        const storePoints = await this.list();
+        if (storePoints.length == 0) {
+            return;
+        }
+        await this.load(storePoints[storePoints.length - 1].id);
+    }
     matchesLevelState(levelState: Partial<LevelState>) {
         return matches(this.gameState.currentLevel, levelState);
     }
@@ -201,20 +208,32 @@ export class DragonQuestType {
         this.onChanged();
     }
 
-    async save() {
+    finishedDialog(dialog: string) {
+        this.gameState.finishedDialog(dialog);
+        this.onChanged();
+    }
+
+    async autoSave() {
+        this.save();
+    }
+
+    async save(name?: string) {
+        const spName =
+            name ||
+            this.gameState.levelKey +
+                " " +
+                new Date().toLocaleDateString() +
+                " " +
+                new Date().toLocaleTimeString();
         await this.store.store({
             game: this.gameState.serialize(),
             inventory: this.inventory.serialize(),
             player: { x: this.playerState.x, y: this.playerState.y },
             date: Date.now(),
-            name:
-                this.gameState.levelKey +
-                " " +
-                new Date().toLocaleDateString() +
-                " " +
-                new Date().toLocaleTimeString(),
+            name: spName,
         });
     }
+
     async list() {
         return await this.store.list();
     }

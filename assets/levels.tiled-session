@@ -30,11 +30,11 @@
                 19,
                 15
             ],
-            "scale": 0.75,
+            "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 385.3333333333333,
-                "y": 514
+                "x": 423.5,
+                "y": 460.5
             }
         },
         "level/village/map.json": {
@@ -153,8 +153,8 @@
     "project": "levels.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "level/village/map.json",
         "level/road/map.json",
+        "level/village/map.json",
         "tileset/pokehouse.json",
         "levels/one/map/road.json",
         "tileset/Plants.json",
