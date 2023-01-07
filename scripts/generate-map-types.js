@@ -21,7 +21,6 @@ const indent ="\t\t\t"
 project.propertyTypes.forEach((propType) => {
     const properties = propType.members
         .map((m) => {
-            console.log(m.name)
             const type = typeMapping[m.type];
             if (!type) return "";
             return `${indent}${m.name}:${type}`;
