@@ -18,9 +18,11 @@ import {
 import { ChestAction } from "../gameplay/worldaction/ChestAction";
 import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
 import { dragonQuestConfiguration } from "./DragonQuestConfiguration";
+import { Gateway } from "../../generated/tiled-types/Gateway";
+import { Entry } from "../../generated/tiled-types/Entry";
 
 export class AbstractWorld extends Phaser.Scene {
-    private entries: { [key: string]: LayerObject } = {};
+    private entries: { [key: string]: LayerObject<Entry> } = {};
     private graphics?: Phaser.GameObjects.Graphics;
     public stopPlayer = false;
     public player?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -41,8 +43,8 @@ export class AbstractWorld extends Phaser.Scene {
         this.load.json(this.levelMapKey, this.levelMapKey);
     }
 
-    addEntry(entry: LayerObject) {
-        this.entries[entry.getProp("name") as string] = entry;
+    addEntry(entry: LayerObject<Entry>) {
+        this.entries[entry.props.name] = entry;
     }
 
     getEntry(name: string = "main") {

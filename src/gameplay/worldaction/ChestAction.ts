@@ -3,9 +3,10 @@ import { Action } from "./Action";
 import { DragonQuest } from "../DragonQuest";
 import { Dialog } from "../types/Dialog";
 import { AnyDropItemRef } from "../types/AnyDropItemRef";
+import { Loot } from "../../../generated/tiled-types/Loot";
 
-export const ChestAction: Action = (layerObject, world) => {
-    const lootName = layerObject.getProp("name") as any;
+export const ChestAction: Action<Loot> = (layerObject, world) => {
+    const lootName = layerObject.props.name;
     const itemRefs: AnyDropItemRef[] = DragonQuest.getLoot(lootName);
 
     const foundChests = DragonQuest.getActionStates("Gateway") as string[];

@@ -2,14 +2,15 @@ import { DragonQuest } from "../DragonQuest";
 import MonsterActionState from "./MonsterActionState";
 import * as Phaser from "phaser";
 import { Action } from "./Action";
+import { Monster } from "../../../generated/tiled-types/Monster";
 
-export const MonsterAction: Action = (layerObject, scene) => {
+export const MonsterAction: Action<Monster> = (layerObject, scene) => {
     const player = scene.player;
     if (!player) {
         return;
     }
     const monsters: Phaser.GameObjects.Sprite[] = [];
-    const monsterName = layerObject.getProp("name") as string;
+    const monsterName = layerObject.props.name;
 
     const monsterUnits = DragonQuest.createVillains(monsterName);
     let platform;

@@ -1,8 +1,9 @@
 import * as Phaser from "phaser";
+import { ObstacleObject } from "../../../generated/tiled-types/ObstacleObject";
 import { Action } from "./Action";
 
-export const ObstacleAction: Action = (layerObject, world) => {
-    const collide = layerObject.getProp("collide") as boolean;
+export const ObstacleAction: Action<ObstacleObject> = (layerObject, world) => {
+    const collide = layerObject.props.collide;
 
     if (collide && world.player) {
         const platform = new Phaser.GameObjects.Rectangle(

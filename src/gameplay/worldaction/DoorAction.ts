@@ -3,7 +3,7 @@ import { Layer } from "../../tile/Layer";
 import { Action } from "./Action";
 import { LayerObject } from "./LayerObject";
 
-const DoorAction: Action = (layerObject, world) => {
+const DoorAction: Action<any> = (layerObject, world) => {
     if (!world.player) {
         return;
     }

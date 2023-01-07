@@ -151,7 +151,7 @@
         "level/village/map.json"
     ],
     "project": "levels.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "level/road/map.json",
         "level/village/map.json",

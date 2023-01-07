@@ -9,6 +9,7 @@
         "generate:schema-characters": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Characters\" -o ./generated/schemas/characters.json --required --noExtraProps --titles",
         "generate:schema-level": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Level\" -o ./generated/schemas/level.json --required --noExtraProps --titles",
         "generate:resolve-json-refs": "node scripts/resolve-ref.js",
+        "generate:generate-map-types": "node scripts/generate-map-types.js",
         "generate": "run-p generate:*",
         "start": "webpack serve",
         "watch:webpack": "webpack --watch",
@@ -23,7 +24,8 @@
     },
     "watch": {
         "generate": "src/config/**/*.json",
-        "validate:json:watch": "generated/config/**/*.json"
+        "validate:json:watch": "generated/config/**/*.json",
+        "generate:generate-map-types": "assets/*.tiled-project"
     },
     "license": "MIT",
     "devDependencies": {

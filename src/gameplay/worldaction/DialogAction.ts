@@ -1,9 +1,10 @@
 import * as Phaser from "phaser";
+import { Dialog } from "../../../generated/tiled-types/Dialog";
 import { DragonQuest } from "../DragonQuest";
 import { Action } from "./Action";
 
-export const DialogAction: Action = (layerObject, world) => {
-    const name = layerObject.getProp("name") as string;
+export const DialogAction: Action<Dialog> = (layerObject, world) => {
+    const name = layerObject.props.name;
 
     if (
         (DragonQuest.getActionStates("Dialog") as string[]).indexOf(name) >= 0

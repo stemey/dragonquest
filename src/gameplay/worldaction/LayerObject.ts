@@ -24,8 +24,19 @@ export function getProp(key: string, properties: Property[]) {
     return null;
 }
 
-export class LayerObject {
-    constructor(private readonly obj: LayerProperties) {}
+export class LayerObject<T> {
+    public props: T;
+    constructor(private readonly obj: LayerProperties) {
+        if (obj.properties) {
+            this.props = obj.properties.reduce((value, prop) => {
+                value[prop.name] = prop.value;
+                return value;
+            }, {} as any);
+        } else {
+            // to not have to relax the props to optional
+            this.props = {} as T;
+        }
+    }
 
     getProp(key: string) {
         if (!this.obj.properties) {

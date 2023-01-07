@@ -18,7 +18,7 @@ export default class TileLayerFactory {
     tileSetImages: { [key: string]: Phaser.Tilemaps.Tileset } = {};
     mapConfig: MapConfig;
     tileSets: Tileset[];
-    actions: { [name: string]: Action } = {};
+    actions: { [name: string]: Action<any> } = {};
     layerActions: { [name: string]: LayerAction } = {};
 
     constructor(
@@ -107,14 +107,6 @@ export default class TileLayerFactory {
         this.tileSets.forEach((ts) => {
             this.scene.load.image(ts.name, "assets/map/" + ts.name + ".png");
         });
-    }
-
-    getType(props: LayerObject) {
-        let type = props.getProp("type");
-        if (!type && props.getProp("monster")) {
-            type = "monster";
-        }
-        return type;
     }
 
     create() {

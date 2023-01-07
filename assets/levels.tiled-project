@@ -48,6 +48,11 @@
             "id": 6,
             "members": [
                 {
+                    "name": "entry",
+                    "type": "string",
+                    "value": ""
+                },
+                {
                     "name": "targetScene",
                     "type": "string",
                     "value": ""
@@ -61,7 +66,7 @@
             ]
         },
         {
-            "color": "#ffa0a0a4",
+            "color": "#ffb30000",
             "id": 10,
             "members": [
                 {

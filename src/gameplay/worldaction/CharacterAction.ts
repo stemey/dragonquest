@@ -3,7 +3,7 @@ import * as Phaser from "phaser";
 import { DialogState } from "../dialog/DialogState";
 import { Action } from "./Action";
 
-export const CharacterAction: Action = (layerObject, world) => {
+export const CharacterAction: Action<any> = (layerObject, world) => {
     const name = layerObject.getProp("name") as string;
     const characters = world.physics.add.group({
         classType: Phaser.GameObjects.Container,

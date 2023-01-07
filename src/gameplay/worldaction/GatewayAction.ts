@@ -1,12 +1,12 @@
 import * as Phaser from "phaser";
+import { Gateway } from "../../../generated/tiled-types/Gateway";
 import { AbstractWorld } from "../../scenes/AbstractWorld";
 import { GatewayEntry } from "../../scenes/WorldEntryParameter";
 import { Action } from "./Action";
 
-const GatewayAction: Action = (layerObject, world) => {
-    const entry = (layerObject.getProp("name") as string) || "main";
-    const targetScene = ("/level/" +
-        layerObject.getProp("targetScene")) as string;
+const GatewayAction: Action<Gateway> = (layerObject, world) => {
+    const entry = layerObject.props.entry || "main";
+    const targetScene = "/level/" + layerObject.props.targetScene;
     const zone = new Phaser.GameObjects.Zone(
         world,
         layerObject.x + layerObject.width / 2,
