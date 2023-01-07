@@ -17,7 +17,7 @@ const typeMapping = {
     float: "number",
     int: "number",
 };
-const indent ="\t"
+const indent ="\t\t\t"
 project.propertyTypes.forEach((propType) => {
     const properties = propType.members
         .map((m) => {
@@ -29,7 +29,7 @@ project.propertyTypes.forEach((propType) => {
         .join("\n");
     const ts = `
     export interface ${propType.name} {
-    ${properties}        
+${properties}        
     }  
     `;
     fs.writeFileSync(
