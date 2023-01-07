@@ -1,4 +1,4 @@
-import { DragonQuest } from "../DragonQuest";
+import { DragonQuest } from "../hub/DragonQuest";
 import * as Phaser from "phaser";
 import { DialogState } from "../dialog/DialogState";
 import { Action } from "./Action";

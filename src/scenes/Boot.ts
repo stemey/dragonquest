@@ -2,7 +2,7 @@ import * as Phaser from "phaser";
 import * as WebFont from "webfontloader";
 import characters from "../../generated/config/global/characters.json";
 import powers from "../../generated/config/global/powers.json";
-import { DragonQuest } from "../gameplay/DragonQuest";
+import { DragonQuest } from "../gameplay/hub/DragonQuest";
 import { Characters } from "../gameplay/types/Characters";
 import { Powers } from "../gameplay/types/Powers";
 import { removeSchemaFromJson } from "../utils/removeSchemaFromJson";
@@ -95,7 +95,8 @@ export default class extends Phaser.Scene {
             );
         });
 
-        DragonQuest.init(cleanedCharacters, cleanedPowers, this.game);
+        DragonQuest.init(this.game);
+        DragonQuest.gameManager.init(cleanedCharacters, cleanedPowers);
 
         WebFont.load({
             google: {

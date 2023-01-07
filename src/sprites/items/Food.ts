@@ -1,4 +1,4 @@
-import { DragonQuest } from "../../gameplay/DragonQuest";
+import { DragonQuest } from "../../gameplay/hub/DragonQuest";
 import { Item } from "./Item";
 
 export class Food extends Item {
@@ -9,7 +9,7 @@ export class Food extends Item {
     }
 
     pickedUp(player: Phaser.GameObjects.Sprite) {
-        DragonQuest.foundFood(this.amount);
+        DragonQuest.inventory.foundFood(this.amount);
         super.initialize();
     }
 }

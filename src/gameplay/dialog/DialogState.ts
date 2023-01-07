@@ -1,6 +1,6 @@
 import { observable } from "mobx";
-import { DragonQuest } from "../DragonQuest";
-import { evaluateExpression } from "../evaluateExpression";
+import { DragonQuest } from "../hub/DragonQuest";
+import { evaluateExpression } from "../hub/evaluateExpression";
 import { Dialog } from "../types/Dialog";
 import { DialogAction } from "../types/DialogAction";
 
@@ -14,7 +14,7 @@ export class DialogState {
     constructor() {}
 
     stop() {
-        if (this.dialogId) DragonQuest.finishedDialog(this.dialogId);
+        if (this.dialogId) DragonQuest.gameState.finishedDialog(this.dialogId);
         this.dialog = undefined;
         this.dialogId = undefined;
         this.selectedOptionIndex.set(0);
@@ -53,7 +53,7 @@ export class DialogState {
             DragonQuest.updateLevelFlags(action.levelFlags);
         }
         if (action.items) {
-            DragonQuest.foundItems(action.items);
+            DragonQuest.inventory.foundItems(action.items);
         }
     }
     startDialog(dialog: Dialog, dialogId?: string) {

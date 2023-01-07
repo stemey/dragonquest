@@ -1,4 +1,4 @@
-import { LevelState } from "../GameState";
+import { LevelState } from "../hub/GameState";
 import { DialogAction } from "./DialogAction";
 import { PlayerState } from "./PlayerState";
 

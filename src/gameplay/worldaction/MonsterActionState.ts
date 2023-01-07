@@ -1,7 +1,7 @@
 import { GameObjects } from "phaser";
 import { AbstractWorld } from "../../scenes/AbstractWorld";
 import { Unit } from "../../sprites/Unit";
-import { DragonQuest } from "../DragonQuest";
+import { DragonQuest } from "../hub/DragonQuest";
 
 export default class MonsterActionState {
     constructor(
@@ -20,7 +20,7 @@ export default class MonsterActionState {
         if (enemies.filter((e) => e.alive).length === 0) {
             return;
         }
-        DragonQuest.autoSave();
+        DragonQuest.storePointManager.autoSave();
         player.body.setVelocity(0);
         this.scene.scene.sleep();
         this.scene.scene.sleep("WorldUiScene");

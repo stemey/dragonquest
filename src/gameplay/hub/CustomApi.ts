@@ -6,10 +6,10 @@ export class CustomApi {
     }
 
     setClass(name: "wizard" | "warrior") {
-        this.dragonQuest.addHero(name);
+        this.dragonQuest.gameManager.addHero(name);
     }
 
     addHero(name: string) {
-        this.dragonQuest.addHero(name);
+        this.dragonQuest.gameManager.addHero(name);
     }
 }

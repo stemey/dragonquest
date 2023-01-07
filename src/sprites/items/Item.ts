@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { DragonQuest } from "../../gameplay/DragonQuest";
+import { DragonQuest } from "../../gameplay/hub/DragonQuest";
 
 export class Item {
     respawnTime = 60000;

@@ -1,15 +1,18 @@
 import * as Phaser from "phaser";
 import { Action } from "./Action";
-import { DragonQuest } from "../DragonQuest";
+import { DragonQuest } from "../hub/DragonQuest";
 import { Dialog } from "../types/Dialog";
 import { AnyDropItemRef } from "../types/AnyDropItemRef";
 import { Loot } from "../../../generated/tiled-types/Loot";
 
 export const ChestAction: Action<Loot> = (layerObject, world) => {
     const lootName = layerObject.props.name;
-    const itemRefs: AnyDropItemRef[] = DragonQuest.getLoot(lootName);
+    const itemRefs: AnyDropItemRef[] =
+        DragonQuest.levelManager.getLoot(lootName);
 
-    const foundChests = DragonQuest.getActionStates("Gateway") as string[];
+    const foundChests = DragonQuest.storePointManager.getActionStates(
+        "Gateway"
+    ) as string[];
     if (foundChests.indexOf(lootName) >= 0) {
         return;
     }
@@ -56,7 +59,7 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                 if (collided) {
                     return;
                 }
-                const dropItemRefs = DragonQuest.foundItems(itemRefs);
+                const dropItemRefs = DragonQuest.inventory.foundItems(itemRefs);
                 if (dropItemRefs.length == 0) {
                     return;
                 }
@@ -79,7 +82,10 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                     delay: 1000,
                     callback: () => {
                         world.stopPlayer = false;
-                        DragonQuest.addActionState("Gateway", lootName);
+                        DragonQuest.storePointManager.addActionState(
+                            "Gateway",
+                            lootName
+                        );
                         const items = dropItemRefs
                             .map((i) => {
                                 switch (i.type) {

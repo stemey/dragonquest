@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { DragonQuest } from "../gameplay/DragonQuest";
+import { DragonQuest } from "../gameplay/hub/DragonQuest";
 import TileLayerFactory from "../tile/TileLayerFactory";
 import { PickUpAction } from "../gameplay/worldaction/PickupAction";
 //import { DoorAction } from "../gameplay/worldaction/DoorAction";
@@ -55,7 +55,7 @@ export class AbstractWorld extends Phaser.Scene {
         if (data?.type === "battle") {
             return false;
         }
-        const loadedStorePoint = DragonQuest.loadedStorePoint;
+        const loadedStorePoint = DragonQuest.storePointManager.loadedStorePoint;
         if (this.storePoint !== loadedStorePoint) {
             this.storePoint = loadedStorePoint;
             this.scene.restart(data);
@@ -131,7 +131,6 @@ export class AbstractWorld extends Phaser.Scene {
 
         const levelConfig = this.cache.json.get(this.levelConfigKey);
         DragonQuest.setLevel(this.scene.key, levelConfig);
-        DragonQuest.currentLevelKey = this.scene.key;
 
         //smallmap.actions["item"] = ItemAction;
         smallmap.actions["Monster"] = MonsterAction;
@@ -153,7 +152,7 @@ export class AbstractWorld extends Phaser.Scene {
                 if (gold.active) {
                     (gold as Phaser.Physics.Arcade.Sprite).visible = false;
                     gold.active = false;
-                    DragonQuest.foundGold(10);
+                    DragonQuest.inventory.foundGold(10);
                 }
             }
         );
@@ -164,7 +163,7 @@ export class AbstractWorld extends Phaser.Scene {
                 if (gold.active) {
                     (gold as Phaser.Physics.Arcade.Sprite).visible = false;
                     gold.active = false;
-                    DragonQuest.foundFood(10);
+                    DragonQuest.inventory.foundFood(10);
                 }
             }
         );
@@ -329,7 +328,7 @@ export class AbstractWorld extends Phaser.Scene {
 
         // move player a way from possibley alive enemies
         if (data && data.type == "battle" && !data.win) {
-            DragonQuest.loadLastStorePoint();
+            DragonQuest.storePointManager.loadLastStorePoint();
         } else if (data && data.type == "gateway" && data.entry) {
             const entry = this.entries[data.entry];
             this.player.x = entry.x;

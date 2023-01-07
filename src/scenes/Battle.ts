@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
 import CharacterDisplay from "../sprites/CharacterDisplay";
-import { DragonQuest } from "../gameplay/DragonQuest";
+import { DragonQuest } from "../gameplay/hub/DragonQuest";
 import { Unit } from "../sprites/Unit";
 import { BattleAction } from "../gameplay/battle/BattleAction";
 import { BattleEntry } from "./WorldEntryParameter";
@@ -37,7 +37,7 @@ export default class extends Phaser.Scene {
 
     addCharacters(enemies: Unit[]) {
         const scale = 2;
-        DragonQuest.heroes.forEach((hero, idx) => {
+        DragonQuest.gameManager.getHeroes().forEach((hero, idx) => {
             const knight = new CharacterDisplay(
                 hero,
                 this,
@@ -61,7 +61,7 @@ export default class extends Phaser.Scene {
         });
 
         // array with heroes
-        this.heroes = DragonQuest.heroes;
+        this.heroes = DragonQuest.gameManager.getHeroes();
         // array with both parties, who will attack
         this.units = this.heroes.concat(this.enemies);
 
@@ -97,7 +97,7 @@ export default class extends Phaser.Scene {
         }
         if (this.enemies.filter((enemy) => enemy.alive).length === 0) {
             this.events.emit("Message", "Heroes win");
-            DragonQuest.finishedBattle({
+            DragonQuest.gameState.finishedBattle({
                 heroWin: true,
                 deadEnemy: this.enemyName,
             });
@@ -207,7 +207,7 @@ export default class extends Phaser.Scene {
         const deadEnemies = this.enemies.filter((enemy) => !enemy.alive);
         deadEnemies.forEach((enemy) => {
             if (enemy.dropItems) {
-                DragonQuest.foundItems(enemy.dropItems);
+                DragonQuest.inventory.foundItems(enemy.dropItems);
             }
         });
         const win = deadEnemies.length == this.enemies.length;

@@ -1,4 +1,4 @@
-import { LevelState } from "../GameState";
+import { LevelState } from "../hub/GameState";
 
 export interface GameEvent {
     trigger: {

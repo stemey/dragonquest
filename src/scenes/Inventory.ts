@@ -1,6 +1,6 @@
 import { Table, TextCell } from "../gui/Table";
 import * as Phaser from "phaser";
-import { DragonQuest } from "../gameplay/DragonQuest";
+import { DragonQuest } from "../gameplay/hub/DragonQuest";
 
 export class Inventory extends Phaser.Scene {
     constructor() {

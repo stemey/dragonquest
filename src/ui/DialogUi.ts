@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
 import { DialogState } from "../gameplay/dialog/DialogState";
-import { DragonQuest } from "../gameplay/DragonQuest";
+import { DragonQuest } from "../gameplay/hub/DragonQuest";
 import { autorun } from "mobx";
 import { Dialog } from "../gameplay/types/Dialog";
 
@@ -86,7 +86,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
 
         let dialog: Dialog;
         if (typeof dialogId === "string") {
-            dialog = DragonQuest.getDialog(dialogId);
+            dialog = DragonQuest.levelManager.getDialog(dialogId);
         } else {
             dialog = dialogId;
         }

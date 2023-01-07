@@ -1,4 +1,4 @@
-import { DragonQuest } from "../DragonQuest";
+import { DragonQuest } from "../hub/DragonQuest";
 import MonsterActionState from "./MonsterActionState";
 import * as Phaser from "phaser";
 import { Action } from "./Action";
@@ -12,7 +12,7 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
     const monsters: Phaser.GameObjects.Sprite[] = [];
     const monsterName = layerObject.props.name;
 
-    const monsterUnits = DragonQuest.createVillains(monsterName);
+    const monsterUnits = DragonQuest.levelManager.createVillains(monsterName);
     let platform;
     let monsterCoords = { x: layerObject.x, y: layerObject.y };
     if (layerObject.width) {

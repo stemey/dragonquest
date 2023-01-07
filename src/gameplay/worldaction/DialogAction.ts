@@ -1,13 +1,15 @@
 import * as Phaser from "phaser";
 import { Dialog } from "../../../generated/tiled-types/Dialog";
-import { DragonQuest } from "../DragonQuest";
+import { DragonQuest } from "../hub/DragonQuest";
 import { Action } from "./Action";
 
 export const DialogAction: Action<Dialog> = (layerObject, world) => {
     const name = layerObject.props.name;
 
     if (
-        (DragonQuest.getActionStates("Dialog") as string[]).indexOf(name) >= 0
+        (
+            DragonQuest.storePointManager.getActionStates("Dialog") as string[]
+        ).indexOf(name) >= 0
     ) {
         return;
     }
@@ -30,7 +32,7 @@ export const DialogAction: Action<Dialog> = (layerObject, world) => {
         (player, zone) => {
             zone.destroy();
             world.game.events.emit("DialogStart", name);
-            DragonQuest.addActionState("Dialog", name);
+            DragonQuest.storePointManager.addActionState("Dialog", name);
         },
         this
     );

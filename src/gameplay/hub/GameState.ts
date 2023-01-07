@@ -1,4 +1,5 @@
-import { Storable } from "../store/Storable";
+import { Storable } from "../../store/Storable";
+import { DragonQuestType } from "./DragonQuest";
 
 export interface BattleOutcome {
     heroWin: boolean;
@@ -9,6 +10,8 @@ export class GameState
     implements
         Storable<{ levels: { [key: string]: LevelState }; levelKey: string }>
 {
+    constructor(private readonly hub: DragonQuestType) {}
+
     serialize(): { levels: { [key: string]: LevelState }; levelKey: string } {
         return {
             levels: this.levels,
@@ -59,14 +62,17 @@ export class GameState
             ...this.levels[this.levelKey].flags,
             ...flags,
         };
+        this.hub.onChanged();
     }
     finishedBattle(outcome: BattleOutcome) {
         if (outcome.heroWin) {
             this.currentLevel.monsters[outcome.deadEnemy] = { dead: true };
         }
+        this.hub.onChanged();
     }
     finishedDialog(dialog: string) {
         this.currentLevel.dialogs[dialog] = { finished: true };
+        this.hub.onChanged();
     }
 }
 
