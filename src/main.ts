@@ -1,15 +1,15 @@
 import * as Phaser from "phaser";
 
 import { config } from "./config";
-import { UiScene } from "./scenes/UiScene";
-import Battle from "./scenes/Battle";
+import Battle from "./gameplay/battle/Battle";
 import Boot from "./scenes/Boot";
-import { Inventory } from "./scenes/Inventory";
+import { Inventory } from "./gameplay/inventory/InventoryScene";
 import Road from "./scenes/Road";
-import { WorldUiScene } from "./scenes/WorldUiScene";
+import { WorldUiScene } from "./gameplay/dialog/WorldUiScene";
 import { dragonQuestConfiguration } from "./scenes/DragonQuestConfiguration";
 import GatewayAction from "./gameplay/worldaction/GatewayAction";
 import { LoadGame } from "./scenes/LoadGame";
+import { UiScene } from "./gameplay/battle/UiScene";
 
 const gameConfig = Object.assign(config, {
     scene: [Boot, Road, LoadGame, Battle, UiScene, Inventory, WorldUiScene],

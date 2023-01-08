@@ -4,7 +4,7 @@ import TileLayerFactory from "../tile/TileLayerFactory";
 import { PickUpAction } from "../gameplay/worldaction/PickupAction";
 //import { DoorAction } from "../gameplay/worldaction/DoorAction";
 //import { GatewayAction } from "../gameplay/worldaction/GatewayAction";
-import { MonsterAction } from "../gameplay/worldaction/MonsterAction";
+import { MonsterAction } from "../gameplay/battle/MonsterAction";
 import { EntryAction } from "../gameplay/worldaction/EntryAction";
 import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
 //import { ItemAction } from "../gameplay/worldaction/ItemAction";

@@ -1,8 +1,8 @@
 import * as Phaser from "phaser";
-import { DialogState } from "../gameplay/dialog/DialogState";
-import { DragonQuest } from "../gameplay/hub/DragonQuest";
+import { DialogState } from "./DialogState";
+import { DragonQuest } from "../hub/DragonQuest";
 import { autorun } from "mobx";
-import { Dialog } from "../gameplay/types/Dialog";
+import { Dialog } from "../types/Dialog";
 
 const ALL_X = 160;
 

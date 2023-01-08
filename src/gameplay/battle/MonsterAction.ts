@@ -1,7 +1,7 @@
 import { DragonQuest } from "../hub/DragonQuest";
 import MonsterActionState from "./MonsterActionState";
 import * as Phaser from "phaser";
-import { Action } from "./Action";
+import { Action } from "../worldaction/Action";
 import { Monster } from "../../../generated/tiled-types/Monster";
 
 export const MonsterAction: Action<Monster> = (layerObject, scene) => {

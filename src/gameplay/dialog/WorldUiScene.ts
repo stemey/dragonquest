@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { DialogUi } from "../ui/DialogUi";
+import { DialogUi } from "./DialogUi";
 
 export class WorldUiScene extends Phaser.Scene {
     constructor() {

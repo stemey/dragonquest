@@ -1,9 +1,9 @@
 import * as Phaser from "phaser";
-import CharacterDisplay from "../sprites/CharacterDisplay";
-import { DragonQuest } from "../gameplay/hub/DragonQuest";
-import { Unit } from "../sprites/Unit";
-import { BattleAction } from "../gameplay/battle/BattleAction";
-import { BattleEntry } from "./WorldEntryParameter";
+import CharacterDisplay from "../../sprites/CharacterDisplay";
+import { DragonQuest } from "../hub/DragonQuest";
+import { Unit } from "../../sprites/Unit";
+import { BattleAction } from "./BattleAction";
+import { BattleEntry } from "../../scenes/WorldEntryParameter";
 
 export default class extends Phaser.Scene {
     private entryWorld = "";
