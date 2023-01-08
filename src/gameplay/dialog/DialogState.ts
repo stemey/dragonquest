@@ -1,8 +1,8 @@
 import { observable } from "mobx";
 import { DragonQuest } from "../hub/DragonQuest";
 import { evaluateExpression } from "../hub/evaluateExpression";
-import { Dialog } from "../types/Dialog";
-import { DialogAction } from "../types/DialogAction";
+import { Dialog, Message } from "../types/Dialog";
+import { executeAction } from "./executeAction";
 
 export class DialogState {
     private state = observable.box("start");
@@ -14,7 +14,8 @@ export class DialogState {
     constructor() {}
 
     stop() {
-        if (this.dialogId) DragonQuest.gameState.finishedDialog(this.dialogId);
+        if (this.dialogId)
+            DragonQuest.instance.gameState.finishedDialog(this.dialogId);
         this.dialog = undefined;
         this.dialogId = undefined;
         this.selectedOptionIndex.set(0);
@@ -30,32 +31,13 @@ export class DialogState {
         if ("options" in currentMessage) {
             const option = currentMessage.options[idx];
             if (option.action) {
-                this.executeAction(option.action);
+                executeAction(option.action);
             }
-            console.log("you choose: " + option.message);
             this.state.set(option.next);
-            this.resumeConversation();
         }
+        this.executeCurrentMessage();
     }
-    executeAction(action: DialogAction) {
-        if (action.customs) {
-            action.customs.forEach((c) => {
-                const methodName = c.method;
-                if (methodName in DragonQuest.api) {
-                    const method = (DragonQuest.api as any)[c.method];
-                    if (typeof method === "function") {
-                        method.apply(DragonQuest.api, c.params);
-                    }
-                }
-            });
-        }
-        if (action.levelFlags) {
-            DragonQuest.updateLevelFlags(action.levelFlags);
-        }
-        if (action.items) {
-            DragonQuest.inventory.foundItems(action.items);
-        }
-    }
+
     startDialog(dialog: Dialog, dialogId?: string) {
         this.dialogId = dialogId;
         this.dialog = dialog;
@@ -63,18 +45,27 @@ export class DialogState {
         this.state.set("start");
     }
 
-    continueConversation() {
+    continueConversation(message?: Message) {
+        if (!this.dialog) {
+            console.error("not conversing");
+            return;
+        }
+        const currentMessage = message || this.dialog[this.state.get()];
+
+        if ("next" in currentMessage) {
+            this.state.set(currentMessage.next);
+        }
+        this.executeCurrentMessage();
+    }
+
+    executeCurrentMessage() {
         if (!this.dialog) {
             console.error("not conversing");
             return;
         }
         const currentMessage = this.dialog[this.state.get()];
-
-        if ("next" in currentMessage) {
-            this.state.set(currentMessage.next);
-        }
         if ("action" in currentMessage && currentMessage.action) {
-            this.executeAction(currentMessage.action);
+            executeAction(currentMessage.action);
         }
 
         const nextMessage = this.dialog[this.state.get()];
@@ -89,25 +80,7 @@ export class DialogState {
             } else {
                 this.state.set(nextMessage.failure);
             }
-        }
-    }
-
-    resumeConversation() {
-        if (!this.dialog) {
-            console.error("not conversing");
-            return;
-        }
-        const currentMessage = this.dialog[this.state.get()];
-        if (!currentMessage) {
-            console.error("cannot find state " + this.state);
-            this.stop();
-            return;
-        }
-        if ("message" in currentMessage) {
-            console.log(currentMessage.actor + ":" + currentMessage.message);
-        }
-        if ("options" in currentMessage) {
-            this.selectedOptionIndex.set(0);
+            this.executeCurrentMessage();
         }
     }
 

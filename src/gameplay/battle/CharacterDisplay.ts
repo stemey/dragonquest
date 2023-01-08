@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { Unit } from "./Unit";
+import { Unit } from "../../sprites/Unit";
 
 export default class extends Phaser.GameObjects.Container {
     private ellipse: Phaser.GameObjects.Graphics;

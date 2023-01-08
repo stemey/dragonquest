@@ -9,6 +9,9 @@ import { DropItemRef } from "../types/DropItemRef";
 export class Inventory
     implements Storable<{ goldCount: number; items: DropItem[] }>
 {
+    removeAllItems() {
+        this.items.clear();
+    }
     constructor(private readonly hub: DragonQuestType) {}
 
     foundFood(amount: number) {

@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { Unit } from "../sprites/Unit";
+import { Unit } from "../../../sprites/Unit";
 import MenuItem from "./MenuItem";
 
 export class Menu extends Phaser.GameObjects.Container {

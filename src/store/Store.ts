@@ -16,6 +16,10 @@ export class Store {
     private _db: Promise<IDBDatabase>;
 
     constructor() {
+        if (typeof window.indexedDB === "undefined") {
+            this._db= {} as any
+            return;
+        }
         this._db = new Promise((resolve, reject) => {
             const dbOpenRequest = window.indexedDB.open("dragonquest", 1);
             // Register two event handlers to act on the database being opened successfully, or not

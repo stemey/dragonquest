@@ -9,7 +9,7 @@ export class Food extends Item {
     }
 
     pickedUp(player: Phaser.GameObjects.Sprite) {
-        DragonQuest.inventory.foundFood(this.amount);
+        DragonQuest.instance.inventory.foundFood(this.amount);
         super.initialize();
     }
 }

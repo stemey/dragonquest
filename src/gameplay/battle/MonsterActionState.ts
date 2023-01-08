@@ -20,7 +20,7 @@ export default class MonsterActionState {
         if (enemies.filter((e) => e.alive).length === 0) {
             return;
         }
-        DragonQuest.storePointManager.autoSave();
+        DragonQuest.instance.storePointManager.autoSave();
         player.body.setVelocity(0);
         this.scene.scene.sleep();
         this.scene.scene.sleep("WorldUiScene");

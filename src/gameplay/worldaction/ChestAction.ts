@@ -8,9 +8,9 @@ import { Loot } from "../../../generated/tiled-types/Loot";
 export const ChestAction: Action<Loot> = (layerObject, world) => {
     const lootName = layerObject.props.name;
     const itemRefs: AnyDropItemRef[] =
-        DragonQuest.levelManager.getLoot(lootName);
+        DragonQuest.instance.levelManager.getLoot(lootName);
 
-    const foundChests = DragonQuest.storePointManager.getActionStates(
+    const foundChests = DragonQuest.instance.storePointManager.getActionStates(
         "Gateway"
     ) as string[];
     if (foundChests.indexOf(lootName) >= 0) {
@@ -59,7 +59,7 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                 if (collided) {
                     return;
                 }
-                const dropItemRefs = DragonQuest.inventory.foundItems(itemRefs);
+                const dropItemRefs = DragonQuest.instance.inventory.foundItems(itemRefs);
                 if (dropItemRefs.length == 0) {
                     return;
                 }
@@ -82,7 +82,7 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                     delay: 1000,
                     callback: () => {
                         world.stopPlayer = false;
-                        DragonQuest.storePointManager.addActionState(
+                        DragonQuest.instance.storePointManager.addActionState(
                             "Gateway",
                             lootName
                         );

@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { Unit } from "../sprites/Unit";
+import { Unit } from "../../../sprites/Unit";
 
 export interface UnitProperty {
     name: string;

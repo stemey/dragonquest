@@ -49,16 +49,51 @@ export class DragonQuestType {
         this.game?.events.emit(event, data);
     }
 
+    onGameEvent(event: string, cb: (data: any) => void) {
+        this.game?.events.on(event, cb);
+    }
+
+    emitEvent(type: "level" | "game", event: string, data: any) {
+        switch (type) {
+            case "game":
+                this.emitGameEvent(event, data);
+                break;
+            case "level":
+                this.emitLevelEvent(event, data);
+                break;
+        }
+    }
+
+    onEvent(type: "level" | "game", event: string, cb: (data: any) => void) {
+        switch (type) {
+            case "game":
+                this.onGameEvent(event, cb);
+                break;
+            case "level":
+                this.onLevelEvent(event, cb);
+                break;
+        }
+    }
+
+    emitLevelEvent(event: string, data: any) {
+        const level = this.levelManager.currentLevelKey;
+        this.game?.scene.getScene(level).events.emit(event, data);
+    }
+
+    onLevelEvent(event: string, cb: (data: any) => void) {
+        const level = this.levelManager.currentLevelKey;
+        this.game?.scene.getScene(level).events.on(event, cb);
+    }
+
     onChanged() {
         Object.keys(this.levelManager.currentLevel.events).forEach((name) => {
             const event = this.levelManager.currentLevel.events[name];
             if (
+                // TODO migrate to gamestate
                 this.gameState.currentLevel.firedEvents.indexOf(name) < 0 &&
-                matchesLevelState(
-                    this.gameState.currentLevel,
-                    event.trigger.levelState
-                )
+                this.matchesLevelState(event.trigger.levelState)
             ) {
+                // TODO migrate to gamestate
                 this.gameState.currentLevel.firedEvents.push(name);
                 this.game?.events.emit("DialogStart", event.dialog);
             }
@@ -66,5 +101,5 @@ export class DragonQuestType {
     }
 }
 
-export const DragonQuest = new DragonQuestType();
+export const DragonQuest = { instance: new DragonQuestType() };
 (window as any).DragonQuest = DragonQuest;

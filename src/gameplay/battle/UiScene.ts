@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
-import { ActionsMenu } from "../../menu/ActionsMenu";
-import { CharacterStats } from "../../menu/CharacterStats";
+import { ActionsMenu } from "./menu/ActionsMenu";
+import { CharacterStats } from "./menu/CharacterStats";
 import Battle from "./Battle";
 import { Unit } from "../../sprites/Unit";
 import { MessageUi } from "../../ui/MessageUi";

@@ -4,8 +4,9 @@ import { Level } from "../types/Level";
 import { DragonQuestType } from "./DragonQuest";
 
 export class LevelManager {
+    
     private levels: { [key: string]: Level } = {};
-    private currentLevelKey = "";
+    public currentLevelKey = "";
 
     constructor(private readonly hub: DragonQuestType) {}
 

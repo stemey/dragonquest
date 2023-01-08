@@ -10,7 +10,7 @@ export class Gold extends Item {
     }
 
     pickedUp(player: Phaser.GameObjects.Sprite) {
-        DragonQuest.inventory.foundGold(this.amount);
+        DragonQuest.instance.inventory.foundGold(this.amount);
         super.initialize();
     }
 }

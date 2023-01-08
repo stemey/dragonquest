@@ -8,7 +8,7 @@ export const DialogAction: Action<Dialog> = (layerObject, world) => {
 
     if (
         (
-            DragonQuest.storePointManager.getActionStates("Dialog") as string[]
+            DragonQuest.instance.storePointManager.getActionStates("Dialog") as string[]
         ).indexOf(name) >= 0
     ) {
         return;
@@ -32,7 +32,7 @@ export const DialogAction: Action<Dialog> = (layerObject, world) => {
         (player, zone) => {
             zone.destroy();
             world.game.events.emit("DialogStart", name);
-            DragonQuest.storePointManager.addActionState("Dialog", name);
+            DragonQuest.instance.storePointManager.addActionState("Dialog", name);
         },
         this
     );

@@ -2,11 +2,11 @@ import * as Phaser from "phaser";
 
 import { config } from "./config";
 import Battle from "./gameplay/battle/Battle";
-import Boot from "./scenes/Boot";
+import Boot from "./boot/Boot";
 import { Inventory } from "./gameplay/inventory/InventoryScene";
 import Road from "./scenes/Road";
 import { WorldUiScene } from "./gameplay/dialog/WorldUiScene";
-import { dragonQuestConfiguration } from "./scenes/DragonQuestConfiguration";
+import { dragonQuestConfiguration } from "./boot/DragonQuestConfiguration";
 import GatewayAction from "./gameplay/worldaction/GatewayAction";
 import { LoadGame } from "./scenes/LoadGame";
 import { UiScene } from "./gameplay/battle/UiScene";

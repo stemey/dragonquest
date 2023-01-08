@@ -86,7 +86,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
 
         let dialog: Dialog;
         if (typeof dialogId === "string") {
-            dialog = DragonQuest.levelManager.getDialog(dialogId);
+            dialog = DragonQuest.instance.levelManager.getDialog(dialogId);
         } else {
             dialog = dialogId;
         }

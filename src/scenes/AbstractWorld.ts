@@ -17,7 +17,7 @@ import {
 } from "./WorldEntryParameter";
 import { ChestAction } from "../gameplay/worldaction/ChestAction";
 import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
-import { dragonQuestConfiguration } from "./DragonQuestConfiguration";
+import { dragonQuestConfiguration } from "../boot/DragonQuestConfiguration";
 import { Gateway } from "../../generated/tiled-types/Gateway";
 import { Entry } from "../../generated/tiled-types/Entry";
 
@@ -55,7 +55,7 @@ export class AbstractWorld extends Phaser.Scene {
         if (data?.type === "battle") {
             return false;
         }
-        const loadedStorePoint = DragonQuest.storePointManager.loadedStorePoint;
+        const loadedStorePoint = DragonQuest.instance.storePointManager.loadedStorePoint;
         if (this.storePoint !== loadedStorePoint) {
             this.storePoint = loadedStorePoint;
             this.scene.restart(data);
@@ -130,7 +130,7 @@ export class AbstractWorld extends Phaser.Scene {
         const smallmap = new TileLayerFactory(this.levelMapKey, this);
 
         const levelConfig = this.cache.json.get(this.levelConfigKey);
-        DragonQuest.setLevel(this.scene.key, levelConfig);
+        DragonQuest.instance.setLevel(this.scene.key, levelConfig);
 
         //smallmap.actions["item"] = ItemAction;
         smallmap.actions["Monster"] = MonsterAction;
@@ -152,7 +152,7 @@ export class AbstractWorld extends Phaser.Scene {
                 if (gold.active) {
                     (gold as Phaser.Physics.Arcade.Sprite).visible = false;
                     gold.active = false;
-                    DragonQuest.inventory.foundGold(10);
+                    DragonQuest.instance.inventory.foundGold(10);
                 }
             }
         );
@@ -163,7 +163,7 @@ export class AbstractWorld extends Phaser.Scene {
                 if (gold.active) {
                     (gold as Phaser.Physics.Arcade.Sprite).visible = false;
                     gold.active = false;
-                    DragonQuest.inventory.foundFood(10);
+                    DragonQuest.instance.inventory.foundFood(10);
                 }
             }
         );
@@ -309,7 +309,7 @@ export class AbstractWorld extends Phaser.Scene {
             this.player.depth = depth;
         }
 
-        DragonQuest.updatePlayerPosition(
+        DragonQuest.instance.updatePlayerPosition(
             this.scene.key,
             this.player.x,
             this.player.y
@@ -328,7 +328,7 @@ export class AbstractWorld extends Phaser.Scene {
 
         // move player a way from possibley alive enemies
         if (data && data.type == "battle" && !data.win) {
-            DragonQuest.storePointManager.loadLastStorePoint();
+            DragonQuest.instance.storePointManager.loadLastStorePoint();
         } else if (data && data.type == "gateway" && data.entry) {
             const entry = this.entries[data.entry];
             this.player.x = entry.x;
