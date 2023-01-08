@@ -22,8 +22,7 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
             layerObject.x + layerObject.width / 2,
             layerObject.y + layerObject.height / 2,
             layerObject.width,
-            layerObject.height,
-            13123
+            layerObject.height
         );
         monsterCoords = {
             x: layerObject.x + layerObject.width / 2,
@@ -43,20 +42,10 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
             });
             monsters.push(sprite);
             container.add(sprite, true);
-            (sprite as any).enemies = monster;
-            (sprite as any).enemyId = monster.id;
         });
     }
     const state = new MonsterActionState(monsters, scene);
 
-    monsters.forEach((child) => {
-        scene.physics.add.overlap(player, child, ((
-            player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
-            monster: Phaser.GameObjects.Sprite
-        ) => {
-            state.onMeetEnemy(player, monster, monsterUnits, monsterName);
-        }) as unknown as ArcadePhysicsCallback);
-    });
     if (platform) {
         scene.physics.add.overlap(player, platform, ((
             player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
@@ -64,5 +53,14 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
         ) => {
             state.onMeetEnemy(player, monster, monsterUnits, monsterName);
         }) as unknown as ArcadePhysicsCallback);
+    } else {
+        monsters.forEach((child) => {
+            scene.physics.add.overlap(player, child, ((
+                player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
+                monster: Phaser.GameObjects.Sprite
+            ) => {
+                state.onMeetEnemy(player, monster, monsterUnits, monsterName);
+            }) as unknown as ArcadePhysicsCallback);
+        });
     }
 };

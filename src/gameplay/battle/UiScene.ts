@@ -1,7 +1,7 @@
 import * as Phaser from "phaser";
 import { ActionsMenu } from "./menu/ActionsMenu";
 import { CharacterStats } from "./menu/CharacterStats";
-import Battle from "./Battle";
+import { BattleScene } from "./BattleScene";
 import { Unit } from "../../sprites/Unit";
 import { MessageUi } from "../../ui/MessageUi";
 
@@ -9,7 +9,7 @@ export class UiScene extends Phaser.Scene {
     private graphics?: Phaser.GameObjects.Graphics;
     private currentMenu?: ActionsMenu;
     private actionsMenu?: ActionsMenu;
-    private battleScene?: Battle;
+    private battleScene?: BattleScene;
     constructor() {
         super({ key: "UIScene" });
     }
@@ -48,7 +48,7 @@ export class UiScene extends Phaser.Scene {
         const menus = this.add.container();
 
         const battleScene = this.scene.get("BattleScene");
-        this.battleScene = battleScene as Battle;
+        this.battleScene = battleScene as BattleScene;
 
         const heroesMenu = new CharacterStats(scale * 160, scale * 153, this);
         const actionsMenu = new ActionsMenu(scale * 5, scale * 153, this, []);
@@ -74,7 +74,7 @@ export class UiScene extends Phaser.Scene {
         this.add.existing(message);
 
         // TODO should be in battleScene
-        (battleScene as Battle).nextTurn();
+        (battleScene as BattleScene).nextTurn();
     }
 
     attack() {

@@ -1,7 +1,10 @@
 import { GameObjects } from "phaser";
 import { AbstractWorld } from "../../scenes/AbstractWorld";
+import { BattleEntry } from "../../scenes/WorldEntryParameter";
 import { Unit } from "../../sprites/Unit";
 import { DragonQuest } from "../hub/DragonQuest";
+import { BattleOutcome } from "../hub/GameState";
+import { SceneTransitions } from "../SceneTransitions";
 
 export default class MonsterActionState {
     constructor(
@@ -22,25 +25,24 @@ export default class MonsterActionState {
         }
         DragonQuest.instance.storePointManager.autoSave();
         player.body.setVelocity(0);
-        this.scene.scene.sleep();
-        this.scene.scene.sleep("WorldUiScene");
+
         DragonQuest.instance.events.battle.end.on((data) => this.wake(data));
-        if (this.scene.scene.isSleeping("BattleScene")) {
-            this.scene.scene.wake("BattleScene", {
+
+        SceneTransitions.battle.transition(
+            this.scene,
+            {
                 enemies: enemies,
                 entryWorld: this.scene.scene.key,
                 enemyName,
-            });
-        } else {
-            this.scene.scene.launch("BattleScene", {
-                enemies: enemies,
-                entryWorld: this.scene.scene.key,
-                enemyName,
-            });
-        }
+            },
+            (data: BattleEntry) => {
+                this.scene.onWake(data);
+            }
+        );
     }
 
-    wake(data: { heroWin: boolean }) {
+    wake(data: BattleOutcome) {
+        //this.scene.scene.wake("WorldUiScene");
         if (data.heroWin) {
             this.monsters.forEach((sprite) => {
                 sprite.destroy();

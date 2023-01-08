@@ -1,20 +1,24 @@
 import { Table, TextCell } from "../../gui/Table";
 import * as Phaser from "phaser";
 import { DragonQuest } from "../hub/DragonQuest";
+import { ReversibleData, SceneTransitions } from "../SceneTransitions";
+import { SceneWithReversibleTransitions } from "../../scenes/SceneWithReversibleTransitions";
 
-export class Inventory extends Phaser.Scene {
+export class Inventory
+    extends Phaser.Scene
+    implements SceneWithReversibleTransitions
+{
+    private reverse?: (data: {}) => void;
     constructor() {
         super({ key: "InventoryScene" });
     }
 
-    private entryWorld = "";
+    create(data: ReversibleData) {
+        this.reverse = data.reverse;
+        SceneTransitions.inventory.onWake(this, this.onWake, this);
 
-    create(data: { entryWorld: string }) {
-        this.entryWorld = data.entryWorld;
         const graphics = this.add.graphics();
         this.createTable(graphics);
-
-        this.events.on("wake", this.wake, this);
 
         this.input.keyboard.on("keydown", this.onKey, this);
     }
@@ -44,16 +48,15 @@ export class Inventory extends Phaser.Scene {
         table.draw();
     }
 
-    wake(sys: any, data: { entryWorld: string }) {
+    onWake(data: ReversibleData) {
+        this.reverse = data.reverse;
         const graphics = this.add.graphics();
-        this.entryWorld = data.entryWorld;
         this.createTable(graphics);
     }
 
     onKey(event: KeyboardEvent) {
-        if (event.code === "Escape") {
-            this.scene.sleep();
-            this.scene.wake(this.entryWorld);
+        if (this.reverse && event.code === "Escape") {
+            this.reverse(this.scene);
         }
     }
 }

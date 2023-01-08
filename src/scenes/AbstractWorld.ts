@@ -2,12 +2,9 @@ import * as Phaser from "phaser";
 import { DragonQuest } from "../gameplay/hub/DragonQuest";
 import TileLayerFactory from "../tile/TileLayerFactory";
 import { PickUpAction } from "../gameplay/worldaction/PickupAction";
-//import { DoorAction } from "../gameplay/worldaction/DoorAction";
-//import { GatewayAction } from "../gameplay/worldaction/GatewayAction";
 import { MonsterAction } from "../gameplay/battle/MonsterAction";
 import { EntryAction } from "../gameplay/worldaction/EntryAction";
 import { CharacterAction } from "../gameplay/worldaction/CharacterAction";
-//import { ItemAction } from "../gameplay/worldaction/ItemAction";
 import { LayerObject } from "../gameplay/worldaction/LayerObject";
 import { DialogAction } from "../gameplay/worldaction/DialogAction";
 import {
@@ -20,6 +17,7 @@ import { ObstacleAction } from "../gameplay/worldaction/ObstacleAction";
 import { dragonQuestConfiguration } from "../boot/DragonQuestConfiguration";
 import { Gateway } from "../../generated/tiled-types/Gateway";
 import { Entry } from "../../generated/tiled-types/Entry";
+import { SceneTransitions } from "../gameplay/SceneTransitions";
 
 export class AbstractWorld extends Phaser.Scene {
     private entries: { [key: string]: LayerObject<Entry> } = {};
@@ -52,7 +50,7 @@ export class AbstractWorld extends Phaser.Scene {
     }
 
     mustRestart(data?: WorldEntryParameter) {
-        if (data?.type === "battle") {
+        if (data?.type == "battle") {
             return false;
         }
         const loadedStorePoint =
@@ -82,7 +80,7 @@ export class AbstractWorld extends Phaser.Scene {
         // initDragonQuest()
         this.graphics = this.add.graphics();
 
-        this.events.on("wake", this.wake, this);
+        //this.events.on("wake", this.wake, this);
 
         //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
         this.anims.create({
@@ -248,15 +246,16 @@ export class AbstractWorld extends Phaser.Scene {
     onInventory(event: KeyboardEvent) {
         if (event.code === "KeyI") {
             this.scene.sleep();
-            if (this.scene.isSleeping("InventoryScene")) {
-                this.scene.wake("InventoryScene", {
+            this.scene.sleep("WorldUiScene");
+            SceneTransitions.inventory.transition(
+                this,
+                {
                     entryWorld: this.scene.key,
-                });
-            } else {
-                this.scene.launch("InventoryScene", {
-                    entryWorld: this.scene.key,
-                });
-            }
+                },
+                () => {
+                    this.onWake();
+                }
+            );
         }
     }
 
@@ -317,7 +316,7 @@ export class AbstractWorld extends Phaser.Scene {
         );
     }
 
-    wake(sys: any, data: WorldEntryParameter) {
+    onWake(data?: WorldEntryParameter) {
         if (!this.player || !this.cursors) {
             return;
         }
@@ -330,6 +329,10 @@ export class AbstractWorld extends Phaser.Scene {
         // move player a way from possibley alive enemies
         if (data && data.type == "battle" && !data.win) {
             DragonQuest.instance.storePointManager.loadLastStorePoint();
+            // this is necessary to not start battle again. Better would be to remove those while loading.
+            const pos = DragonQuest.instance.getLastSafePlayerPosition();
+            this.player.x = pos.x;
+            this.player.y = pos.y;
         } else if (data && data.type == "gateway" && data.entry) {
             const entry = this.entries[data.entry];
             this.player.x = entry.x;

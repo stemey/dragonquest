@@ -4,9 +4,21 @@ import { DragonQuest } from "../hub/DragonQuest";
 import { Unit } from "../../sprites/Unit";
 import { BattleAction } from "./BattleAction";
 import { BattleEntry } from "../../scenes/WorldEntryParameter";
+import { ReversibleData, SceneTransitions } from "../SceneTransitions";
+import { SceneWithReversibleTransitions } from "../../scenes/SceneWithReversibleTransitions";
 
-export default class extends Phaser.Scene {
-    private entryWorld = "";
+export interface BattleSceneParameter {
+    entryWorld: string;
+    enemyName: string;
+    enemies: Unit[];
+}
+export const SCENE_KEY = "BattleScene";
+
+export class BattleScene
+    extends Phaser.Scene
+    implements
+        SceneWithReversibleTransitions<BattleSceneParameter, BattleEntry>
+{
     private characterList: CharacterDisplay[] = [];
     private enemies: Unit[] = [];
     private heroes: Unit[] = [];
@@ -15,24 +27,26 @@ export default class extends Phaser.Scene {
     private selectedIndex = 0;
     private playersTurn = false;
     private enemyName = "";
+    reverse?: (data: BattleEntry) => void;
     constructor() {
-        super({ key: "BattleScene" });
+        super({ key: SCENE_KEY });
     }
 
-    create(data: { entryWorld: string; enemyName: string; enemies: Unit[] }) {
-        this.entryWorld = data.entryWorld;
-        this.enemyName = data.enemyName;
+    create(data: ReversibleData<BattleSceneParameter, BattleEntry>) {
+        this.reverse = data.reverse;
+        this.enemyName = data.data.enemyName;
         // change the background to green
         this.cameras.main.setBackgroundColor("rgba(0, 200, 0, 0.5)");
 
         // Run UI Scene at the same time
-        this.scene.launch("UIScene");
+        //this.scene.launch("UIScene");
         this.input.keyboard.on("keydown", this.onKeyInput, this);
 
-        if (data.enemies) {
-            this.addCharacters(data.enemies);
+        if (data.data.enemies) {
+            this.addCharacters(data.data.enemies);
         }
-        this.events.on("wake", this.wake, this);
+
+        SceneTransitions.battle.onWake(this, this.onWake, this);
     }
 
     addCharacters(enemies: Unit[]) {
@@ -70,18 +84,14 @@ export default class extends Phaser.Scene {
         this.playersTurn = false;
     }
 
-    wake(
-        sys: any,
-        data: { entryWorld: string; enemyName: string; enemies: Unit[] }
-    ) {
-        this.entryWorld = data.entryWorld;
-        this.entryWorld = data.entryWorld;
+    onWake(data: ReversibleData<BattleSceneParameter, BattleEntry>) {
+        this.reverse = data.reverse;
         this.scene.wake("UIScene");
         this.characterList.forEach((child) => {
             child.destroy();
         });
         this.characterList = [];
-        this.addCharacters(data.enemies);
+        this.addCharacters(data.data.enemies);
 
         this.time.addEvent({
             delay: 10,
@@ -96,23 +106,15 @@ export default class extends Phaser.Scene {
             this.events.emit("UnitSelected", { turnId: -1 });
         }
         if (this.enemies.filter((enemy) => enemy.alive).length === 0) {
-            this.events.emit("Message", "Heroes win");
-            DragonQuest.instance.gameState.finishedBattle({
-                heroWin: true,
-                deadEnemy: this.enemyName,
-            });
-            this.time.addEvent({
-                delay: 3000,
-                callback: this.goToWorld,
-                callbackScope: this,
-            });
+            this.events.emit(
+                "Message",
+                "Heroes win \n press space to continue"
+            );
         } else if (this.heroes.filter((hero) => hero.alive).length === 0) {
-            this.events.emit("Message", "Villains win");
-            this.time.addEvent({
-                delay: 3000,
-                callback: this.goToWorld,
-                callbackScope: this,
-            });
+            this.events.emit(
+                "Message",
+                "Villains win \n press space to continue"
+            );
         } else {
             this.index++;
             // if there are no more units, we start again from the first one
@@ -202,8 +204,6 @@ export default class extends Phaser.Scene {
     }
 
     goToWorld() {
-        this.scene.sleep("BattleScene");
-        this.scene.sleep("UIScene");
         const deadEnemies = this.enemies.filter((enemy) => !enemy.alive);
         deadEnemies.forEach((enemy) => {
             if (enemy.dropItems) {
@@ -215,13 +215,27 @@ export default class extends Phaser.Scene {
             heroWin: win,
             deadEnemy: this.enemyName,
         });
-        this.scene.wake(this.entryWorld, {
-            type: "battle",
-            win,
-        } as BattleEntry);
+        if (this.reverse) {
+            this.reverse({
+                type: "battle",
+                win,
+            } as BattleEntry);
+        }
     }
 
     onKeyInput(event: KeyboardEvent) {
+        if (
+            this.enemies.filter((enemy) => enemy.alive).length === 0 ||
+            this.heroes.filter((enemy) => enemy.alive).length === 0
+        ) {
+            if (event.code === "Space") {
+                DragonQuest.instance.gameState.finishedBattle({
+                    heroWin: true,
+                    deadEnemy: this.enemyName,
+                });
+                this.goToWorld();
+            }
+        }
         if (this.playersTurn) {
             if (event.code === "ArrowLeft") {
                 do {

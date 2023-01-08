@@ -9,6 +9,7 @@ import { StorePointManager } from "./StorePointManager";
 import { GameManager } from "./GameManager";
 import { LevelManager } from "./LevelManager";
 import { DragonEvents } from "../DragonEvents";
+import { SceneTransitions } from "../SceneTransitions";
 
 export class DragonQuestType {
     matchesLevelState(levelState: Partial<LevelState>) {
@@ -108,5 +109,8 @@ export class DragonQuestType {
     }
 }
 
-export const DragonQuest = { instance: new DragonQuestType() };
+export const DragonQuest = {
+    instance: new DragonQuestType(),
+    transitions: SceneTransitions,
+};
 (window as any).DragonQuest = DragonQuest;
