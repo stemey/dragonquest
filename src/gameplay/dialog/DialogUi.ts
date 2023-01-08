@@ -38,7 +38,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
         this.group = new Phaser.GameObjects.Container(this.scene, 0, 0);
         this.all.add(this.group);
         //this.text.setOrigin(1);
-        this.scene.game.events.on("DialogStart", this.startDialog, this);
+        DragonQuest.instance.events.dialog.start.on(this.startDialog, this);
         this.visible = false;
         this.dialogState = new DialogState();
     }
@@ -135,8 +135,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
                 this.text.setText(text);
             } else {
                 this.visible = false;
-                this.scene.game.events.emit("DialogEnd");
-                console.log("finished conversation");
+                DragonQuest.instance.events.dialog.end.emit();
             }
         });
         this.visible = true;

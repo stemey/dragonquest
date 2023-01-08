@@ -59,7 +59,8 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                 if (collided) {
                     return;
                 }
-                const dropItemRefs = DragonQuest.instance.inventory.foundItems(itemRefs);
+                const dropItemRefs =
+                    DragonQuest.instance.inventory.foundItems(itemRefs);
                 if (dropItemRefs.length == 0) {
                     return;
                 }
@@ -107,7 +108,7 @@ export const ChestAction: Action<Loot> = (layerObject, world) => {
                                 end: true,
                             },
                         };
-                        world.game.events.emit("DialogStart", dialog);
+                        DragonQuest.instance.events.dialog.start.emit(dialog);
                         world.game.events.on("DialogEnd", () => {
                             chest.destroy();
                         });

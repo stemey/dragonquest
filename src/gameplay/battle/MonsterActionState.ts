@@ -24,9 +24,7 @@ export default class MonsterActionState {
         player.body.setVelocity(0);
         this.scene.scene.sleep();
         this.scene.scene.sleep("WorldUiScene");
-        this.scene.game.events.on("battleFinished", (data: any) =>
-            this.wake(data)
-        );
+        DragonQuest.instance.events.battle.end.on((data) => this.wake(data));
         if (this.scene.scene.isSleeping("BattleScene")) {
             this.scene.scene.wake("BattleScene", {
                 enemies: enemies,

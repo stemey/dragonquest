@@ -55,7 +55,8 @@ export class AbstractWorld extends Phaser.Scene {
         if (data?.type === "battle") {
             return false;
         }
-        const loadedStorePoint = DragonQuest.instance.storePointManager.loadedStorePoint;
+        const loadedStorePoint =
+            DragonQuest.instance.storePointManager.loadedStorePoint;
         if (this.storePoint !== loadedStorePoint) {
             this.storePoint = loadedStorePoint;
             this.scene.restart(data);
@@ -210,10 +211,10 @@ export class AbstractWorld extends Phaser.Scene {
         }
 
         this.player.body.setVelocity(0);
-        this.game.events.on("DialogStart", () => {
+        DragonQuest.instance.events.dialog.start.on(() => {
             this.stopPlayer = true;
         });
-        this.game.events.on("DialogEnd", () => {
+        DragonQuest.instance.events.dialog.end.on(() => {
             this.stopPlayer = false;
             if (!this.player || !this.cursors) {
                 return;

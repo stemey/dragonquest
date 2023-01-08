@@ -8,6 +8,7 @@ import { matchesLevelState } from "./matchesLevelState";
 import { StorePointManager } from "./StorePointManager";
 import { GameManager } from "./GameManager";
 import { LevelManager } from "./LevelManager";
+import { DragonEvents } from "../DragonEvents";
 
 export class DragonQuestType {
     matchesLevelState(levelState: Partial<LevelState>) {
@@ -22,6 +23,7 @@ export class DragonQuestType {
     public gameState = new GameState(this);
     public playerState: PlayerProgress = new PlayerProgress();
     private game?: Game;
+    public events = DragonEvents;
 
     init(game: Game) {
         this.game = game;
@@ -45,12 +47,12 @@ export class DragonQuestType {
         this.gameState.enterLevel(key);
     }
 
-    emitGameEvent(event: string, data: any) {
-        this.game?.events.emit(event, data);
+    emitGameEvent(event: string, data: any, ctx?: any) {
+        this.game?.events.emit(event, data, ctx);
     }
 
-    onGameEvent(event: string, cb: (data: any) => void) {
-        this.game?.events.on(event, cb);
+    onGameEvent(event: string, cb: (data: any) => void, ctx?: any) {
+        this.game?.events.on(event, cb, ctx);
     }
 
     emitEvent(type: "level" | "game", event: string, data: any) {
@@ -64,13 +66,18 @@ export class DragonQuestType {
         }
     }
 
-    onEvent(type: "level" | "game", event: string, cb: (data: any) => void) {
+    onEvent(
+        type: "level" | "game",
+        event: string,
+        cb: (data: any) => void,
+        ctx?: any
+    ) {
         switch (type) {
             case "game":
-                this.onGameEvent(event, cb);
+                this.onGameEvent(event, cb, ctx);
                 break;
             case "level":
-                this.onLevelEvent(event, cb);
+                this.onLevelEvent(event, cb, ctx);
                 break;
         }
     }
@@ -80,7 +87,7 @@ export class DragonQuestType {
         this.game?.scene.getScene(level).events.emit(event, data);
     }
 
-    onLevelEvent(event: string, cb: (data: any) => void) {
+    onLevelEvent(event: string, cb: (data: any) => void, ctx?: any) {
         const level = this.levelManager.currentLevelKey;
         this.game?.scene.getScene(level).events.on(event, cb);
     }
@@ -95,7 +102,7 @@ export class DragonQuestType {
             ) {
                 // TODO migrate to gamestate
                 this.gameState.currentLevel.firedEvents.push(name);
-                this.game?.events.emit("DialogStart", event.dialog);
+                this.events.dialog.start.emit(event.dialog);
             }
         });
     }

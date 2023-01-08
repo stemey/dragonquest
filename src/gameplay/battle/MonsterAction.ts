@@ -12,7 +12,8 @@ export const MonsterAction: Action<Monster> = (layerObject, scene) => {
     const monsters: Phaser.GameObjects.Sprite[] = [];
     const monsterName = layerObject.props.name;
 
-    const monsterUnits = DragonQuest.instance.levelManager.createVillains(monsterName);
+    const monsterUnits =
+        DragonQuest.instance.levelManager.createVillains(monsterName);
     let platform;
     let monsterCoords = { x: layerObject.x, y: layerObject.y };
     if (layerObject.width) {

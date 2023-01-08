@@ -1,7 +1,6 @@
 import { DragonQuest } from "../hub/DragonQuest";
 import { DialogAction } from "../types/DialogAction";
 
-
 export function executeAction(action: DialogAction) {
     if (action.customs) {
         action.customs.forEach((c) => {

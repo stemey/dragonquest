@@ -18,7 +18,7 @@ const gameMock = { events: { emit: jest.fn() } } as unknown as Game;
 
 describe("DialogState", () => {
     beforeAll(() => {
-        DragonQuest.instance=new DragonQuestType();
+        DragonQuest.instance = new DragonQuestType();
         DragonQuest.instance.init(gameMock);
         DragonQuest.instance.levelManager.enterLevel("first", {
             events: {},
@@ -95,10 +95,11 @@ describe("DialogState", () => {
             expect(options[0].selected).toBeTruthy();
             state.chooseOption(1);
             expect(state.conversing).toBeFalsy();
-            expect(DragonQuest.instance.inventory.hasItem(key.name)).toBeTruthy();
+            expect(
+                DragonQuest.instance.inventory.hasItem(key.name)
+            ).toBeTruthy();
         });
         it("different end", () => {
-
             const state = new DialogState();
             state.startDialog(dialog);
             expect(state.getDeltaX(undefined)).toBe(0);
@@ -115,8 +116,9 @@ describe("DialogState", () => {
             expect(state.getState()?.text).toBe("A");
             state.continueConversation();
             expect(state.conversing).toBeFalsy();
-            expect(DragonQuest.instance.inventory.hasItem(key.name)).toBeFalsy()
-
+            expect(
+                DragonQuest.instance.inventory.hasItem(key.name)
+            ).toBeFalsy();
         });
     });
     describe("with test", () => {
@@ -138,7 +140,6 @@ describe("DialogState", () => {
                 action: {
                     items: [key],
                 },
-
             },
             end: {
                 end: true,
@@ -153,8 +154,9 @@ describe("DialogState", () => {
             state.continueConversation();
             expect(state.getState()?.text).toBeUndefined();
             expect(state.conversing).toBeFalsy();
-            expect(DragonQuest.instance.inventory.hasItem(key.name)).toBeFalsy();
-
+            expect(
+                DragonQuest.instance.inventory.hasItem(key.name)
+            ).toBeFalsy();
         });
         it("success", () => {
             (evaluateExpression as jest.Mock).mockReturnValue(true);
@@ -164,8 +166,9 @@ describe("DialogState", () => {
             expect(state.getState()?.text).toBe("start");
             state.continueConversation();
             expect(state.getState()?.text).toBe("A");
-            expect(DragonQuest.instance.inventory.hasItem(key.name)).toBeTruthy();
-
+            expect(
+                DragonQuest.instance.inventory.hasItem(key.name)
+            ).toBeTruthy();
         });
     });
 });

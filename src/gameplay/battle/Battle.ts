@@ -211,7 +211,10 @@ export default class extends Phaser.Scene {
             }
         });
         const win = deadEnemies.length == this.enemies.length;
-        this.game.events.emit("battleFinished", { heroWin: win });
+        DragonQuest.instance.events.battle.end.emit({
+            heroWin: win,
+            deadEnemy: this.enemyName,
+        });
         this.scene.wake(this.entryWorld, {
             type: "battle",
             win,

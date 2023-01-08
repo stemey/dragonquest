@@ -17,7 +17,7 @@ export class Store {
 
     constructor() {
         if (typeof window.indexedDB === "undefined") {
-            this._db= {} as any
+            this._db = {} as any;
             return;
         }
         this._db = new Promise((resolve, reject) => {
