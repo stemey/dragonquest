@@ -5,7 +5,7 @@ import { Dialog } from "./types/Dialog";
 export class Event<T> {
     constructor(
         private readonly name: string,
-        private type: "game" | "level"
+        private type: "game" | "level" = "game"
     ) {}
 
     on(cb: (data: T) => void, ctx?: any): void {
@@ -18,10 +18,10 @@ export class Event<T> {
 
 export const DragonEvents = {
     dialog: {
-        start: new Event<Dialog | string>("DialogStart", "game"),
-        end: new Event<void>("DialogEnd", "game"),
+        start: new Event<Dialog | string>("DialogStart"),
+        end: new Event<void>("DialogEnd"),
     },
     battle: {
-        end: new Event<BattleOutcome>("BattleEnd", "game"),
+        end: new Event<BattleOutcome>("BattleEnd"),
     },
 };

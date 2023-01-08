@@ -17,7 +17,16 @@ export class StorePointManager {
     async list() {
         return await this.store.list();
     }
-    async load(id: number) {
+    async load(id: number | string) {
+        if (typeof id === "string") {
+            const list = await this.list();
+            const found = list.find((v) => v.name === id);
+            if (!found) {
+                console.error("cannot find storepoint named", id);
+                return;
+            }
+            id = found.id;
+        }
         this.loadedStorePoint = id;
         const storePoint = await this.store.load(id);
         const { x, y } = storePoint.player;
