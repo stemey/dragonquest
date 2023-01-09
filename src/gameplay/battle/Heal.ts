@@ -1,7 +1,7 @@
 import { Events } from "phaser";
 import { Unit } from "../../sprites/Unit";
 import { Healing } from "../types/Healing";
-import { BattleAction } from "./BattleAction";
+import { BattleAction } from "./model/BattleAction";
 
 export class Heal implements BattleAction {
     constructor(private heal: Healing) {}
