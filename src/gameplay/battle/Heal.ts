@@ -8,6 +8,7 @@ export class Heal implements BattleAction {
     get name() {
         return this.heal.name;
     }
+
     execute(events: Events.EventEmitter, actor: Unit, target: Unit) {
         target.heal(this.heal.healing);
         events.emit("Message", actor.name + "heals " + target.name);
