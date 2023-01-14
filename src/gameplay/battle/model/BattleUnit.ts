@@ -18,7 +18,7 @@ export class BattleUnit implements InteractiveSelectable {
         new Potion("green", 1),
     ];
     effect = new EffectState();
-    powers = observable.array<BattleActionState>([]);
+    public powers = observable.array<BattleActionState>([]);
     _selected = observable.box(false);
     melee = observable.box(true);
     stats: Stats = new Stats();

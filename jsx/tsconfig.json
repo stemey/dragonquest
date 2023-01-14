@@ -1,17 +1,15 @@
 {
     "compilerOptions": {
         "resolveJsonModule": true,
-        "rootDir": ".",
-        "outDir": "dist",
+        "rootDir": "src",
+        "outDir": "jsx-runtime",
         "sourceMap": true,
         "inlineSources": true,
         "moduleResolution": "Node16",
-        "declaration": false,
+        "declaration": true,
         "strict": true,
         "target": "ESNext",
         "allowSyntheticDefaultImports": true,
-        "jsx": "preserve",
-        "jsxImportSource": "@dragonquest/jsx"
     },
-    "include": ["src", "generated", "jsx/src/jsx", "jsx/src/jsx-runtime.ts"]
+    "include": ["src"]
 }

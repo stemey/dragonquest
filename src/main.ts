@@ -10,10 +10,12 @@ import { dragonQuestConfiguration } from "./boot/DragonQuestConfiguration";
 import GatewayAction from "./gameplay/worldaction/GatewayAction";
 import { LoadGame } from "./scenes/LoadGame";
 import { UiScene } from "./gameplay/battle/UiScene";
+import { TestUiScene } from "./gameplay/battle/TestUiScene";
 
 const gameConfig = Object.assign(config, {
     scene: [
         Boot,
+        TestUiScene,
         Road,
         LoadGame,
         BattleScene,

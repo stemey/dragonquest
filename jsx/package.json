@@ -1,0 +1,13 @@
+{
+    "name": "@dragonquest/jsx",
+    "version": "1.0.0",
+    "scripts": {
+        "compile": "yarn tsc"
+    },
+    "main": "jsx-runtime/index.js",
+    "module": "jsx-runtime/index.js",
+    "types": "jsx-runtime/index.d.ts",
+    "files": [
+        "dijsx-runtimest"
+    ]
+}

@@ -107,7 +107,13 @@ export default class extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("/level/road");
+        const params = new URLSearchParams(window.location.search);
+        const scene = params.get("scene");
+        if (scene) {
+            this.scene.start(scene);
+        } else {
+            this.scene.start("/level/road");
+        }
     }
 
     fontsLoaded() {}

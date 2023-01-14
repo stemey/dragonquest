@@ -7,8 +7,8 @@ import { Target } from "./target";
 
 export class BattleActionState implements InteractiveSelectable {
     constructor(private power: Heal | Attack, targets: Target[]) {
-        this.name.set(power.name);
-        this.description.set(power.description);
+        this._name.set(power.name);
+        this._description.set(power.description);
         this.targets = observable.array(targets);
     }
 
@@ -30,11 +30,11 @@ export class BattleActionState implements InteractiveSelectable {
     previous() {
         return previous(this.targets, true);
     }
-    name = observable.box("");
+    _name = observable.box("");
     _selected = observable.box(false);
     chosen = observable.box(false);
     ready = observable.box(false);
-    description = observable.box("");
+    _description = observable.box("");
     targets: Target[];
 
     get selected() {
@@ -42,6 +42,13 @@ export class BattleActionState implements InteractiveSelectable {
     }
     set selected(selected: boolean) {
         this._selected.set(selected);
+    }
+
+    get name():string {
+        return this._name.get();
+    }
+    get description():string {
+        return this._description.get();
     }
 
     get disabled() {

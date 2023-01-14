@@ -5,15 +5,15 @@
     },
     "activeFile": "level/road/map.json",
     "expandedProjectPaths": [
-        "levels/one",
         "level/road",
+        "tileset",
+        ".",
+        "levels/one",
         "levels/one/map",
+        "levels",
         "level",
         "level/village",
-        "levels",
-        "map",
-        "tileset",
-        "."
+        "map"
     ],
     "file.lastUsedOpenFilter": "Alle Dateien (*)",
     "fileStates": {
@@ -33,8 +33,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 423.5,
-                "y": 460.5
+                "x": 688,
+                "y": 725.5
             }
         },
         "level/village/map.json": {
@@ -153,8 +153,8 @@
     "project": "levels.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "level/road/map.json",
         "level/village/map.json",
+        "level/road/map.json",
         "tileset/pokehouse.json",
         "levels/one/map/road.json",
         "tileset/Plants.json",
