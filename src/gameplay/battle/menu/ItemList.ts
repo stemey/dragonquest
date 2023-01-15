@@ -48,6 +48,5 @@ export class ItemList extends Phaser.GameObjects.Container {
         border.setStrokeStyle(3,0xFF0000)
         this.add(border);
 
-      
     }
 }

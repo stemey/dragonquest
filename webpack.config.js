@@ -42,16 +42,24 @@ module.exports = {
         }),
     ],
     module: {
+        
         rules: [
             {
-                test: /\.ts$/,
-                use: ["ts-loader"],
+                test: /\.tsx?$/,
+                use: [
+                    'babel-loader',
+                    {
+                        loader: 'ts-loader',
+                        
+                    }
+                ],
+                exclude: /(node_modules)/,
                 include: path.join(__dirname, "src"),
-            },
+            }
         ],
     },
     resolve: {
-        extensions: [".ts", ".js", ".json"],
+        extensions: [".ts", ".tsx", ".js", ".json"],
     },
     devServer: {
         static: {

@@ -11,11 +11,12 @@ import GatewayAction from "./gameplay/worldaction/GatewayAction";
 import { LoadGame } from "./scenes/LoadGame";
 import { UiScene } from "./gameplay/battle/UiScene";
 import { TestUiScene } from "./gameplay/battle/TestUiScene";
+import { JsxUiScene } from "./gameplay/battle/JsxUiScene";
 
 const gameConfig = Object.assign(config, {
     scene: [
         Boot,
-        TestUiScene,
+        JsxUiScene,
         Road,
         LoadGame,
         BattleScene,

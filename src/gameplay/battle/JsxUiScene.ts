@@ -1,27 +1,29 @@
 import * as Phaser from "phaser";
-import { ItemList } from "./menu/ItemList";
 import { BattleUnit } from "./model/BattleUnit";
-import { ObservableItemModel } from "./menu/ObservableItemModel";
 import characters from "../../config/global/characters.json";
 import powers from "../../config/global/powers.json";
 import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
 import { ItemListSettings } from "./menu/ItemListSettings";
+import { create, jsx, reconcile } from "@dragonquest/jsx/jsx-runtime";
+import { Gui } from "./menu/Gui";
 
-export const SCENE_KEY = "TestUiScene";
+export const SCENE_KEY = "JsxUiScene";
 
-export class TestUiScene extends Phaser.Scene {
+export class JsxUiScene extends Phaser.Scene {
     constructor() {
         super({ key: SCENE_KEY });
     }
 
     model?: BattleUnit;
+    ui?: Phaser.GameObjects.GameObject;
 
     create() {
         const knight = characters.knight as Character;
         knight.attacks.push(powers.axe as Power);
         knight.attacks.push(powers["long sword"] as Power);
+        knight.attacks.push(powers.fireball as Power);
         this.model = new BattleUnit(new Unit(knight), []);
         const config: ItemListSettings = {
             fontSize: "15",
@@ -31,21 +33,11 @@ export class TestUiScene extends Phaser.Scene {
             width: 200,
             marginBetweenItems: 15,
         };
-        /*
-        const powerItems: ObservableItemModel[] = this.model.powers.map((a) =>
-            createItemProxy(a, { text: "description", selected: "selected" })
-        );
-        const powerList = new ItemList(this, 0, 0, config, { items:powerItems });
-        this.add.existing(powerList);
 
+        const element = jsx(Gui, { units: [this.model] });
+        this.ui = create(this, element);
+        this.add.existing(this.ui);
 
-        const potionItems: ObservableItemModel[] = this.model.powers.map((a) =>
-            createItemProxy(a, { text: "description", selected: "selected" })
-        );
-        
-        const potionList = new ItemList(this, 0, 0, config, { items:potionItems });
-        this.add.existing(potionList);
-*/
         this.input.keyboard.on("keydown", this.onKeyInput, this);
     }
 
@@ -55,5 +47,11 @@ export class TestUiScene extends Phaser.Scene {
         } else if (event.code === "ArrowDown") {
             this.model?.next();
         }
+        if (this.ui) {
+            const element = jsx(Gui, { units: [this.model] });
+
+            reconcile(this, undefined as any, element, this.ui);
+        }
+        
     }
 }

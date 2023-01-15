@@ -1,30 +1,17 @@
-const add = (parent: any, child: any) => {
-    parent.appendChild(
-        child?.nodeType ? child : document.createTextNode(child)
-    );
-};
+import { Element } from "./Element";
+import { GameObjectFactory } from "./gameObjectFactory";
 
-const appendChild = (parent: any, child: any) => {
-    if (Array.isArray(child)) {
-        child.forEach((nestedChild) => appendChild(parent, nestedChild));
-    } else {
-        add(parent, child);
-    }
-};
+export type Props = { [key: string]: any };
 
-export const jsx = (tag: any, props: any) => {
+export type Tag<P extends Props> = (
+    props: P
+) => Element<P> | GameObjectFactory<P, any>;
+
+export const jsx = <P extends Props>(tag: Tag<P>, props: P) => {
     const { children } = props;
-    if (typeof tag === "function") return tag(props, children);
-    const element = document.createElement(tag);
-    Object.entries(props || {}).forEach(([name, value]) => {
-        if (name.startsWith("on") && name.toLowerCase() in window) {
-            element.addEventListener(name.toLowerCase().substr(2), value);
-        } else {
-            element.setAttribute(name, value);
-        }
-    });
-    appendChild(element, children);
-    return element;
+    const newProps = { ...props };
+    delete newProps.children;
+    return { children: children, props: newProps, tag } as Element<P>;
 };
 
 export const jsxs = jsx;
