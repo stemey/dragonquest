@@ -1,4 +1,5 @@
 import { GlobalState } from "../GlobalState";
+import { useEffect } from "../useEffect";
 import { useState } from "../useState";
 import { create, globalState, reconcile } from "../utils";
 import { MockContainer, mockHelper, MockObjectFactory } from "./mocks";
@@ -6,13 +7,18 @@ import { MockContainer, mockHelper, MockObjectFactory } from "./mocks";
 const TagOne = () => new MockObjectFactory("TagOne");
 const TagTwo = () => new MockObjectFactory("TagTwo");
 
+let dispose=jest.fn();
+
 const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
     const [length, setLength] = useState(5);
-    if (props.listen) {
-        props.listen((x) => {
-            setLength(x);
-        });
-    }
+    useEffect(() => {
+        if (props.listen) {
+            props.listen((x) => {
+                setLength(x);
+            });
+        }
+        return dispose;
+    });
 
     return { tag: TagOne, props: { x: length } };
 };
@@ -20,6 +26,7 @@ const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
 describe("reconcile", () => {
     beforeEach(() => {
         globalState.current = new GlobalState();
+        dispose.mockReset();
     });
     it("props", () => {
         const initial = { tag: TagOne, props: { x: 0 } };
@@ -78,6 +85,7 @@ describe("reconcile", () => {
             children: [
                 { tag: TagOne, props: { x: 3 } },
                 { tag: TagOne, props: { x: 1 } },
+                { tag: VirtualTag, props: { x: 1 } },
             ],
         };
         const m = create<undefined, MockContainer>(
@@ -105,6 +113,8 @@ describe("reconcile", () => {
         expect(m).toBeDefined;
         expect(m.children).toHaveLength(1);
         expect(m.children[0].props.x).toBe(9);
+
+        expect(dispose).toBeCalledTimes(1)
     });
     it("switch child", () => {
         const initial = {

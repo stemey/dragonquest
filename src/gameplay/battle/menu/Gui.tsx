@@ -1,5 +1,5 @@
-import { Container } from "@dragonquest/jsx/jsx-runtime";
 import { Element } from "@dragonquest/jsx/src/Element";
+import { Container } from "../../../jsx/Container";
 import { BattleUnit } from "../model/BattleUnit";
 import { Unit } from "./Unit";
 

@@ -6,8 +6,9 @@ import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
 import { ItemListSettings } from "./menu/ItemListSettings";
-import { create, jsx, reconcile } from "@dragonquest/jsx/jsx-runtime";
+import { create, jsx, reconcile, render, wrapInGlobalState } from "@dragonquest/jsx/jsx-runtime";
 import { Gui } from "./menu/Gui";
+import { phaserJsxHelper } from "../../jsx/phaserJsxHelper";
 
 export const SCENE_KEY = "JsxUiScene";
 
@@ -35,7 +36,7 @@ export class JsxUiScene extends Phaser.Scene {
         };
 
         const element = jsx(Gui, { units: [this.model] });
-        this.ui = create(this, element);
+        this.ui = render(this, element,phaserJsxHelper);
         this.add.existing(this.ui);
 
         this.input.keyboard.on("keydown", this.onKeyInput, this);
@@ -47,11 +48,7 @@ export class JsxUiScene extends Phaser.Scene {
         } else if (event.code === "ArrowDown") {
             this.model?.next();
         }
-        if (this.ui) {
-            const element = jsx(Gui, { units: [this.model] });
-
-            reconcile(this, undefined as any, element, this.ui);
-        }
+        
         
     }
 }

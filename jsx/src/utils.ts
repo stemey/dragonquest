@@ -4,9 +4,10 @@ import { GlobalState } from "./GlobalState";
 export const create = <S, T>(
     scene: S,
     element: Element<any>,
-    helper: ContainerHelper<T>
+    helper: ContainerHelper<T>,
+    currentId: string = ""
 ) => {
-    return evaluateTag(scene, element, helper);
+    return evaluateTag(scene, element, helper, currentId);
 };
 
 const evaluateTag = <S, P extends object, T>(
@@ -22,19 +23,20 @@ const evaluateTag = <S, P extends object, T>(
     currentId = currentId || createId(element);
     currentState.currentElementId = currentId;
     const creator = element.tag(element.props);
+    currentState.currentElementState?.onCreated();
     if ("update" in creator && "create" in creator) {
         const gameObject = creator.create(scene, element.props);
         if (element.children) {
             element.children.forEach((c, idx) => {
-                const newId = currentId + createId(element, idx);
+                const newId = currentId + createId(c, idx);
                 currentState.currentElementId = newId;
-                const child = create(scene, c, helper);
+                const child = create(scene, c, helper, newId);
                 helper.add(gameObject, child);
             });
         }
         return gameObject;
     }
-    return evaluateTag(scene, creator as Element<any>, helper);
+    return evaluateTag(scene, creator as Element<any>, helper, currentId);
 };
 
 export const reconcile = <S, G extends object>(
@@ -69,13 +71,18 @@ export const reconcile = <S, G extends object>(
                 .reverse();
             toBeRemoved.forEach((idx) => {
                 helper.remove(gameObject, idx);
-                oldChildren.splice(idx, 1);
+
+                const removed = oldChildren.splice(idx, 1);
+                const elementState = globalState.current?.stateMap.get(
+                    removed[0]
+                );
+                elementState?.destroy();
             });
             nu.children.forEach((c, idx) => {
                 const newId = currentId + createId(c, idx);
                 const oldIdx = oldChildren.indexOf(newId);
                 if (oldIdx < 0) {
-                    const newObject = create(scene, c, helper);
+                    const newObject = create(scene, c, helper, newId);
                     helper.add(gameObject, newObject);
                 } else {
                     if (oldIdx !== idx) {
@@ -83,13 +90,13 @@ export const reconcile = <S, G extends object>(
                     }
                     const childGo = helper.get(gameObject, oldIdx);
                     currentState.currentElementId = newId;
-                    reconcile(scene, undefined, c, childGo, helper, newId);
+                    reconcile(scene, c, c, childGo, helper, newId);
                 }
             });
         }
         return gameObject;
     }
-    reconcile(scene, undefined, creator as Element<any>, gameObject, helper);
+    reconcile(scene, creator, creator as Element<any>, gameObject, helper);
 };
 
 function createId(element: Element<any>, idx?: number): string {
@@ -120,7 +127,7 @@ export const globalState: { current: GlobalState | undefined } = {
     current: undefined,
 };
 
-const wrapInGlobalState = <T>(g: GlobalState, cb: () => T): T => {
+export const wrapInGlobalState = <T>(g: GlobalState, cb: () => T): T => {
     globalState.current = g;
     const returnValue = cb();
     globalState.current = undefined;

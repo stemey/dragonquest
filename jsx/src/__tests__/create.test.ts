@@ -1,4 +1,5 @@
 import { GlobalState } from "../GlobalState";
+import { useEffect } from "../useEffect";
 import { useState } from "../useState";
 import { create, globalState } from "../utils";
 import { MockContainer, mockHelper, MockObjectFactory } from "./mocks";
@@ -7,11 +8,14 @@ const TagOne = () => new MockObjectFactory("TagOne");
 
 const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
     const [length, setLength] = useState(5);
-    if (props.listen) {
-        props.listen((x) => {
-            setLength(x);
-        });
-    }
+
+    useEffect(() => {
+        if (props.listen) {
+            props.listen((x) => {
+                setLength(x);
+            });
+        }
+    });
 
     return { tag: TagOne, props: { x: length } };
 };
@@ -34,7 +38,8 @@ describe("create", () => {
             undefined,
             {
                 tag: TagOne,
-                props: { x: 0}, children: [{ tag: TagOne, props: { x: 3 } }] ,
+                props: { x: 0 },
+                children: [{ tag: TagOne, props: { x: 3 } }],
             },
             mockHelper
         );
@@ -60,7 +65,7 @@ describe("create", () => {
             myCb = cb;
         };
         const stateChange = jest.fn();
-        globalState.current?.onStateChange(stateChange)
+        globalState.current?.onStateChange(stateChange);
         const m = create<undefined, MockContainer>(
             undefined,
             {
@@ -71,9 +76,9 @@ describe("create", () => {
         );
         myCb(10);
         const stateMap = globalState.current?.stateMap;
-        expect(stateMap?.get("VirtualTag")?.states).toHaveLength(1)
-        expect(stateMap?.get("VirtualTag")?.states[0].value).toBe(10)
-        expect(stateMap?.size).toBe(2)
-        expect(stateChange).toBeCalledTimes(1)
+        expect(stateMap?.get("VirtualTag")?.states).toHaveLength(1);
+        expect(stateMap?.get("VirtualTag")?.states[0].value).toBe(10);
+        expect(stateMap?.size).toBe(1);
+        expect(stateChange).toBeCalledTimes(1);
     });
 });

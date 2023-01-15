@@ -1,5 +1,5 @@
 import Phaser, { Scene } from "phaser";
-import { Tag } from "./jsx-runtime";
+import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
 
 export interface TextProps {
     text: string;

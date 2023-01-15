@@ -13,5 +13,5 @@
         "jsx": "preserve",
         "jsxImportSource": "@dragonquest/jsx"
     },
-    "include": ["src", "generated", "jsx/src/jsx", "jsx/src/jsx-runtime.ts"]
+    "include": ["src", "generated", "jsx/src/jsx-runtime.ts"]
 }

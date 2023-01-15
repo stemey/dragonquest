@@ -1,6 +1,5 @@
 import { Tag } from "@dragonquest/jsx/jsx-runtime";
 import Phaser, { GameObjects, Scene } from "phaser";
-import { ItemListSettings } from "./ItemListSettings";
 
 export interface VerticalListProps {
     verticalGap: number;
