@@ -5,7 +5,7 @@ export type Props = { [key: string]: any };
 
 export type Tag<P extends Props> = (
     props: P
-) => Element<P> | GameObjectFactory<P, any>;
+) => Element<P> | GameObjectFactory<P, any,any>;
 
 export const jsx = <P extends Props>(tag: Tag<P>, props: P) => {
     const { children } = props;

@@ -1,21 +1,37 @@
+import { UseStateReturnType } from "./useState";
+
 export class GlobalState {
-    _currentElementId?: string;
+    _currentElementId: string="";
     currentElementState?: ElementState;
     stateMap: Map<string, ElementState> = new Map();
-    useState<T>(t: T) {
-        if (!this.currentElementId) {
+    listener?: () => void;
+    useState<T>(t: T): UseStateReturnType<T> {
+        if (!this.currentElementState) {
             throw new Error("no current element");
         }
-        const elementState = this.stateMap.get(this.currentElementId);
+        return this.currentElementState.useState(t, () =>
+            this.fireStateChanges()
+        );
     }
 
-    set currentElementId(id: string | undefined) {
+    onStateChange(cb: () => void) {
+        this.listener = cb;
+    }
+
+    fireStateChanges() {
+        if (this.listener) {
+            this.listener();
+        }
+    }
+
+    set currentElementId(id: string) {
         this._currentElementId = id;
         this.currentElementState = this.stateMap.get(
-            this.currentElementId || ""
+            this.currentElementId
         );
         if (!this.currentElementState) {
             this.currentElementState = new ElementState();
+            this.stateMap.set(this.currentElementId, this.currentElementState);
         } else {
             this.currentElementState.reset();
         }
@@ -29,21 +45,23 @@ export class ElementState {
     stateIdx = 0;
     states: State[] = [];
     initialized = false;
-    useState<T>(t: T) {
+    useState<T>(t: T, fireStateChange: () => void): UseStateReturnType<T> {
         if (!this.initialized) {
             this.states.push({ value: t });
         }
         const state = this.states[this.stateIdx];
         this.stateIdx++;
         return [
-            t,
+            state.value,
             (t: T) => {
                 state.value = t;
+                fireStateChange();
             },
         ];
     }
     reset() {
         this.stateIdx = 0;
+        this.initialized=true;
     }
 }
 

@@ -2,9 +2,9 @@ import { Scene } from "phaser";
 
 export interface GameObjectFactory<
     P extends object,
-    T extends Phaser.GameObjects.GameObject
+    T,S
 > {
-    create(scene: Scene, props: P): T;
+    create(scene: S, props: P): T;
 
     update(gameObject: T, props: P): void;
 }
