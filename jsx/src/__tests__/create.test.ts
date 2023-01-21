@@ -78,7 +78,7 @@ describe("create", () => {
         const stateMap = globalState.current?.stateMap;
         expect(stateMap?.get("VirtualTag")?.states).toHaveLength(1);
         expect(stateMap?.get("VirtualTag")?.states[0].value).toBe(10);
-        expect(stateMap?.size).toBe(1);
+        expect(stateMap?.size).toBe(2);
         expect(stateChange).toBeCalledTimes(1);
     });
 });

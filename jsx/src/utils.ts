@@ -1,3 +1,4 @@
+import { isArrayLike } from "mobx";
 import { Element } from "./Element";
 import { GlobalState } from "./GlobalState";
 
@@ -20,14 +21,20 @@ const evaluateTag = <S, P extends object, T>(
     if (!currentState) {
         throw new Error("global state not set");
     }
-    currentId = currentId || createId(element);
+    if (!currentId) {
+        currentId = createId(element);
+    }
     currentState.currentElementId = currentId;
     const creator = element.tag(element.props);
     currentState.currentElementState?.onCreated();
     if ("update" in creator && "create" in creator) {
         const gameObject = creator.create(scene, element.props);
         if (element.children) {
-            element.children.forEach((c, idx) => {
+            let children = element.children;
+            if (!Array.isArray(element.children)) {
+                children = [element.children as unknown as Element<any>];
+            }
+            children.forEach((c, idx) => {
                 const newId = currentId + createId(c, idx);
                 currentState.currentElementId = newId;
                 const child = create(scene, c, helper, newId);
@@ -36,7 +43,14 @@ const evaluateTag = <S, P extends object, T>(
         }
         return gameObject;
     }
-    return evaluateTag(scene, creator as Element<any>, helper, currentId);
+    // TODO what about children here? And need to add new tag
+
+    return evaluateTag(
+        scene,
+        creator as Element<any>,
+        helper,
+        currentId + createId(creator)
+    );
 };
 
 export const reconcile = <S, G extends object>(
@@ -51,18 +65,28 @@ export const reconcile = <S, G extends object>(
     if (!currentState) {
         throw new Error("global state not set");
     }
-    currentId = currentId || createId(nu);
+    if (!currentId) {
+        currentId = createId(nu);
+    }
     currentState.currentElementId = currentId;
     const creator = nu.tag(nu.props);
     if ("update" in creator && "create" in creator) {
         creator.update(gameObject, nu.props);
         if (nu.children) {
+            let children = nu.children;
+            if (!Array.isArray(nu.children)) {
+                children = [nu.children as unknown as Element<any>];
+            }
+            let oldElementChildren = old?.children;
+            if (!Array.isArray(old?.children)) {
+                oldElementChildren = [old?.children as unknown as Element<any>];
+            }
             const oldChildren =
-                old?.children?.map((c, idx) => currentId + createId(c, idx)) ||
-                [];
+                oldElementChildren?.map(
+                    (c, idx) => currentId + createId(c, idx)
+                ) || [];
             const newChildren =
-                nu?.children?.map((c, idx) => currentId + createId(c, idx)) ||
-                [];
+                children.map((c, idx) => currentId + createId(c, idx)) || [];
             const toBeRemoved = oldChildren
                 .map((key, idx) => ({ key, idx }))
                 .filter((data) => newChildren.indexOf(data.key) < 0)
@@ -78,7 +102,7 @@ export const reconcile = <S, G extends object>(
                 );
                 elementState?.destroy();
             });
-            nu.children.forEach((c, idx) => {
+            children.forEach((c, idx) => {
                 const newId = currentId + createId(c, idx);
                 const oldIdx = oldChildren.indexOf(newId);
                 if (oldIdx < 0) {
@@ -96,7 +120,14 @@ export const reconcile = <S, G extends object>(
         }
         return gameObject;
     }
-    reconcile(scene, creator, creator as Element<any>, gameObject, helper);
+    reconcile(
+        scene,
+        creator,
+        creator as Element<any>,
+        gameObject,
+        helper,
+        currentId + createId(creator)
+    );
 };
 
 function createId(element: Element<any>, idx?: number): string {

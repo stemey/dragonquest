@@ -15,15 +15,15 @@ export class TextItem extends Phaser.GameObjects.Container {
 
         const text = new Phaser.GameObjects.Text(
             scene,
-            config.padding.x,
-            config.padding.y,
+            config.padding.left,
+            config.padding.top,
             item.text,
             {
                 color: Phaser.Display.Color.IntegerToColor(config.textColor)
                     .rgba,
                 align: "left",
                 fontSize: config.fontSize,
-                fixedWidth: config.width - 2 * config.padding.x,
+                fixedWidth: config.width - 2 * config.padding.left,
             }
         );
         this.add(text);
@@ -31,16 +31,16 @@ export class TextItem extends Phaser.GameObjects.Container {
         const border = new Phaser.GameObjects.Rectangle(
             scene,
             config.width / 2,
-            height / 2 + config.padding.y,
+            height / 2 + config.padding.top,
             config.width,
-            height + 2 * config.padding.y,
+            height +  config.padding.left,
             config.bgColor
         );
         border.setStrokeStyle(3, 0xff0000);
 
         this.add(border);
 
-        autorun(() => {
+        autorun(() => {  
             text.setText(this.item.text);
             if (this.item.selected) {
                 border.strokeColor = this.config.selectedBorderColor;

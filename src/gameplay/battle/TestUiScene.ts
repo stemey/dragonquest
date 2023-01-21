@@ -23,14 +23,7 @@ export class TestUiScene extends Phaser.Scene {
         knight.attacks.push(powers.axe as Power);
         knight.attacks.push(powers["long sword"] as Power);
         this.model = new BattleUnit(new Unit(knight), []);
-        const config: ItemListSettings = {
-            fontSize: "15",
-            padding: { x: 20, y: 10 },
-            textColor: 0xaa00,
-            selectedBorderColor: 0xff00,
-            width: 200,
-            marginBetweenItems: 15,
-        };
+       
         /*
         const powerItems: ObservableItemModel[] = this.model.powers.map((a) =>
             createItemProxy(a, { text: "description", selected: "selected" })

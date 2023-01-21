@@ -1,5 +1,6 @@
 import { ContainerHelper } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects } from "phaser";
+import { JsxContainer } from "./JsxContainer";
 
 export const phaserJsxHelper: ContainerHelper<GameObjects.Container> = {
     remove: function (gameObject: GameObjects.Container, idx: number): void {
@@ -22,6 +23,9 @@ export const phaserJsxHelper: ContainerHelper<GameObjects.Container> = {
         parent: GameObjects.Container,
         idx: number
     ) {
+        if ("getAtJsx" in parent) {
+            return (parent as JsxContainer).getAtJsx(idx);
+        }
         return parent.getAt(idx) as unknown as GameObjects.Container;
     },
 };

@@ -1,5 +1,7 @@
 
 export interface Padding {
-    x: number;
-    y: number;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
 }

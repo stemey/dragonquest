@@ -2,7 +2,7 @@ import { observable } from "mobx";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 
 export class Potion implements InteractiveSelectable {
-    constructor(name: string, count: number) {
+    constructor(public name: string,  count: number) {
         this.count.set(count);
     }
     private _confirmed = observable.box(false);

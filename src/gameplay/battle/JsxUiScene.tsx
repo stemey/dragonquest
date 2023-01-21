@@ -6,7 +6,7 @@ import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
 import { ItemListSettings } from "./menu/ItemListSettings";
-import { create, jsx, reconcile, render, wrapInGlobalState } from "@dragonquest/jsx/jsx-runtime";
+import { render } from "@dragonquest/jsx/jsx-runtime";
 import { Gui } from "./menu/Gui";
 import { phaserJsxHelper } from "../../jsx/phaserJsxHelper";
 
@@ -28,27 +28,28 @@ export class JsxUiScene extends Phaser.Scene {
         this.model = new BattleUnit(new Unit(knight), []);
         const config: ItemListSettings = {
             fontSize: "15",
-            padding: { x: 20, y: 10 },
+            padding: { left: 20, top: 10,bottom: 20, right: 10 },
             textColor: 0xaa00,
             selectedBorderColor: 0xff00,
             width: 200,
             marginBetweenItems: 15,
         };
 
-        const element = jsx(Gui, { units: [this.model] });
-        this.ui = render(this, element,phaserJsxHelper);
+        this.ui = render(this, <Gui units={[this.model]} />, phaserJsxHelper);
+        this.ui.active=true;
         this.add.existing(this.ui);
 
         this.input.keyboard.on("keydown", this.onKeyInput, this);
     }
+
 
     onKeyInput(event: KeyboardEvent) {
         if (event.code === "ArrowUp") {
             this.model?.previous();
         } else if (event.code === "ArrowDown") {
             this.model?.next();
+        } else if (event.code === "Space") {
+            this.model?.confirm();
         }
-        
-        
     }
 }

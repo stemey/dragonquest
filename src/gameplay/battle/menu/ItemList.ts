@@ -18,14 +18,14 @@ export class ItemList extends Phaser.GameObjects.Container {
 
         const itemconfig = {
             ...config,
-            width: config.width - 2 * config.padding.x,
+            width: config.width - 2 * config.padding.left,
         };
 
-        let nextY = config.padding.y;
+        let nextY = config.padding.top;
         model.items.forEach((i) => {
             const item = new TextItem(
                 scene,
-                config.padding.x,
+                config.padding.left,
                 nextY,
                 itemconfig,
                 i
@@ -39,10 +39,10 @@ export class ItemList extends Phaser.GameObjects.Container {
         const border = new Phaser.GameObjects.Rectangle(
             scene,
             config.width/2,
-            height/2+config.padding.y,
+            height/2+config.padding.top,
             
             config.width,
-            height + 2 * config.padding.y,
+            height + 2 * config.padding.top,
             config.bgColor
         );
         border.setStrokeStyle(3,0xFF0000)
