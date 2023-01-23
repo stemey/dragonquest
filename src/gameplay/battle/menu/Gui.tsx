@@ -8,7 +8,7 @@ export function Gui(props: { units: BattleUnit[] }):Element<any> {
         return <Unit unit={u}></Unit>;
     });
     return (
-        <Container x={100} y={0}>
+        <Container x={0} y={0}>
             {units}
         </Container>
     );

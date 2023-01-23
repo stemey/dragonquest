@@ -1,7 +1,7 @@
-import Phaser, { GameObjects, Scene } from "phaser";
+import Phaser, { GameObjects, Scene, Tilemaps } from "phaser";
 import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
 import { Padding } from "../gameplay/battle/menu/Padding";
-import { getBounds, setPosition, setWidth } from "./utils";
+import { getBounds, setPosition } from "./utils";
 import { JsxContainer } from "./JsxContainer";
 
 export interface DivProps {
@@ -11,6 +11,8 @@ export interface DivProps {
     height?: number;
     fillColor?: number;
     fillAlpha?: number;
+    x?: number;
+    y?: number;
 }
 
 export const Div: Tag<DivProps> = () => ({
@@ -18,7 +20,7 @@ export const Div: Tag<DivProps> = () => ({
         return new DivContainer(scene, props);
     },
     update(container: DivContainer, props: DivProps) {
-        container.updateProps(props);
+        return container.updateProps(props);
     },
 });
 
@@ -27,25 +29,40 @@ export class DivContainer
     implements JsxContainer
 {
     private rectangle: Phaser.GameObjects.Rectangle;
+    private innerRectangle: Phaser.GameObjects.Rectangle;
+    private currentContentHeight=0;
     constructor(scene: Scene, private props: DivProps) {
         super(scene, 0, 0);
         this.rectangle = new Phaser.GameObjects.Rectangle(
             scene,
             props.margin.left + props.width / 2,
-            props.margin.top,
+            props.margin.top + (props.height || 0) / 2,
             props.width,
             props.height,
             props.fillColor,
             props.fillAlpha
         );
+        //this.rectangle.visible = false;
         this.add(this.rectangle);
+        this.innerRectangle = new Phaser.GameObjects.Rectangle(
+            scene,
+            (props.width + props.margin.left + props.margin.right) / 2,
+            ((props.height || 0) + props.margin.top + props.margin.bottom) / 2,
+            props.width + props.margin.left + props.margin.right,
+            (props.height || 0) + props.margin.top + props.margin.bottom,
+            props.fillColor,
+            0.2
+        );
+        //this.rectangle.visible = false;
+        this.add(this.innerRectangle);
+        this.currentContentHeight = this.getContentHeight(props)
     }
     getAtJsx(idx: number): GameObjects.Container {
         //skip rectangle
-        return this.getAt(idx + 1) as any;
+        return this.getAt(idx + 2) as any;
     }
     add(child: GameObjects.GameObject) {
-        if (this.rectangle == child) {
+        if (this.rectangle == child || this.innerRectangle === child) {
             super.add(child);
             return this;
         }
@@ -62,18 +79,28 @@ export class DivContainer
             this.props.margin.left + this.props.padding.left,
             this.props.margin.top + this.props.padding.top
         );
-        this.updateHeight();
+        const contentHeight = this.getContentHeight(this.props);
+        this.updateHeight(this.props, contentHeight);
 
         return this;
     }
     updateProps(props: DivProps) {
+        const contentHeight = this.getContentHeight(props);
+        this.setPosition(props.x, props.y);
         this.each((c: GameObjects.GameObject) => {
             if (c === this.rectangle) {
-                /*setPosition(
+                setPosition(
                     this.rectangle,
-                    props.margin.left,
-                    props.margin.top
-                );*/
+                    getX(props, false, props.width),
+                    getY(props, false, contentHeight)
+                );
+                //setWidth(this.rectangle, props.width);
+            } else if (c === this.innerRectangle) {
+                setPosition(
+                    this.innerRectangle,
+                    getX(props, true, props.width),
+                    getY(props, true, contentHeight)
+                );
                 //setWidth(this.rectangle, props.width);
             } else {
                 /*  setWidth(
@@ -84,37 +111,73 @@ export class DivContainer
                 );*/
                 setPosition(
                     c,
-                    this.props.margin.left + this.props.padding.left,
-                    this.props.margin.top + this.props.padding.top
+                    props.margin.left + props.padding.left,
+                    props.margin.top + props.padding.top
                 );
+                
             }
         });
         this.props = props;
-        this.updateHeight();
+        this.updateHeight(props, contentHeight);
+        this.innerRectangle.updateDisplayOrigin();
+        this.rectangle.updateDisplayOrigin();
+        const changed = this.currentContentHeight!==contentHeight;
+        this.currentContentHeight=contentHeight
+        return changed;
     }
 
-    update() {
-        super.update();
-        this.rectangle.update();
-    }
-
-    updateHeight() {
-        if (!this.props.height) {
-            let fullHeight = this.props.padding.top + this.props.padding.bottom;
-            this.each((c: GameObjects.GameObject) => {
-                if (c !== this.rectangle) {
-                    ///console.log("child y", (c as any).y);
-                    //console.log("child x", (c as any).x);
-
-                    fullHeight += getBounds(c)?.height || 0;
-                }
-            });
-            this.rectangle.setDisplaySize(this.props.width, fullHeight);
-            this.rectangle.setY(
-                fullHeight / 2 + this.props.margin.top
-            );
-            console.log("height", fullHeight);
-            console.log("y", this.rectangle.y);
+    getContentHeight(props: DivProps) {
+        if (props.height) {
+            return props.height;
         }
+        let fullHeight = this.props.padding.top + this.props.padding.bottom;
+        this.each((c: GameObjects.GameObject) => {
+            if (c !== this.rectangle && c !== this.innerRectangle) {
+                ///console.log("child y", (c as any).y);
+                //console.log("child x", (c as any).x);
+
+                fullHeight += getBounds(c)?.height || 0;
+            }
+        });
+        return Math.round(fullHeight);
+    }
+
+    updateHeight(props: DivProps, contentHeight: number) {
+       if (!props.height) {
+            this.rectangle.setSize(
+                getWidth(props, false, props.width),
+                getHeight(props, false, contentHeight)
+            );
+
+            this.innerRectangle.setSize(
+                getWidth(props, true, props.width),
+                getHeight(props, true, contentHeight)
+            );
+        }
+    }
+}
+
+function getHeight(props: DivProps, full: boolean, contentHeight?: number) {
+    let frame = props.padding.top + props.padding.bottom;
+    if (full) frame += props.margin.top + props.margin.bottom;
+    return (contentHeight || props.height || 1) + frame;
+}
+function getWidth(props: DivProps, full: boolean, contentWidth?: number) {
+    let frame = props.padding.left + props.padding.right;
+    if (full) frame += props.margin.left + props.margin.right;
+    return (contentWidth || props.width || 1) + frame;
+}
+function getX(props: DivProps, full: boolean, contentWidth?: number) {
+    if (full) {
+        return Math.round(getWidth(props, full, contentWidth) / 2);
+    } else {
+        return Math.round(getWidth(props, full, contentWidth) / 2 + props.margin.left);
+    }
+}
+function getY(props: DivProps, full: boolean, contentHeight?: number) {
+    if (full) {
+        return Math.round(getHeight(props, full, contentHeight) / 2);
+    } else {
+        return Math.round(getHeight(props, full, contentHeight) / 2 + props.margin.top);
     }
 }

@@ -10,7 +10,7 @@ export type Tag<P extends Props> = (
 export const jsx = <P extends Props>(tag: Tag<P>, props: P) => {
     const { children } = props;
     const newProps = { ...props };
-    delete newProps.children;
+    //delete newProps.children;
     return { children: children, props: newProps, tag } as Element<P>;
 };
 

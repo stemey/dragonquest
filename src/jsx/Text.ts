@@ -4,6 +4,8 @@ import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
 export interface TextProps {
     text: string;
     style: Phaser.Types.GameObjects.Text.TextStyle;
+    x?: number;
+    y?: number;
 }
 
 export const Text: Tag<TextProps> = () => ({
@@ -16,5 +18,8 @@ export const Text: Tag<TextProps> = () => ({
         const { text, style } = newProps;
         textObject.setText(text);
         textObject.setStyle(style);
+        textObject.setPosition(newProps.x || 0, newProps.y || 0);
+        textObject.updateDisplayOrigin();
+        return false;
     },
 });

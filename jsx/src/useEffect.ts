@@ -1,14 +1,11 @@
 import { globalState } from "./utils";
 
-export const useEffect = (cb: () => (() => void) | void) => {
+export const useEffect = (cb: () => (() => void) | void, dependencies?:any[]) => {
     const state = globalState.current?.currentElementState;
     if (!state) {
         throw new Error("no state for element");
     }
-    if (!state.initialized) {
-        const dispose = cb();
-        if (dispose) {
-            state.onDestroy(() => dispose());
-        }
-    }
+    state.useEffect(cb, dependencies)
+    
+    
 };

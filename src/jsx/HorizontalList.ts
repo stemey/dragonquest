@@ -35,5 +35,5 @@ export const HorizontalList: Tag<HorizontalListProps> = () => ({
     update(
         container: Phaser.GameObjects.Container,
         props: HorizontalListProps
-    ) {},
+    ) {return false;},
 });

@@ -29,6 +29,8 @@ const evaluateTag = <S, P extends object, T>(
     currentState.currentElementState?.onCreated();
     if ("update" in creator && "create" in creator) {
         const gameObject = creator.create(scene, element.props);
+        handleRef(element, gameObject);
+
         if (element.children) {
             let children = element.children;
             if (!Array.isArray(element.children)) {
@@ -71,7 +73,12 @@ export const reconcile = <S, G extends object>(
     currentState.currentElementId = currentId;
     const creator = nu.tag(nu.props);
     if ("update" in creator && "create" in creator) {
-        creator.update(gameObject, nu.props);
+        const rerender = creator.update(gameObject, nu.props);
+        if (rerender && globalState.current) {
+            globalState.current.rerender=true;
+        }
+        handleRef(nu, gameObject);
+
         if (nu.children) {
             let children = nu.children;
             if (!Array.isArray(nu.children)) {
@@ -143,16 +150,32 @@ export const render = <S, G extends object>(
     helper: ContainerHelper<G>
 ) => {
     const globalState = new GlobalState();
+    
     const value = wrapInGlobalState(globalState, () =>
         create(scene, element, helper)
     );
+
+    function renderInternally(){
+        while (globalState.rerender) {
+            globalState.rerender=false;
+    
+            wrapInGlobalState(globalState, () => {
+                reconcile(scene, element, element, value, helper);
+            });
+        }
+    }
+
+    renderInternally();
+
     globalState.onStateChange(() => {
-        wrapInGlobalState(globalState, () => {
-            reconcile(scene, element, element, value, helper);
-        });
-    });
+        renderInternally();
+     });
+    
+
     return value;
 };
+
+
 
 export const globalState: { current: GlobalState | undefined } = {
     current: undefined,
@@ -171,3 +194,12 @@ export interface ContainerHelper<G> {
     add(parent: G, child: G): void;
     get(parent: G, idx: number): G;
 }
+const handleRef = <T>(el: Element<any>, gameObject: T) => {
+    if (el.props.ref) {
+        if (typeof el.props.ref === "function") {
+            el.props.ref(gameObject);
+        } else {
+            el.props.ref.current = gameObject;
+        }
+    }
+};

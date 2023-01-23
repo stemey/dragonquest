@@ -2,6 +2,7 @@ import { Ref } from "./useRef";
 import { UseStateReturnType } from "./useState";
 
 export class GlobalState {
+    rerender: boolean = false;
     _currentElementId: string = "";
     currentElementState?: ElementState;
     stateMap: Map<string, ElementState> = new Map();
@@ -26,6 +27,7 @@ export class GlobalState {
     }
 
     fireStateChanges() {
+        this.rerender = true;
         if (this.listener) {
             this.listener();
         }
@@ -46,13 +48,49 @@ export class GlobalState {
     }
 }
 
+export interface EffectState {
+    dependencies: any[];
+    dispose: () => void;
+}
+
 export class ElementState {
+    useEffect(cb: () => void | (() => void), dependencies: any[] | undefined) {
+        if (!this.initialized) {
+            const disposeFn = cb();
+            if (dependencies) {
+                const dispose = disposeFn ? disposeFn : () => {};
+                this.effects.push({ dependencies, dispose: () => dispose() });
+            } else if (disposeFn) {
+                this.onDestroy(() => disposeFn());
+            }
+            return;
+        }
+        if (dependencies) {
+            const previousDependencies = this.effects[this.effectsIdx];
+            const equal = dependencies.every(
+                (d, idx) => previousDependencies.dependencies[idx] === d
+            );
+            if (!equal) {
+                previousDependencies.dispose();
+                const disposeFn = cb();
+                const dispose = disposeFn ? () => disposeFn() : () => {};
+                this.effects[this.effectsIdx] = {
+                    dependencies,
+                    dispose: () => dispose(),
+                };
+            }
+            this.effectsIdx++;
+        }
+    }
+    effects: EffectState[] = [];
     destroyListeners: (() => void)[] = [];
     stateIdx = 0;
+    effectsIdx = 0;
     refIdx = 0;
     states: State[] = [];
     refs: Ref<any>[] = [];
     initialized = false;
+
     useState<T>(t: T, fireStateChange: () => void): UseStateReturnType<T> {
         if (!this.initialized) {
             this.states.push({ value: t });
@@ -78,6 +116,7 @@ export class ElementState {
     reset() {
         this.stateIdx = 0;
         this.refIdx = 0;
+        this.effectsIdx = 0;
     }
     onCreated() {
         this.initialized = true;

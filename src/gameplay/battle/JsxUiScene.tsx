@@ -9,6 +9,7 @@ import { ItemListSettings } from "./menu/ItemListSettings";
 import { render } from "@dragonquest/jsx/jsx-runtime";
 import { Gui } from "./menu/Gui";
 import { phaserJsxHelper } from "../../jsx/phaserJsxHelper";
+import { Example } from "../../jsx/Example";
 
 export const SCENE_KEY = "JsxUiScene";
 
@@ -36,7 +37,7 @@ export class JsxUiScene extends Phaser.Scene {
         };
 
         this.ui = render(this, <Gui units={[this.model]} />, phaserJsxHelper);
-        this.ui.active=true;
+        //this.ui = render(this, <Example/>, phaserJsxHelper);
         this.add.existing(this.ui);
 
         this.input.keyboard.on("keydown", this.onKeyInput, this);

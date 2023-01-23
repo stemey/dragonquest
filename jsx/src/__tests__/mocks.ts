@@ -17,8 +17,9 @@ export class MockObjectFactory
     create(scene: undefined, props: any): MockContainer {
         return new MockContainer(props.children || [], props, this.tagName);
     }
-    update(gameObject: MockContainer, props: any): void {
+    update(gameObject: MockContainer, props: any) {
         gameObject.props = props;
+        return false;
     }
 }
 
@@ -42,6 +43,6 @@ export const mockHelper: ContainerHelper<MockContainer> = {
         }
     },
     remove: function (con: MockContainer, idx: number): void {
-        con.children.splice(idx,1);
-    }
+        con.children.splice(idx, 1);
+    },
 };

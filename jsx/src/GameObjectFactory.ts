@@ -6,5 +6,5 @@ export interface GameObjectFactory<
 > {
     create(scene: S, props: P): T;
 
-    update(gameObject: T, props: P): void;
+    update(gameObject: T, props: P): boolean;
 }

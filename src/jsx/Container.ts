@@ -1,9 +1,11 @@
 import Phaser, { Scene } from "phaser";
 import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
+import { Ref } from "@dragonquest/jsx/jsx-runtime";
 
 export interface ContainerProps {
-    x: number;
-    y: number;
+    x?: number;
+    y?: number;
+    ref?: ((gameObject: any) => void) | Ref<any> ;
 }
 
 export const Container: Tag<ContainerProps> = () => ({
@@ -12,8 +14,14 @@ export const Container: Tag<ContainerProps> = () => ({
         return new Phaser.GameObjects.Container(scene, x, y);
     },
     update(container: Phaser.GameObjects.Container, props: ContainerProps) {
+        // x and y could also be set by parent.
         const { x, y } = props;
-        container.setX(x);
-        container.setY(y);
+        if (x) {
+            container.setX(x);
+        }
+        if (y) {
+            container.setY(y);
+        }
+        return false;
     },
 });

@@ -5,13 +5,15 @@ import { getBounds, setPosition, setWidth } from "./utils";
 export interface VerticalListProps {
     verticalGap: number;
     width?: number;
+    x?: number;
+    y?: number;
 }
 
 // Phaser.GameObjects.Components.Alpha, Phaser.GameObjects.Components.BlendMode, Phaser.GameObjects.Components.ComputedSize, Phaser.GameObjects.Components.Crop, Phaser.GameObjects.Components.Depth, Phaser.GameObjects.Components.Flip, Phaser.GameObjects.Components.GetBounds, Phaser.GameObjects.Components.Mask, Phaser.GameObjects.Components.Origin, Phaser.GameObjects.Components.Pipeline, Phaser.GameObjects.Components.ScrollFactor, Phaser.GameObjects.Components.Tint, Phaser.GameObjects.Components.Transform, Phaser.GameObjects.Components.Visible
 
 class VerticalListContainer extends Phaser.GameObjects.Container {
     constructor(scene: Scene, private props: VerticalListProps) {
-        super(scene, 0, 0);
+        super(scene, props.x || 0, props.y || 0);
     }
 
     add(child: GameObjects.GameObject) {
@@ -62,5 +64,7 @@ export const VerticalList: Tag<VerticalListProps> = () => ({
                 //setWidth(c, props.width);
             });
         }
+        container.setPosition(props.x || 0, props.y || 0);
+        return false;
     },
 });
