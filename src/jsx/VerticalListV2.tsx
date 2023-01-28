@@ -27,7 +27,6 @@ export const VerticalListV2 = (props: {
         });
     }
 
-    console.log("x",props.x)
 
     return (
         <Container x={props.x} y={props.y} ref={refCallback}>

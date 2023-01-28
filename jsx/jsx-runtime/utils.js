@@ -3,6 +3,9 @@ export const create = (scene, element, helper, currentId = "") => {
     return evaluateTag(scene, element, helper, currentId);
 };
 const evaluateTag = (scene, element, helper, currentId = "") => {
+    if (!element) {
+        return undefined;
+    }
     const currentState = globalState.current;
     if (!currentState) {
         throw new Error("global state not set");
@@ -22,10 +25,15 @@ const evaluateTag = (scene, element, helper, currentId = "") => {
                 children = [element.children];
             }
             children.forEach((c, idx) => {
+                if (!c) {
+                    return;
+                }
                 const newId = currentId + createId(c, idx);
                 currentState.currentElementId = newId;
                 const child = create(scene, c, helper, newId);
-                helper.add(gameObject, child);
+                if (child) {
+                    helper.add(gameObject, child);
+                }
             });
         }
         return gameObject;
@@ -58,8 +66,12 @@ export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") =>
             if (!Array.isArray(old?.children)) {
                 oldElementChildren = [old?.children];
             }
-            const oldChildren = oldElementChildren?.map((c, idx) => currentId + createId(c, idx)) || [];
-            const newChildren = children.map((c, idx) => currentId + createId(c, idx)) || [];
+            const oldChildren = oldElementChildren
+                ?.filter((c) => !!c)
+                .map((c, idx) => currentId + createId(c, idx)) || [];
+            const newChildren = children
+                .filter((c) => !!c)
+                .map((c, idx) => currentId + createId(c, idx)) || [];
             const toBeRemoved = oldChildren
                 .map((key, idx) => ({ key, idx }))
                 .filter((data) => newChildren.indexOf(data.key) < 0)
@@ -72,12 +84,16 @@ export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") =>
                 const elementState = globalState.current?.stateMap.get(removed[0]);
                 elementState?.destroy();
             });
-            children.forEach((c, idx) => {
+            children
+                .filter((c) => !!c)
+                .forEach((c, idx) => {
                 const newId = currentId + createId(c, idx);
                 const oldIdx = oldChildren.indexOf(newId);
                 if (oldIdx < 0) {
                     const newObject = create(scene, c, helper, newId);
-                    helper.add(gameObject, newObject);
+                    if (newObject) {
+                        helper.add(gameObject, newObject);
+                    }
                 }
                 else {
                     if (oldIdx !== idx) {
@@ -103,7 +119,7 @@ export const render = (scene, element, helper) => {
     const globalState = new GlobalState();
     const value = wrapInGlobalState(globalState, () => create(scene, element, helper));
     function renderInternally() {
-        while (globalState.rerender) {
+        while (!!value && globalState.rerender) {
             globalState.rerender = false;
             wrapInGlobalState(globalState, () => {
                 reconcile(scene, element, element, value, helper);

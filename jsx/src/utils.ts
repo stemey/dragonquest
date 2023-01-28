@@ -16,7 +16,10 @@ const evaluateTag = <S, P extends object, T>(
     element: Element<any>,
     helper: ContainerHelper<T>,
     currentId: string = ""
-): T => {
+): T | undefined => {
+    if (!element) {
+        return undefined;
+    }
     const currentState = globalState.current;
     if (!currentState) {
         throw new Error("global state not set");
@@ -37,10 +40,15 @@ const evaluateTag = <S, P extends object, T>(
                 children = [element.children as unknown as Element<any>];
             }
             children.forEach((c, idx) => {
+                if (!c) {
+                    return;
+                }
                 const newId = currentId + createId(c, idx);
                 currentState.currentElementId = newId;
                 const child = create(scene, c, helper, newId);
-                helper.add(gameObject, child);
+                if (child) {
+                    helper.add(gameObject, child);
+                }
             });
         }
         return gameObject;
@@ -75,7 +83,7 @@ export const reconcile = <S, G extends object>(
     if ("update" in creator && "create" in creator) {
         const rerender = creator.update(gameObject, nu.props);
         if (rerender && globalState.current) {
-            globalState.current.rerender=true;
+            globalState.current.rerender = true;
         }
         handleRef(nu, gameObject);
 
@@ -89,11 +97,13 @@ export const reconcile = <S, G extends object>(
                 oldElementChildren = [old?.children as unknown as Element<any>];
             }
             const oldChildren =
-                oldElementChildren?.map(
-                    (c, idx) => currentId + createId(c, idx)
-                ) || [];
+                oldElementChildren
+                    ?.filter((c) => !!c)
+                    .map((c, idx) => currentId + createId(c, idx)) || [];
             const newChildren =
-                children.map((c, idx) => currentId + createId(c, idx)) || [];
+                children
+                    .filter((c) => !!c)
+                    .map((c, idx) => currentId + createId(c, idx)) || [];
             const toBeRemoved = oldChildren
                 .map((key, idx) => ({ key, idx }))
                 .filter((data) => newChildren.indexOf(data.key) < 0)
@@ -109,21 +119,25 @@ export const reconcile = <S, G extends object>(
                 );
                 elementState?.destroy();
             });
-            children.forEach((c, idx) => {
-                const newId = currentId + createId(c, idx);
-                const oldIdx = oldChildren.indexOf(newId);
-                if (oldIdx < 0) {
-                    const newObject = create(scene, c, helper, newId);
-                    helper.add(gameObject, newObject);
-                } else {
-                    if (oldIdx !== idx) {
-                        helper.move(gameObject, oldIdx, idx);
+            children
+                .filter((c) => !!c)
+                .forEach((c, idx) => {
+                    const newId = currentId + createId(c, idx);
+                    const oldIdx = oldChildren.indexOf(newId);
+                    if (oldIdx < 0) {
+                        const newObject = create(scene, c, helper, newId);
+                        if (newObject) {
+                            helper.add(gameObject, newObject);
+                        }
+                    } else {
+                        if (oldIdx !== idx) {
+                            helper.move(gameObject, oldIdx, idx);
+                        }
+                        const childGo = helper.get(gameObject, oldIdx);
+                        currentState.currentElementId = newId;
+                        reconcile(scene, c, c, childGo, helper, newId);
                     }
-                    const childGo = helper.get(gameObject, oldIdx);
-                    currentState.currentElementId = newId;
-                    reconcile(scene, c, c, childGo, helper, newId);
-                }
-            });
+                });
         }
         return gameObject;
     }
@@ -150,15 +164,15 @@ export const render = <S, G extends object>(
     helper: ContainerHelper<G>
 ) => {
     const globalState = new GlobalState();
-    
+
     const value = wrapInGlobalState(globalState, () =>
         create(scene, element, helper)
     );
 
-    function renderInternally(){
-        while (globalState.rerender) {
-            globalState.rerender=false;
-    
+    function renderInternally() {
+        while (!!value && globalState.rerender) {
+            globalState.rerender = false;
+
             wrapInGlobalState(globalState, () => {
                 reconcile(scene, element, element, value, helper);
             });
@@ -169,13 +183,10 @@ export const render = <S, G extends object>(
 
     globalState.onStateChange(() => {
         renderInternally();
-     });
-    
+    });
 
     return value;
 };
-
-
 
 export const globalState: { current: GlobalState | undefined } = {
     current: undefined,

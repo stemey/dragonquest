@@ -1,8 +1,8 @@
 import Phaser, { GameObjects, Scene, Tilemaps } from "phaser";
 import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
-import { Padding } from "../gameplay/battle/menu/Padding";
-import { getBounds, setPosition } from "./utils";
-import { JsxContainer } from "./JsxContainer";
+import { Padding } from "../../gameplay/battle/menu/Padding";
+import { getBounds, setPosition } from "../utils";
+import { JsxContainer } from "../JsxContainer";
 
 export interface DivProps {
     area?: string;
@@ -16,7 +16,7 @@ export interface DivProps {
     y?: number;
 }
 
-export const Div: Tag<DivProps> = () => ({
+export const DivV: Tag<DivProps> = () => ({
     create(scene: Scene, props: DivProps) {
         return new DivContainer(scene, props);
     },

@@ -1,5 +1,5 @@
 import { render, useState } from "@dragonquest/jsx/jsx-runtime";
-import { Div } from "./Div";
+import { Div } from "./div/Div";
 import { Text } from "./Text";
 import { Transform } from "./Transform";
 import { VerticalListV2 } from "./VerticalListV2";

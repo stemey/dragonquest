@@ -38,7 +38,10 @@ export class JsxUiScene extends Phaser.Scene {
 
         this.ui = render(this, <Gui units={[this.model]} />, phaserJsxHelper);
         //this.ui = render(this, <Example/>, phaserJsxHelper);
-        this.add.existing(this.ui);
+        if (this.ui) {
+            this.add.existing(this.ui);
+
+        }
 
         this.input.keyboard.on("keydown", this.onKeyInput, this);
     }

@@ -30,6 +30,9 @@ describe("create", () => {
             { tag: TagOne, props: { x: 0 } },
             mockHelper
         );
+        if (!m) {
+            fail("error")
+        }
         expect(m).toBeDefined;
         expect(m.props.x).toBe(0);
     });
@@ -43,6 +46,9 @@ describe("create", () => {
             },
             mockHelper
         );
+        if (!m) {
+            fail("error")
+        }
         expect(m).toBeDefined;
         expect(m.children).toHaveLength(1);
         expect(m.children[0].props.x).toBe(3);
@@ -56,6 +62,9 @@ describe("create", () => {
             },
             mockHelper
         );
+        if (!m) {
+            fail("error")
+        }
         expect(m).toBeDefined;
         expect(m.props.x).toBe(5);
     });
@@ -74,6 +83,9 @@ describe("create", () => {
             },
             mockHelper
         );
+        if (!m) {
+            fail("error")
+        }
         myCb(10);
         const stateMap = globalState.current?.stateMap;
         expect(stateMap?.get("VirtualTag")?.states).toHaveLength(1);

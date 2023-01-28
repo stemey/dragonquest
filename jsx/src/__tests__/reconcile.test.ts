@@ -7,7 +7,7 @@ import { MockContainer, mockHelper, MockObjectFactory } from "./mocks";
 const TagOne = () => new MockObjectFactory("TagOne");
 const TagTwo = () => new MockObjectFactory("TagTwo");
 
-let dispose=jest.fn();
+let dispose = jest.fn();
 
 const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
     const [length, setLength] = useState(5);
@@ -35,6 +35,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         reconcile<undefined, MockContainer>(
             undefined,
             initial,
@@ -56,6 +59,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         reconcile<undefined, MockContainer>(
             undefined,
             initial,
@@ -93,6 +99,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         const oldFirstChild = m.children[0];
         reconcile<undefined, MockContainer>(
             undefined,
@@ -114,7 +123,7 @@ describe("reconcile", () => {
         expect(m.children).toHaveLength(1);
         expect(m.children[0].props.x).toBe(9);
 
-        expect(dispose).toBeCalledTimes(1)
+        expect(dispose).toBeCalledTimes(1);
     });
     it("switch child", () => {
         const initial = {
@@ -127,6 +136,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         reconcile<undefined, MockContainer>(
             undefined,
             initial,
@@ -156,6 +168,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         reconcile<undefined, MockContainer>(
             undefined,
             initial,
@@ -185,6 +200,9 @@ describe("reconcile", () => {
             initial,
             mockHelper
         );
+        if (!m) {
+            fail("error");
+        }
         myCb(10);
         reconcile(undefined, initial, initial, m, mockHelper);
         expect(m.props.x).toBe(10);

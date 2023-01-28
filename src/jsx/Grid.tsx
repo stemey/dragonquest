@@ -37,6 +37,7 @@ export const Grid = (props: GridProps) => {
     const children = props.children || [];
     const x = props.x || 0;
     const y = props.y || 0;
+    console.log("grid pos",x,y)
     children.forEach((c, idx) => {
         if (c.props.area && geom[c.props.area]) {
             const areaGeom = geom[c.props.area];

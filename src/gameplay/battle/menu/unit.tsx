@@ -4,10 +4,9 @@ import { Item } from "./Item";
 import { ObservableItemModel } from "./ObservableItemModel";
 import { createModelProxy } from "./createModelProxy";
 import { Potion } from "../model/Potion";
-import { Div } from "../../../jsx/Div";
+import { Div } from "../../../jsx/div/Div";
 import { VerticalListV2 } from "../../../jsx/VerticalListV2";
 import { Sprite } from "../../../jsx/Sprite";
-import { HorizontalListV2 } from "../../../jsx/HorizontalListV2";
 import { Text } from "../../../jsx/Text";
 import { Grid, GridItem } from "../../../jsx/Grid";
 
@@ -23,7 +22,7 @@ export const Unit = (props: { unit: BattleUnit }) => {
                 item={m}
                 config={{
                     fontSize: "8",
-                    padding: { left: 23, top: 34, bottom: 1, right: 0 },
+                    padding: { left: 0, top: 0, bottom: 0, right: 0 },
                     selectedBorderColor: 0xff000,
                     textColor,
                     width: 100,
@@ -42,7 +41,7 @@ export const Unit = (props: { unit: BattleUnit }) => {
                 item={m}
                 config={{
                     fontSize: "8",
-                    padding: { left: 23, top: 34, bottom: 1, right: 0 },
+                    padding: { left: 0, top: 0, bottom: 0, right: 0 },
                     selectedBorderColor: 0xff000,
                     textColor,
                     width: 100,
@@ -75,7 +74,7 @@ export const Unit = (props: { unit: BattleUnit }) => {
             x={50}
             y={20}
             margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-            padding={{ left: 20, top: 20, right: 0, bottom: 0 }}
+            padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
             fillColor={0x3090ad}
         >
             <Grid areas={areas} columns={columns} rows={rows}>
@@ -117,7 +116,7 @@ export const Unit = (props: { unit: BattleUnit }) => {
                 <GridItem area="weapons">
                     <Div
                         margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                        padding={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                        padding={{ left: 10, top: 10, right: 0, bottom: 0 }}
                         fillColor={0x55}
                         fillAlpha={0.5}
                     >
