@@ -5,9 +5,10 @@ import { getBounds, setPosition } from "./utils";
 import { JsxContainer } from "./JsxContainer";
 
 export interface DivProps {
+    area?: string;
     margin: Padding;
     padding: Padding;
-    width: number;
+    width?: number;
     height?: number;
     fillColor?: number;
     fillAlpha?: number;
@@ -30,9 +31,10 @@ export class DivContainer
 {
     private rectangle: Phaser.GameObjects.Rectangle;
     private innerRectangle: Phaser.GameObjects.Rectangle;
-    private currentContentHeight=0;
+    private currentContentHeight = 0;
     constructor(scene: Scene, private props: DivProps) {
-        super(scene, 0, 0);
+        super(scene, props.x || 0, props.y || 0);
+        props.width = props.width || 0;
         this.rectangle = new Phaser.GameObjects.Rectangle(
             scene,
             props.margin.left + props.width / 2,
@@ -55,7 +57,7 @@ export class DivContainer
         );
         //this.rectangle.visible = false;
         this.add(this.innerRectangle);
-        this.currentContentHeight = this.getContentHeight(props)
+        this.currentContentHeight = this.getContentHeight(props);
     }
     getAtJsx(idx: number): GameObjects.Container {
         //skip rectangle
@@ -114,15 +116,15 @@ export class DivContainer
                     props.margin.left + props.padding.left,
                     props.margin.top + props.padding.top
                 );
-                
             }
         });
         this.props = props;
         this.updateHeight(props, contentHeight);
         this.innerRectangle.updateDisplayOrigin();
         this.rectangle.updateDisplayOrigin();
-        const changed = this.currentContentHeight!==contentHeight;
-        this.currentContentHeight=contentHeight
+
+        const changed = this.currentContentHeight !== contentHeight;
+        this.currentContentHeight = contentHeight;
         return changed;
     }
 
@@ -143,7 +145,7 @@ export class DivContainer
     }
 
     updateHeight(props: DivProps, contentHeight: number) {
-       if (!props.height) {
+        if (!props.height) {
             this.rectangle.setSize(
                 getWidth(props, false, props.width),
                 getHeight(props, false, contentHeight)
@@ -152,6 +154,15 @@ export class DivContainer
             this.innerRectangle.setSize(
                 getWidth(props, true, props.width),
                 getHeight(props, true, contentHeight)
+            );
+        } else if (props.width && props.height) {
+            this.innerRectangle.setSize(
+                getWidth(props, true),
+                getHeight(props, true)
+            );
+            this.rectangle.setSize(
+                getWidth(props, false),
+                getHeight(props, false)
             );
         }
     }
@@ -171,13 +182,17 @@ function getX(props: DivProps, full: boolean, contentWidth?: number) {
     if (full) {
         return Math.round(getWidth(props, full, contentWidth) / 2);
     } else {
-        return Math.round(getWidth(props, full, contentWidth) / 2 + props.margin.left);
+        return Math.round(
+            getWidth(props, full, contentWidth) / 2 + props.margin.left
+        );
     }
 }
 function getY(props: DivProps, full: boolean, contentHeight?: number) {
     if (full) {
         return Math.round(getHeight(props, full, contentHeight) / 2);
     } else {
-        return Math.round(getHeight(props, full, contentHeight) / 2 + props.margin.top);
+        return Math.round(
+            getHeight(props, full, contentHeight) / 2 + props.margin.top
+        );
     }
 }

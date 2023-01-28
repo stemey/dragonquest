@@ -6,20 +6,30 @@ export interface SpriteProps {
     frame: string;
     x?: number;
     y?: number;
-    scaleX?: number;
-    scaleY?: number;
+    height?: number;
+    width?: number;
 }
 
 function update(sprite: Phaser.GameObjects.Sprite, props: SpriteProps) {
-    const scaleX = props.scaleX || 1;
+    /* const scaleX = props.scaleX || 1;
     const scaleY = props.scaleY || scaleX;
     if (props.scaleX) {
         sprite.setScale(scaleX, scaleY);
-    }
+    }*/
     const bounds = sprite.getBounds();
     const x = (props.x || 0) + bounds.width / 2;
     const y = (props.y || 0) + bounds.height / 2;
     setPosition(sprite, x, y);
+    const previousScale = sprite.scale;
+    if (props.width && props.height) {
+        const scale = Math.min(
+            props.width / (bounds.width / previousScale),
+            props.height / (bounds.height / previousScale)
+        );
+        sprite.setScale(scale);
+    } else if (props.width) {
+        sprite.setScale(props.width / (bounds.width / previousScale));
+    }
 
     return false;
 }

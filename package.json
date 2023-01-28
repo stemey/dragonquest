@@ -16,7 +16,7 @@
         "generate:resolve-json-refs": "node scripts/resolve-ref.js",
         "generate:generate-map-types": "node scripts/generate-map-types.js",
         "generate": "run-p generate:*",
-        "start": "webpack serve",
+        "start": "webpack serve ",
         "watch:webpack": "webpack --watch",
         "watch:general": "npm-watch",
         "watch": "run-p watch:*",
