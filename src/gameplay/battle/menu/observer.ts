@@ -7,7 +7,8 @@ import {
 import { IReactionDisposer, reaction, trace } from "mobx";
 
 export const observer = <P>(fn: (props: P) => Element<any>) => {
-    return (props: P) => {
+    const x =  function observing(props: P) {
+        
         const [changes, setChanges] = useState(0);
         const trackingRef = useRef(false);
         const disposeRef = useRef<IReactionDisposer>();
@@ -17,7 +18,7 @@ export const observer = <P>(fn: (props: P) => Element<any>) => {
                 () => {
                     rendering = fn(props);
                     return rendering;
-                }, 
+                },
                 () => {
                     setChanges(changes + 1);
                 },
@@ -43,4 +44,6 @@ export const observer = <P>(fn: (props: P) => Element<any>) => {
 
         return rendering;
     };
+    console.log("my name",x.name)
+    return x;
 };

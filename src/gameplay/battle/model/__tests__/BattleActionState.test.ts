@@ -1,6 +1,7 @@
 import { Unit } from "../../../../sprites/Unit";
 import { Attack } from "../../Attack";
 import { BattleActionState } from "../BattleActionState";
+import { BattleModel } from "../BattleModel";
 import { Target } from "../target";
 import { enemy1, enemy2, weapon } from "./fixtures";
 
@@ -10,12 +11,20 @@ const targets = [new Target(unit1), new Target(unit2)];
 
 describe("BattleActionState", () => {
     it("init", () => {
-        const action = new BattleActionState(new Attack(weapon), targets);
+        const action = new BattleActionState(
+            new Attack(weapon),
+            targets,
+            null as any
+        );
         expect(action.selected).toBeFalsy();
         expect(action.targets[0].selected).toBeFalsy();
     });
     it("next", () => {
-        const action = new BattleActionState(new Attack(weapon), targets);
+        const action = new BattleActionState(
+            new Attack(weapon),
+            targets,
+            null as any
+        );
         action.selected = true;
         action.next();
         expect(action.targets[0].selected).toBeTruthy();
@@ -28,7 +37,11 @@ describe("BattleActionState", () => {
         expect(action.targets[1].selected).toBeFalsy();
     });
     it("previous", () => {
-        const action = new BattleActionState(new Attack(weapon), targets);
+        const action = new BattleActionState(
+            new Attack(weapon),
+            targets,
+            null as any
+        );
         action.selected = true;
         action.previous();
         expect(action.targets[0].selected).toBeFalsy();
@@ -41,7 +54,11 @@ describe("BattleActionState", () => {
         expect(action.targets[1].selected).toBeTruthy();
     });
     it("confirm", () => {
-        const action = new BattleActionState(new Attack(weapon), targets);
+        const action = new BattleActionState(
+            new Attack(weapon),
+            targets,
+            null as any
+        );
         action.selected = true;
         action.next();
         action.confirm();

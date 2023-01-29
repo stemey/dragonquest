@@ -1,9 +1,12 @@
 import { observable } from "mobx";
 import { Unit } from "../../../sprites/Unit";
+import { Character } from "../../types/Character";
 import { BattleActionState } from "./BattleActionState";
+import { BattleModel } from "./BattleModel";
 import { EffectState } from "./EffectState";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 import { Potion } from "./Potion";
+import { previous } from "./select";
 import { SelectableGroup } from "./SelectableGroup";
 import { Stats } from "./Stats";
 import { Target } from "./target";
@@ -23,22 +26,33 @@ export class BattleUnit implements InteractiveSelectable {
     melee = observable.box(true);
     stats: Stats = new Stats();
     private selectableGroups: SelectableGroup[];
+    public character: Character;
+    public targetedBy = observable.array<BattleActionState>([]);
 
-    constructor(unit: Unit, targets: Target[]) {
+    constructor(
+        unit: Unit,
+        targets: Target[],
+        public battleModel: BattleModel
+    ) {
+        this.character = unit.character;
         this.name.set(unit.name);
         this.hp.set(unit.maxHp);
         this.maxHp.set(unit.maxHp);
         unit.attacks.map((a) => {
-            this.powers.push(new BattleActionState(a, targets));
+            this.powers.push(new BattleActionState(a, targets, this));
         });
         this.selectableGroups = [
-            new SelectableGroup(this.powers),
             new SelectableGroup(this.potions),
+            new SelectableGroup(this.powers),
         ];
     }
 
     get selectedGroup(): SelectableGroup | undefined {
         return this.selectableGroups.find((s) => s.selected);
+    }
+
+    get selectedTargets() {
+        return this.powers.map((a) => a.selectedTarget).filter((t) => !!t);
     }
 
     get selected() {
@@ -52,7 +66,7 @@ export class BattleUnit implements InteractiveSelectable {
     next() {
         const currentGroup = this.selectedGroup;
         if (!currentGroup) {
-            this.selectableGroups[0].select();
+            this.selectableGroups[0].select(true);
             return false;
         }
         const atTheEnd = currentGroup.next();
@@ -62,24 +76,26 @@ export class BattleUnit implements InteractiveSelectable {
             if (newIndex >= this.selectableGroups.length) {
                 return true;
             }
-            this.selectableGroups[newIndex].select();
+            this.selectableGroups[newIndex].select(true);
         }
         return false;
     }
     previous() {
         const currentGroup = this.selectedGroup;
         if (!currentGroup) {
-            this.selectableGroups[0].select();
+            this.selectableGroups[this.selectableGroups.length-1].select(false);
             return false;
         }
         const atTheEnd = currentGroup.previous();
         if (atTheEnd) {
             const index = this.selectableGroups.indexOf(currentGroup);
             let newIndex = index - 1;
-            if (index < 0) {
+            if (newIndex < 0) {
                 return true;
             }
-            this.selectableGroups[newIndex].select();
+            const newGroup = this.selectableGroups[newIndex];
+            newGroup.select(false);
+
         }
         return false;
     }
@@ -103,7 +119,6 @@ export class BattleUnit implements InteractiveSelectable {
     get disabled() {
         return false;
     }
-
 
     get actions() {
         return this.powers

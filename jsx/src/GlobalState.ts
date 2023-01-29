@@ -96,6 +96,9 @@ export class ElementState {
             this.states.push({ value: t });
         }
         const state = this.states[this.stateIdx];
+        if (!state) {
+            console.warn("cannot find state for idx",this.stateIdx)
+        }
         this.stateIdx++;
         return [
             state.value,

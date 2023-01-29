@@ -7,6 +7,7 @@ import { getBounds } from "./utils";
 export const VerticalListV2 = (props: {
     x?: number;
     y?: number;
+    width?:number;
     children?: Element<{}>[];
 }) => {
     const [ref, setRef] = useState<GameObjects.Container | undefined>(
@@ -26,6 +27,12 @@ export const VerticalListV2 = (props: {
             currentHeight += height;
         });
     }
+    props.children?.forEach((c, idx) => {
+        if (props.width  && !c.props.width) {
+            c.props.width = props.width;
+        }
+       
+    });
 
 
     return (

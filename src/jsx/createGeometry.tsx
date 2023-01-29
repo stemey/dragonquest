@@ -20,14 +20,16 @@ export function getValue(values: number[], idx: number, gap: number = 0) {
 }
 
 export function createGeometry(props: GridProps) {
+    const height = props.height;
+    const width = props.width;
     const columns = props.columns
         .split(" ")
         .filter((d) => d.length !== 0)
-        .map((d) => parseInt(d, 10));
+        .map((d) => parseSize(d, width));
     const rows = props.rows
         .split(" ")
         .filter((d) => d.length !== 0)
-        .map((d) => parseInt(d, 10));
+        .map((d) => parseSize(d, height));
 
     const areaRows = props.areas
         .split("\n")
@@ -77,4 +79,17 @@ export function createGeometry(props: GridProps) {
         };
     });
     return areas;
+}
+function parseSize(d: string, maxSize?: number): number {
+    const match = d.match(/.*%$/);
+    if (match) {
+        const percentage = parseInt(d.substring(0, d.length - 1), 10);
+        if (!maxSize) {
+            console.error("no maxSize givem, so cannot derive percentage");
+            return 1;
+        }
+        return (percentage / 100) * maxSize;
+    } else {
+        return parseInt(d, 10);
+    }
 }

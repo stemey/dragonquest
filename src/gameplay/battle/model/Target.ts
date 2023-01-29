@@ -10,6 +10,10 @@ export class Target implements Selectable {
 
     }
 
+    get name() {
+        return this.unit.name
+    }
+
     get selected() {
         return this._selected.get();
     }

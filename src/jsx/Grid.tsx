@@ -5,7 +5,7 @@ import { GridProps } from "./GridProps";
 
 export interface GridItemProps {
     area: string;
-    children?: Element<any>;
+    children?: Element<any>[];
     x?: number;
     y?: number;
     height?: number;
@@ -13,7 +13,10 @@ export interface GridItemProps {
 }
 
 export const GridItem = (props: GridItemProps) => {
-    const child = { ...props.children };
+    if (!props.children || props.children.length<0) {
+        return
+    }
+    const child = props.children[0];
     if (!child.props) {
         child.props = {};
     }
@@ -21,14 +24,7 @@ export const GridItem = (props: GridItemProps) => {
     child.props.y = props.y;
     child.props.height = props.height;
     child.props.width = props.width;
-    console.log(
-        "grid",
-        props.area,
-        props.x,
-        props.y,
-        props.width,
-        props.height
-    );
+    
     return child;
 };
 
@@ -37,7 +33,6 @@ export const Grid = (props: GridProps) => {
     const children = props.children || [];
     const x = props.x || 0;
     const y = props.y || 0;
-    console.log("grid pos",x,y)
     children.forEach((c, idx) => {
         if (c.props.area && geom[c.props.area]) {
             const areaGeom = geom[c.props.area];

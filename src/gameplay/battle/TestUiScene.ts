@@ -1,5 +1,4 @@
 import * as Phaser from "phaser";
-import { ItemList } from "./menu/ItemList";
 import { BattleUnit } from "./model/BattleUnit";
 import { ObservableItemModel } from "./menu/ObservableItemModel";
 import characters from "../../config/global/characters.json";
@@ -8,6 +7,7 @@ import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
 import { ItemListSettings } from "./menu/ItemListSettings";
+import { BattleModel } from "./model/BattleModel";
 
 export const SCENE_KEY = "TestUiScene";
 
@@ -22,7 +22,7 @@ export class TestUiScene extends Phaser.Scene {
         const knight = characters.knight as Character;
         knight.attacks.push(powers.axe as Power);
         knight.attacks.push(powers["long sword"] as Power);
-        this.model = new BattleUnit(new Unit(knight), []);
+        this.model = new BattleUnit(new Unit(knight), [], new BattleModel());
        
         /*
         const powerItems: ObservableItemModel[] = this.model.powers.map((a) =>

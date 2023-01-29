@@ -1,5 +1,4 @@
 import { IObservableArray } from "mobx";
-import { InteractiveSelectable } from "./InteractiveSelectable";
 import { Selectable } from "./Selectable";
 
 export const next = (selectables: Selectable[]|IObservableArray<Selectable>, cyclic: boolean) => {
@@ -31,7 +30,7 @@ export const getSelected = <T extends Selectable>(selectables: T[]|IObservableAr
 export const previous = (selectables: Selectable[]|IObservableArray<Selectable>, cyclic: boolean) => {
     const selected = selectables.find((s) => s.selected);
     if (!selected) {
-        selectables[0].selected = true;
+        selectables[selectables.length-1].selected = true;
         return false;
     }
     let index = selectables.indexOf(selected);

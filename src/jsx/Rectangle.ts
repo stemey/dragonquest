@@ -29,6 +29,7 @@ export const Rectangle: Tag<RectangleProps> = () => ({
         );
         rectangle.updateDisplayOrigin();
         rectangle.setSize(props.width, props.height);
+        rectangle.setFillStyle(props.fillColor,props.fillAlpha)
         return false;
     },
 });

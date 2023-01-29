@@ -8,6 +8,8 @@ export interface GridProps {
     gap?: { x: number; y: number; } | number;
     x?:number;
     y?:number;
+    width?:number;
+    height?:number;
     children?: Element<{
         x?: number;
         y?: number;

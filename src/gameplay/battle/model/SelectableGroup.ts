@@ -23,9 +23,10 @@ export class SelectableGroup implements InteractiveSelectable {
     deselect() {
         this.selectables.forEach((s) => (s.selected = false));
     }
-    select() {
+    select(first:boolean) {
         if (!this.selected && this.selectables.length > 0) {
-            this.selectables[0].selected = true;
+            const index = first?0:this.selectables.length-1;
+            this.selectables[index].selected = true;
         }
     }
     selectNext() {

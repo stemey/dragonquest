@@ -1,6 +1,5 @@
 import { Unit } from "../../../../sprites/Unit";
-import { Attack } from "../../Attack";
-import { BattleActionState } from "../BattleActionState";
+import { BattleModel } from "../BattleModel";
 import { BattleUnit } from "../BattleUnit";
 import { Target } from "../target";
 import { enemy1, enemy2, weapon, knight } from "./fixtures";
@@ -11,11 +10,11 @@ const targets = [new Target(unit1), new Target(unit2)];
 const hero = new Unit(knight);
 describe("BattleUnit", () => {
     it("init", () => {
-        const unit = new BattleUnit(hero, targets);
+        const unit = new BattleUnit(hero, targets,new BattleModel());
         expect(unit.selected).toBeFalsy();
     });
     it("next", () => {
-        const unit = new BattleUnit(hero, targets);
+        const unit = new BattleUnit(hero, targets,new BattleModel());
         let atTheEnd = unit.next();
         expect(atTheEnd).toBeFalsy();
         expect(unit.powers[0].selected).toBeTruthy();
@@ -31,7 +30,7 @@ describe("BattleUnit", () => {
         expect(atTheEnd).toBeTruthy();
     });
     it("confirm", () => {
-        const unit = new BattleUnit(hero, targets);
+        const unit = new BattleUnit(hero, targets, new BattleModel());
         let atTheEnd = unit.next();
         expect(atTheEnd).toBeFalsy();
         expect(unit.powers[0].selected).toBeTruthy();

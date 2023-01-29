@@ -1,10 +1,14 @@
-import { observable } from "mobx";
+import { IObservableValue, observable } from "mobx";
 import { Unit } from "../../../sprites/Unit";
 import { BattleUnit } from "./BattleUnit";
 import { next, previous } from "./select";
 import { Target } from "./target";
 
 export class BattleModel {
+    findUnitByName(targetName: string) {
+       return this.heroes.concat(this.enemies).find(u=>u.name.get()===targetName)
+    }
+
     heroes = observable.array<BattleUnit>([]);
     enemies = observable.array<BattleUnit>([]);
     endTurn = observable.box(false);
@@ -14,10 +18,10 @@ export class BattleModel {
         this.enemies.clear();
         const targets = heroes.concat(enemies).map((u) => new Target(u));
         heroes.forEach((h) => {
-            this.heroes.push(new BattleUnit(h, targets));
+            this.heroes.push(new BattleUnit(h, targets, this));
         });
         enemies.forEach((h) => {
-            this.enemies.push(new BattleUnit(h, targets));
+            this.enemies.push(new BattleUnit(h, targets, this));
         });
         this.heroes[0].selected = true;
     }
@@ -27,26 +31,37 @@ export class BattleModel {
     }
 
     up() {
-        if (this.endTurn.get()) {
+      /*  if (this.endTurn.get()) {
             this.endTurn.set(false);
             this.heroes[this.heroes.length - 1].next();
-        }
+        }*/
+        
         const atTheEnd = this.currentHero.previous();
         if (atTheEnd) {
+            previous(this.heroes,true)
+            this.currentHero.previous();
+
+        }
+
+       /* if (atTheEnd) {
             const atTheEndOfHeroes = previous(this.heroes, false);
             this.endTurn.set(true);
-        }
+        }*/
     }
     down() {
-        if (this.endTurn.get()) {
+       /* if (this.endTurn.get()) {
             this.endTurn.set(false);
             this.heroes[0].next();
-        }
+        }*/
         const atTheEnd = this.currentHero.next();
         if (atTheEnd) {
+            next(this.heroes,true)
+            this.currentHero.next();
+        }
+        /*if (atTheEnd) {
             const atTheEndOfHeroes = next(this.heroes, false);
             this.endTurn.set(true);
-        }
+        }*/
     }
     left() {
         this.currentHero.selectNext();

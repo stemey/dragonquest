@@ -45,12 +45,13 @@ export const Div = (props: DivProps) => {
         c.props.x = props.padding.left
         c.props.y = props.padding.top
         if (!c.props.width) {
-            c.props.width = currentWidth-props.padding.left+props.padding.right
-
+            c.props.width = currentWidth-props.padding.left-props.padding.right
+        } 
+        if (!c.props.height) {
+            c.props.height = currentHeight-props.padding.top-props.padding.bottom
         } 
     });
 
-    console.log("div", x, y, currentWidth, currentHeight);
 
     return (
         <Container
