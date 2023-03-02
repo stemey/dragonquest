@@ -83,7 +83,7 @@ export const Unit = observer(
         const y = props.y || 0;
 
         const fillColor = props.unit.selected ? 0x3090ad : 0x005555;
-        console.log("selected", props.unit.name.get(), props.unit.selected);
+       // console.log("selected", props.unit.name.get(), props.unit.selected);
 
         const status = props.unit.targetedBy
             .map((a) => a.battleUnit.name + ">" + a.name)
@@ -96,10 +96,13 @@ export const Unit = observer(
             (props.height || 210) - 4
         );
 
+        const width=props.width || 120
+        const height = props.height || 210
+
         return (
             <Div
-                width={props.width || 120}
-                height={props.height || 210}
+                width={width}
+                height={height}
                 x={x}
                 y={y}
                 margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
@@ -107,7 +110,7 @@ export const Unit = observer(
                 fillColor={fillColor}
             >
                 <RectangleBorder
-                    points={rectangle.getPoints(0, 4)}
+                    width={width} height={height}
                 ></RectangleBorder>
                 <Grid areas={areas} columns={columns} rows={rows}>
                     <GridItem area="title">

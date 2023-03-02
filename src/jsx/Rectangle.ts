@@ -1,4 +1,5 @@
 import { Tag } from "@dragonquest/jsx/jsx-runtime";
+import { reaction } from "mobx";
 import { GameObjects, Scene } from "phaser";
 
 export interface RectangleProps {
@@ -37,6 +38,8 @@ export const Rectangle: Tag<RectangleProps> = () => ({
         rectangle.updateDisplayOrigin();
         rectangle.setSize(props.width, props.height);
         rectangle.setFillStyle(props.fillColor, props.fillAlpha);
+        rectangle.setVisible(props.fillAlpha !== 0);
+
         return false;
     },
 });

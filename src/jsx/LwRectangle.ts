@@ -15,6 +15,8 @@ export class RectangleHolder {
                 this.graphics.fillStyle(this.fillColor, this.fillAlpha);
                 this.graphics.alpha = this.fillAlpha;
             }
+            console.log("render")
+
             this.graphics.fillRectShape(this.props);
         }
     }
@@ -40,6 +42,8 @@ export const LwRectangle: Tag<RectangleProps> = () => ({
             props.width,
             props.height
         );
+        rectangle.fillAlpha=props.fillAlpha
+        rectangle.fillColor=props.fillColor
         rectangle.render();
         return false;
     },
