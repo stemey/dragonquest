@@ -85,7 +85,7 @@ function parseSize(d: string, maxSize?: number): number {
     if (match) {
         const percentage = parseInt(d.substring(0, d.length - 1), 10);
         if (!maxSize) {
-            console.error("no maxSize givem, so cannot derive percentage");
+            console.error("no maxSize given, so cannot derive percentage");
             return 1;
         }
         return (percentage / 100) * maxSize;

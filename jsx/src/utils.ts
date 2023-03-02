@@ -54,6 +54,16 @@ const evaluateTag = <S, P extends object, T>(
         return gameObject;
     }
     // TODO what about children here? And need to add new tag
+    if (Array.isArray(creator)) {
+        return creator.map((c) => {
+            return evaluateTag(
+                scene,
+                c as Element<any>,
+                helper,
+                currentId + createId(c)
+            );
+        }) as any;
+    }
 
     return evaluateTag(
         scene,
@@ -80,6 +90,7 @@ export const reconcile = <S, G extends object>(
     }
     currentState.currentElementId = currentId;
     const creator = nu.tag(nu.props);
+
     if ("update" in creator && "create" in creator) {
         const rerender = creator.update(gameObject, nu.props);
         if (rerender && globalState.current) {
@@ -141,14 +152,27 @@ export const reconcile = <S, G extends object>(
         }
         return gameObject;
     }
-    reconcile(
-        scene,
-        creator,
-        creator as Element<any>,
-        gameObject,
-        helper,
-        currentId + createId(creator)
-    );
+    if (Array.isArray(creator)) {
+        creator.forEach((c) => {
+            reconcile(
+                scene,
+                c,
+                c as Element<any>,
+                gameObject,
+                helper,
+                currentId + createId(c)
+            );
+        });
+    } else {
+        reconcile(
+            scene,
+            creator,
+            creator as Element<any>,
+            gameObject,
+            helper,
+            currentId + createId(creator)
+        );
+    }
 };
 
 function createId(element: Element<any>, idx?: number): string {

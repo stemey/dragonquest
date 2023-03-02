@@ -39,6 +39,11 @@ const evaluateTag = (scene, element, helper, currentId = "") => {
         return gameObject;
     }
     // TODO what about children here? And need to add new tag
+    if (Array.isArray(creator)) {
+        return creator.map((c) => {
+            return evaluateTag(scene, c, helper, currentId + createId(c));
+        });
+    }
     return evaluateTag(scene, creator, helper, currentId + createId(creator));
 };
 export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") => {
@@ -107,7 +112,14 @@ export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") =>
         }
         return gameObject;
     }
-    reconcile(scene, creator, creator, gameObject, helper, currentId + createId(creator));
+    if (Array.isArray(creator)) {
+        creator.forEach((c) => {
+            reconcile(scene, c, c, gameObject, helper, currentId + createId(c));
+        });
+    }
+    else {
+        reconcile(scene, creator, creator, gameObject, helper, currentId + createId(creator));
+    }
 };
 function createId(element, idx) {
     if (typeof idx !== "undefined") {

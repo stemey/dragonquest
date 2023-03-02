@@ -15,7 +15,7 @@ export const phaserJsxHelper: ContainerHelper<GameObjects.Container> = {
     },
     add: function (
         parent: GameObjects.Container,
-        child: GameObjects.GameObject
+        child: GameObjects.GameObject 
     ): void {
         parent.add(child);
     },

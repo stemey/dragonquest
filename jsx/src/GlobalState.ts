@@ -2,6 +2,7 @@ import { Ref } from "./useRef";
 import { UseStateReturnType } from "./useState";
 
 export class GlobalState {
+    globalVariables: {[key:string]:any}={};
     rerender: boolean = false;
     _currentElementId: string = "";
     currentElementState?: ElementState;

@@ -10,6 +10,7 @@ import { Sprite } from "../../../jsx/Sprite";
 import { Text } from "../../../jsx/Text";
 import { Grid, GridItem } from "../../../jsx/Grid";
 import { observer } from "./Observer";
+import { RectangleBorder } from "../../../jsx/RectangleBorder";
 
 export const Unit = observer(
     (props: {
@@ -82,9 +83,18 @@ export const Unit = observer(
         const y = props.y || 0;
 
         const fillColor = props.unit.selected ? 0x3090ad : 0x005555;
-        console.log("selected",props.unit.name.get(),props.unit.selected)
+        console.log("selected", props.unit.name.get(), props.unit.selected);
 
-        const status = props.unit.targetedBy.map((a) => a.battleUnit.name +">"+a.name).join(", ");
+        const status = props.unit.targetedBy
+            .map((a) => a.battleUnit.name + ">" + a.name)
+            .join(", ");
+
+        const rectangle = new Phaser.Geom.Rectangle(
+            0,
+            0,
+            (props.width || 120) - 4,
+            (props.height || 210) - 4
+        );
 
         return (
             <Div
@@ -96,6 +106,9 @@ export const Unit = observer(
                 padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
                 fillColor={fillColor}
             >
+                <RectangleBorder
+                    points={rectangle.getPoints(0, 4)}
+                ></RectangleBorder>
                 <Grid areas={areas} columns={columns} rows={rows}>
                     <GridItem area="title">
                         <Text
@@ -142,7 +155,10 @@ export const Unit = observer(
                         </Div>
                     </GridItem>
                     <GridItem area="status">
-                        <Text text={status} style={{ color: "red", fontSize:"8" }} />
+                        <Text
+                            text={status}
+                            style={{ color: "red", fontSize: "8" }}
+                        />
                     </GridItem>
                 </Grid>
             </Div>

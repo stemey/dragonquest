@@ -8,12 +8,12 @@ export interface RectangleProps {
     fillAlpha?: number;
     x: number;
     y: number;
-    onPointerDown?:()=>void
+    onPointerDown?: () => void;
 }
 
 export const Rectangle: Tag<RectangleProps> = () => ({
     create(scene: Scene, props: RectangleProps) {
-        const rect =  new GameObjects.Rectangle(
+        const rect = new GameObjects.Rectangle(
             scene,
             props.x + props.width / 2,
             props.y + props.height / 2,
@@ -24,7 +24,7 @@ export const Rectangle: Tag<RectangleProps> = () => ({
         );
         if (props.onPointerDown) {
             rect.setInteractive();
-            rect.on("pointerdown",props.onPointerDown)
+            rect.on("pointerdown", props.onPointerDown);
         }
 
         return rect;
@@ -36,7 +36,7 @@ export const Rectangle: Tag<RectangleProps> = () => ({
         );
         rectangle.updateDisplayOrigin();
         rectangle.setSize(props.width, props.height);
-        rectangle.setFillStyle(props.fillColor,props.fillAlpha)
+        rectangle.setFillStyle(props.fillColor, props.fillAlpha);
         return false;
     },
 });
