@@ -7,6 +7,7 @@ export interface TextProps {
     x?: number;
     y?: number;
     width?:number;
+    onPointerDown?:()=>void
 }
 
 export const Text: Tag<TextProps> = () => ({
@@ -15,7 +16,12 @@ export const Text: Tag<TextProps> = () => ({
         if (props.width) {
             style.fixedWidth=props.width
         }
-        return new Phaser.GameObjects.Text(scene, 0, 0, text, style);
+        const textObject =  new Phaser.GameObjects.Text(scene, 0, 0, text, style);
+        if (props.onPointerDown) {
+            textObject.setInteractive();
+            textObject.on("pointerdown",props.onPointerDown)
+        }
+        return textObject;
     },
 
     update(textObject: Phaser.GameObjects.Text, newProps: TextProps) {

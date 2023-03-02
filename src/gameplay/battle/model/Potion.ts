@@ -1,10 +1,14 @@
-import { observable } from "mobx";
+import { observable, runInAction } from "mobx";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 
 export class Potion implements InteractiveSelectable {
     constructor(public name: string,  count: number) {
         this.count.set(count);
     }
+    listen(cb: () => void): void {
+       this._selected.observe(cb);
+    }
+    
     private _confirmed = observable.box(false);
     confirm(): void {
         this._confirmed.set(true);

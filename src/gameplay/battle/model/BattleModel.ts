@@ -24,10 +24,21 @@ export class BattleModel {
             this.enemies.push(new BattleUnit(h, targets, this));
         });
         this.heroes[0].selected = true;
+        this.heroes.forEach(h => h.listen(()=> {this.unselect(h)}))
     }
 
     get currentHero() {
         return this.heroes.find((hero) => hero.selected) || this.heroes[0];
+    }
+    unselect(h: BattleUnit) {
+        if (!h.selected) {
+            h._selected.set(true);
+            this.heroes.filter((h2) => {
+                if (h2 !== h) {
+                    h2.deselect();
+                }
+            });
+        }
     }
 
     up() {

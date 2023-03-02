@@ -8,11 +8,12 @@ export interface RectangleProps {
     fillAlpha?: number;
     x: number;
     y: number;
+    onPointerDown?:()=>void
 }
 
 export const Rectangle: Tag<RectangleProps> = () => ({
     create(scene: Scene, props: RectangleProps) {
-        return new GameObjects.Rectangle(
+        const rect =  new GameObjects.Rectangle(
             scene,
             props.x + props.width / 2,
             props.y + props.height / 2,
@@ -21,6 +22,12 @@ export const Rectangle: Tag<RectangleProps> = () => ({
             props.fillColor,
             props.fillAlpha
         );
+        if (props.onPointerDown) {
+            rect.setInteractive();
+            rect.on("pointerdown",props.onPointerDown)
+        }
+
+        return rect;
     },
     update(rectangle: GameObjects.Rectangle, props: RectangleProps) {
         rectangle.setPosition(

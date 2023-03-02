@@ -12,6 +12,10 @@ import { Stats } from "./Stats";
 import { Target } from "./target";
 
 export class BattleUnit implements InteractiveSelectable {
+    deselect() {
+        this._selected.set(false);
+        this.selectableGroups.forEach(s => s.deselect())
+    }
     name = observable.box("");
     hp = observable.box(0);
     maxHp = observable.box(0);
@@ -45,6 +49,19 @@ export class BattleUnit implements InteractiveSelectable {
             new SelectableGroup(this.potions),
             new SelectableGroup(this.powers),
         ];
+        this.selectableGroups.forEach((s) => s.listen(() => this.unselect(s)));
+    }
+    unselect(s: SelectableGroup) {
+        if (s.selected) {
+            this.selectableGroups.filter((s2) => {
+                if (s2 !== s) {
+                    s2.deselect();
+                }
+            });
+        }
+    }
+    listen(cb: () => void): void {
+        this.selectableGroups.forEach((s) => s.listen(cb));
     }
 
     get selectedGroup(): SelectableGroup | undefined {
@@ -83,7 +100,9 @@ export class BattleUnit implements InteractiveSelectable {
     previous() {
         const currentGroup = this.selectedGroup;
         if (!currentGroup) {
-            this.selectableGroups[this.selectableGroups.length-1].select(false);
+            this.selectableGroups[this.selectableGroups.length - 1].select(
+                false
+            );
             return false;
         }
         const atTheEnd = currentGroup.previous();
@@ -95,7 +114,6 @@ export class BattleUnit implements InteractiveSelectable {
             }
             const newGroup = this.selectableGroups[newIndex];
             newGroup.select(false);
-
         }
         return false;
     }

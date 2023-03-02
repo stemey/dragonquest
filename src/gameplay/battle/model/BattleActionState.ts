@@ -1,4 +1,4 @@
-import { observable, ObservableMap } from "mobx";
+import { observable, ObservableMap, runInAction } from "mobx";
 import { Attack } from "../Attack";
 import { Heal } from "../Heal";
 import { BattleUnit } from "./BattleUnit";
@@ -40,29 +40,27 @@ export class BattleActionState implements InteractiveSelectable {
         if (this.chosen.get()) {
             console.log("remove selection", this.name);
             this.chosen.set(false);
-            this.selectTarget(false)
+            this.selectTarget(false);
             this._selectedTarget.set(undefined);
         }
     }
     next() {
-        this.selectTarget(false)
+        this.selectTarget(false);
 
         next(this.targets, true);
         const targetName = getSelected(this.targets)?.name;
         console.log("next target", this.name, targetName);
-        this.selectTarget(true)
-
+        this.selectTarget(true);
     }
     previous() {
-        this.selectTarget(false)
+        this.selectTarget(false);
         previous(this.targets, true);
         console.log(
             "previous target",
             this.name,
             getSelected(this.targets)?.name
         );
-        this.selectTarget(true)
-
+        this.selectTarget(true);
     }
 
     selectTarget(selected: boolean) {
@@ -88,7 +86,9 @@ export class BattleActionState implements InteractiveSelectable {
     ready = observable.box(false);
     _description = observable.box("");
     targets: Target[];
-
+    listen(cb: () => void): void {
+        this._selected.observe(cb);
+    }
     get selected() {
         return this._selected.get();
     }
@@ -96,7 +96,7 @@ export class BattleActionState implements InteractiveSelectable {
         this._selected.set(selected);
         if (!this.selected) {
             if (!this._selectedTarget.get()) {
-                this.selectTarget(false)
+                this.selectTarget(false);
             }
         }
     }

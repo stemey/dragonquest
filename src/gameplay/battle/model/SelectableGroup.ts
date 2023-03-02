@@ -1,8 +1,20 @@
+import { observe, runInAction } from "mobx";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 import { next, previous } from "./select";
 
 export class SelectableGroup implements InteractiveSelectable {
-    constructor(private selectables: InteractiveSelectable[]) {}
+    constructor(private selectables: InteractiveSelectable[]) {
+        selectables.forEach((s, idx) => {
+            s.listen( () => {
+                if (s.selected) this.unselect(idx);
+            });
+        });
+    }
+    unselect(idx: number) {
+        this.selectables.forEach((s, index) => {
+            if (idx !== index) s.selected = false;
+        });
+    }
 
     get selected() {
         return this.selectables.some((s) => s.selected);
@@ -23,9 +35,9 @@ export class SelectableGroup implements InteractiveSelectable {
     deselect() {
         this.selectables.forEach((s) => (s.selected = false));
     }
-    select(first:boolean) {
+    select(first: boolean) {
         if (!this.selected && this.selectables.length > 0) {
-            const index = first?0:this.selectables.length-1;
+            const index = first ? 0 : this.selectables.length - 1;
             this.selectables[index].selected = true;
         }
     }
@@ -66,5 +78,8 @@ export class SelectableGroup implements InteractiveSelectable {
     }
     right() {
         this.selectables[this.selectedIndex].next();
+    }
+    listen(cb:()=>void) {
+        this.selectables.forEach(s => s.listen(cb));
     }
 }

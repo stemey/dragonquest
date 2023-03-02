@@ -1,7 +1,6 @@
 import { ObservableItemModel } from "./ObservableItemModel";
 import { ItemSettings } from "./ItemSettings";
 import { Text } from "../../../jsx/Text";
-import { observer } from "./Observer";
 import { Transform } from "../../../jsx/Transform";
 
 export const Item = (props: {
@@ -18,9 +17,14 @@ export const Item = (props: {
 
     const mode = item.selected ? "in" : "out";
 
+    const pointerDown =()=> {
+        item.selected=!item.selected;
+    }
+
     return (
         <Transform mode={mode}>
             <Text
+                onPointerDown={pointerDown}
                 x={props.x}
                 y={props.y}
                 width={props.width}

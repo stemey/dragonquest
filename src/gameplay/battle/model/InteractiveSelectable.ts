@@ -1,4 +1,5 @@
 export interface InteractiveSelectable {
+    listen(cb: () => void): unknown;
     selected:boolean;
     disabled:boolean;
     confirm():void
