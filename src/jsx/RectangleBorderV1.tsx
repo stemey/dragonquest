@@ -3,7 +3,7 @@ import { GameObjects } from "phaser";
 import { Container } from "./Container";
 import { Rectangle } from "./Rectangle";
 
-export const RectangleBorder = (props: { width: number; height: number }) => {
+export const RectangleBorderV1 = (props: { width: number; height: number }) => {
     const size=4;
     const points = new Phaser.Geom.Rectangle(
         0,

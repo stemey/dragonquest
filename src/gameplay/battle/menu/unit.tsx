@@ -10,7 +10,7 @@ import { Sprite } from "../../../jsx/Sprite";
 import { Text } from "../../../jsx/Text";
 import { Grid, GridItem } from "../../../jsx/Grid";
 import { observer } from "./Observer";
-import { RectangleBorder } from "../../../jsx/RectangleBorder";
+import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 
 export const Unit = observer(
     (props: {
@@ -83,7 +83,7 @@ export const Unit = observer(
         const y = props.y || 0;
 
         const fillColor = props.unit.selected ? 0x3090ad : 0x005555;
-       // console.log("selected", props.unit.name.get(), props.unit.selected);
+        // console.log("selected", props.unit.name.get(), props.unit.selected);
 
         const status = props.unit.targetedBy
             .map((a) => a.battleUnit.name + ">" + a.name)
@@ -96,8 +96,8 @@ export const Unit = observer(
             (props.height || 210) - 4
         );
 
-        const width=props.width || 120
-        const height = props.height || 210
+        const width = props.width || 120;
+        const height = props.height || 210;
 
         return (
             <Div
@@ -109,9 +109,10 @@ export const Unit = observer(
                 padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
                 fillColor={fillColor}
             >
-                <RectangleBorder
-                    width={width} height={height}
-                ></RectangleBorder>
+                <RectangleBorderV2
+                    width={width}
+                    height={height}
+                ></RectangleBorderV2>
                 <Grid areas={areas} columns={columns} rows={rows}>
                     <GridItem area="title">
                         <Text
