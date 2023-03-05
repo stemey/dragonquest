@@ -4,8 +4,8 @@ import { Padding } from "../../gameplay/battle/menu/Padding";
 
 export interface DivProps {
     area?: string;
-    margin: Padding;
-    padding: Padding;
+    margin?: Padding;
+    padding?: Padding;
     width?: number;
     height?: number;
     fillColor?: number;

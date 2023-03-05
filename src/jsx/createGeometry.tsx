@@ -20,16 +20,26 @@ export function getValue(values: number[], idx: number, gap: number = 0) {
 }
 
 export function createGeometry(props: GridProps) {
-    const height = props.height;
-    const width = props.width;
+    const { height, width } = props;
+    const gap = getGap(props.gap);
     const columns = props.columns
         .split(" ")
         .filter((d) => d.length !== 0)
-        .map((d) => parseSize(d, width));
+        .map((d) =>
+            parseSize(
+                d,
+                width ? width - props.columns.length * gap.x : undefined
+            )
+        );
     const rows = props.rows
         .split(" ")
         .filter((d) => d.length !== 0)
-        .map((d) => parseSize(d, height));
+        .map((d) =>
+            parseSize(
+                d,
+                height ? height - props.rows.length * gap.y : undefined
+            )
+        );
 
     const areaRows = props.areas
         .split("\n")
@@ -65,10 +75,10 @@ export function createGeometry(props: GridProps) {
     } = {};
     Object.keys(areasRowCol).forEach((name) => {
         const areaRowCol = areasRowCol[name];
-        const x = getValue(columns, areaRowCol.colStart - 1);
+        const x = getValue(columns, areaRowCol.colStart - 1) + gap.x;
         const width =
             getValue(columns, areaRowCol.colEnd || areaRowCol.colStart) - x;
-        const y = getValue(rows, areaRowCol.rowStart - 1);
+        const y = getValue(rows, areaRowCol.rowStart - 1) + gap.y;
         const height =
             getValue(rows, areaRowCol.rowEnd || areaRowCol.rowStart) - y;
         areas[name] = {
@@ -91,5 +101,14 @@ function parseSize(d: string, maxSize?: number): number {
         return (percentage / 100) * maxSize;
     } else {
         return parseInt(d, 10);
+    }
+}
+function getGap(gap: number | { x: number; y: number } | undefined) {
+    if (!gap) {
+        return { x: 0, y: 0 };
+    } else if (typeof gap == "number") {
+        return { x: gap, y: gap };
+    } else {
+        return { x: gap.x, y: gap.y };
     }
 }

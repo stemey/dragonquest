@@ -17,12 +17,12 @@ export const Item = (props: {
 
     const mode = item.selected ? "in" : "out";
 
-    const pointerDown =()=> {
-        item.selected=!item.selected;
-    }
+    const pointerDown = () => {
+        item.selected = !item.selected;
+    };
 
     return (
-        <Transform mode={mode}>
+        <Transform mode={mode} step={{ x: 10, y: 0, scale: 1 }}>
             <Text
                 onPointerDown={pointerDown}
                 x={props.x}

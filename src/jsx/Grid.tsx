@@ -20,12 +20,16 @@ export const GridItem = (props: GridItemProps) => {
     if (!child.props) {
         child.props = {};
     }
-    child.props.x = props.x;
-    child.props.y = props.y;
+    child.props.x = -(props.width || 0)/2
+    child.props.y = -(props.height || 0)/2
     child.props.height = props.height;
     child.props.width = props.width;
+
+    const x = (props.x||0) + (props.width || 0)/2
+    const y = (props.y||0) + (props.height || 0)/2
     
-    return child;
+    // container to be able to scale children
+    return <Container x={x} y={y}>{child}</Container>;
 };
 
 export const Grid = (props: GridProps) => {

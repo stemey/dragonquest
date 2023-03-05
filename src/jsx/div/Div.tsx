@@ -17,6 +17,8 @@ export const Div = (props: DivProps) => {
     };
     const x = props.x || 0;
     const y = props.y || 0;
+    const padding = props.padding || { bottom: 0, left: 0, right: 0, top: 0 };
+    const margin = props.margin || { bottom: 0, left: 0, right: 0, top: 0 };
     let currentHeight = props.height || 0;
     let currentWidth = props.width || 0;
     const children = Array.isArray(props.children)
@@ -42,23 +44,19 @@ export const Div = (props: DivProps) => {
         if (!c) {
             return;
         }
-        c.props.x = props.padding.left
-        c.props.y = props.padding.top
+
+        c.props.x = padding.left;
+        c.props.y = padding.top;
         if (!c.props.width) {
-            c.props.width = currentWidth-props.padding.left-props.padding.right
-        } 
+            c.props.width = currentWidth - padding.left - padding.right;
+        }
         if (!c.props.height) {
-            c.props.height = currentHeight-props.padding.top-props.padding.bottom
-        } 
+            c.props.height = currentHeight - padding.top - padding.bottom;
+        }
     });
 
-
     return (
-        <Container
-            x={x + props.margin.left}
-            y={y + props.margin.right}
-            ref={refCallback}
-        >
+        <Container x={x + margin.left} y={y + margin.right} ref={refCallback}>
             <Rectangle
                 x={0}
                 y={0}

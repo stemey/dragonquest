@@ -10,7 +10,7 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
     const { width, height } = props;
 
     const size = 2;
-    const length = 12;
+    const length = 4;
     const numberOfSwooshes = 4;
 
     const path = createPath(width, height);
@@ -74,13 +74,17 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
 
 const SelfStartingFollower = (props: FollowerProps & { startAt?: number }) => {
     const { startAt } = props;
+    const [started, setStarted] = useState(false);
     const ref = (follower: GameObjects.PathFollower) => {
-        follower.startFollow({
-            duration: 10000,
-            positionOnPath: true,
-            startAt,
-            loop: -1,
-        });
+        if (!started) {
+            setStarted(true);
+            follower.startFollow({
+                duration: 10000,
+                positionOnPath: true,
+                startAt,
+                loop: -1,
+            });
+        }
     };
 
     return <Follower ref={ref} {...props}></Follower>;

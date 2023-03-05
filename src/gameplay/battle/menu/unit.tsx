@@ -13,6 +13,8 @@ import { observer } from "./Observer";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 import { Border1 } from "../../../card/border/Border1";
 import { getColor } from "../../../utils/color";
+import { Transform } from "../../../jsx/Transform";
+import { Container } from "../../../jsx/Container";
 
 export const Unit = observer(
     (props: {
@@ -88,9 +90,9 @@ export const Unit = observer(
 
         const fillColor = props.unit.selected
             ? 0x3090ad
-            : getColor(baseColor, 0.5, 0.2, 0.5);
+            : getColor(baseColor, 0.5, 0.01, 0.5);
         const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
-        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.3);
+        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.5);
         // console.log("selected", props.unit.name.get(), props.unit.selected);
 
         const status = props.unit.targetedBy
@@ -107,110 +109,130 @@ export const Unit = observer(
         const width = props.width || 120;
         const height = props.height || 210;
 
-        return (
-            <Div
-                width={width}
-                height={height}
-                x={x}
-                y={y}
-                margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
-                fillColor={borderFillColor}
-            >
-                <RectangleBorderV2
-                    width={width}
-                    height={height}
-                ></RectangleBorderV2>
-                <Border1
-                    lineColor={borderLineColor}
-                    fillColor={fillColor}
-                    width={width}
-                    height={height}
-                    options={{ indent: 4 }}
-                />
-                <Grid areas={areas} columns={columns} rows={rows}>
-                    <GridItem area="title">
-                        <Text
-                            style={{
-                                fixedWidth: 160,
-                                padding: { top: 0, bottom: 0 },
-                                align: "center",
-                                fontSize: "8",
-                            }}
-                            text={props.unit.name.get()}
-                        />
-                    </GridItem>
-                    <GridItem area="hero">
-                        <Sprite frame={props.unit.character.image}></Sprite>
-                    </GridItem>
+        const mode = props.unit.selected ? "in" : "out";
 
-                    <GridItem area="potion">
-                        <VerticalListV2>{potions}</VerticalListV2>
-                    </GridItem>
-                    <GridItem area="hpbar">
-                        <Div
-                            margin={{
-                                left: 0,
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            padding={{
-                                left: 0,
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            fillColor={0x005500}
-                            fillAlpha={0.5}
-                        ></Div>
-                    </GridItem>
-                    <GridItem area="powerbar">
-                        <Div
-                            margin={{
-                                left: 0,
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            padding={{
-                                left: 0,
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            fillColor={0x550000}
-                            fillAlpha={0.5}
-                        ></Div>
-                    </GridItem>
-                    <GridItem area="weapons">
-                        <Div
-                            margin={{
-                                left: 0,
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            padding={{
-                                left: 10,
-                                top: 10,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            fillColor={0x55}
-                            fillAlpha={0.5}
-                        >
-                            <VerticalListV2>{items}</VerticalListV2>
-                        </Div>
-                    </GridItem>
-                    <GridItem area="status">
-                        <Text
-                            text={status}
-                            style={{ color: "red", fontSize: "8" }}
+        return (
+            <Container>
+                <Transform mode={mode} step={{scale:1.00,x:-4,y:-2}}>
+                <Div
+                    width={width+4}
+                    height={height+4}
+                    x={x - 8}
+                    y={y - 8}
+                    margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                    padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
+                    fillColor={0x113311}
+                    fillAlpha={0.8}
+                ></Div>
+                </Transform>
+                <Transform mode={mode} step={{scale:1.05,x:10,y:4}}>
+                    <Div
+                        width={width}
+                        height={height}
+                        x={x}
+                        y={y}
+                        margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                        padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
+                        fillColor={borderFillColor}
+                    >
+                        <RectangleBorderV2
+                            width={width}
+                            height={height}
+                        ></RectangleBorderV2>
+                        <Border1
+                            lineColor={borderLineColor}
+                            fillColor={fillColor}
+                            width={width}
+                            height={height}
+                            options={{ indent: 4 }}
                         />
-                    </GridItem>
-                </Grid>
-            </Div>
+                        <Grid areas={areas} columns={columns} rows={rows}>
+                            <GridItem area="title">
+                                <Text
+                                    style={{
+                                        fixedWidth: 160,
+                                        padding: { top: 0, bottom: 0 },
+                                        align: "center",
+                                        fontSize: "8",
+                                    }}
+                                    text={props.unit.name.get()}
+                                />
+                            </GridItem>
+                            <GridItem area="hero">
+                                <Sprite
+                                    frame={props.unit.character.image}
+                                ></Sprite>
+                            </GridItem>
+
+                            <GridItem area="potion">
+                                <VerticalListV2>{potions}</VerticalListV2>
+                            </GridItem>
+                            <GridItem area="hpbar">
+                                <Div
+                                    margin={{
+                                        left: 0,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    padding={{
+                                        left: 0,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    fillColor={0x005500}
+                                    fillAlpha={0.5}
+                                ></Div>
+                            </GridItem>
+                            <GridItem area="powerbar">
+                                <Div
+                                    margin={{
+                                        left: 0,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    padding={{
+                                        left: 0,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    fillColor={0x550000}
+                                    fillAlpha={0.5}
+                                ></Div>
+                            </GridItem>
+                            <GridItem area="weapons">
+                                <Div
+                                    margin={{
+                                        left: 0,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    padding={{
+                                        left: 10,
+                                        top: 10,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                    fillColor={0x55}
+                                    fillAlpha={0.5}
+                                >
+                                    <VerticalListV2>{items}</VerticalListV2>
+                                </Div>
+                            </GridItem>
+                            <GridItem area="status">
+                                <Text
+                                    text={status}
+                                    style={{ color: "red", fontSize: "8" }}
+                                />
+                            </GridItem>
+                        </Grid>
+                    </Div>
+                </Transform>
+            </Container>
         );
     }
 );
