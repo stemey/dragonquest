@@ -9,4 +9,5 @@ module.exports = {
         "<rootDir>/src/**/__tests__/*.test.ts",
     ],
     testEnvironment: "jsdom",
+    setupFiles: ["jest-canvas-mock"],
 };

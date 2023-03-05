@@ -11,6 +11,8 @@ import { Text } from "../../../jsx/Text";
 import { Grid, GridItem } from "../../../jsx/Grid";
 import { observer } from "./Observer";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
+import { Border1 } from "../../../card/border/Border1";
+import { getColor } from "../../../utils/color";
 
 export const Unit = observer(
     (props: {
@@ -19,7 +21,9 @@ export const Unit = observer(
         width?: number;
         height?: number;
         unit: BattleUnit;
+        baseColor: number;
     }) => {
+        const { baseColor } = props;
         const items = props.unit.powers.map((p, idx) => {
             const m = createModelProxy<ObservableItemModel, BattleActionState>(
                 p,
@@ -82,7 +86,11 @@ export const Unit = observer(
         const x = props.x || 0;
         const y = props.y || 0;
 
-        const fillColor = props.unit.selected ? 0x3090ad : 0x005555;
+        const fillColor = props.unit.selected
+            ? 0x3090ad
+            : getColor(baseColor, 0.5, 0.2, 0.5);
+        const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
+        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.3);
         // console.log("selected", props.unit.name.get(), props.unit.selected);
 
         const status = props.unit.targetedBy
@@ -107,12 +115,19 @@ export const Unit = observer(
                 y={y}
                 margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
                 padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
-                fillColor={fillColor}
+                fillColor={borderFillColor}
             >
                 <RectangleBorderV2
                     width={width}
                     height={height}
                 ></RectangleBorderV2>
+                <Border1
+                    lineColor={borderLineColor}
+                    fillColor={fillColor}
+                    width={width}
+                    height={height}
+                    options={{ indent: 4 }}
+                />
                 <Grid areas={areas} columns={columns} rows={rows}>
                     <GridItem area="title">
                         <Text
@@ -134,24 +149,54 @@ export const Unit = observer(
                     </GridItem>
                     <GridItem area="hpbar">
                         <Div
-                            margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                            padding={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                            margin={{
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
+                            padding={{
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
                             fillColor={0x005500}
                             fillAlpha={0.5}
                         ></Div>
                     </GridItem>
                     <GridItem area="powerbar">
                         <Div
-                            margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                            padding={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                            margin={{
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
+                            padding={{
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
                             fillColor={0x550000}
                             fillAlpha={0.5}
                         ></Div>
                     </GridItem>
                     <GridItem area="weapons">
                         <Div
-                            margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                            padding={{ left: 10, top: 10, right: 0, bottom: 0 }}
+                            margin={{
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
+                            padding={{
+                                left: 10,
+                                top: 10,
+                                right: 0,
+                                bottom: 0,
+                            }}
                             fillColor={0x55}
                             fillAlpha={0.5}
                         >
@@ -169,3 +214,6 @@ export const Unit = observer(
         );
     }
 );
+/*
+   
+*/

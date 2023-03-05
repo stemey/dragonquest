@@ -7,6 +7,7 @@ export interface RectangleProps {
     height: number;
     fillColor?: number;
     fillAlpha?: number;
+    
     x: number;
     y: number;
     onPointerDown?: () => void;

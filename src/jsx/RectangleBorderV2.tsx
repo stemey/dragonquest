@@ -22,7 +22,6 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
     const graphicsRef = useRef<GameObjects.Graphics>();
 
     const onTexture = (id: string) => {
-        console.log("generated");
         if (texture === "") {
             setTexture(id);
         }

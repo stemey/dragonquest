@@ -6,12 +6,14 @@ import {
 } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects } from "phaser";
 import { Graphics } from "./Graphics";
+import { LineStyle } from "./LwRectangle";
 
 export const GraphicsTexture = (props: {
     name?: string;
     width: number;
     height: number;
-    onTexture: (name: string, texture: Phaser.Textures.Texture) => void;
+    onTexture?: (name: string, texture: Phaser.Textures.Texture) => void;
+    lineStyle?: LineStyle;
     children?: Element<{ graphics?: GameObjects.Graphics }>[];
 }) => {
     const ref = useRef<GameObjects.Graphics>();
@@ -26,13 +28,15 @@ export const GraphicsTexture = (props: {
                 const name = props.name || "texture" + Math.random();
                 ref.current.generateTexture(name, props.width, props.height);
                 const x = ref.current.scene.textures.get(name);
-                props?.onTexture(name, x);
+                if (props.onTexture) {
+                    props.onTexture(name, x);
+                }
             }
         }
     }, [ref.current, ready]);
 
     return (
-        <Graphics ref={ref}>
+        <Graphics ref={ref} lineStyle={props.lineStyle}>
             {props.children?.map((c) => ({
                 tag: c.tag,
                 children: c.children,
