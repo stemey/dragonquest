@@ -1,4 +1,6 @@
+import { Element } from "../Element";
 import { GlobalState } from "../GlobalState";
+import { Tag } from "../jsx-runtime";
 import { useEffect } from "../useEffect";
 import { useState } from "../useState";
 import { create, globalState, reconcile } from "../utils";
@@ -9,7 +11,11 @@ const TagTwo = () => new MockObjectFactory("TagTwo");
 
 let dispose = jest.fn();
 
-const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
+const VirtualTag: Tag<any> = (props: {
+    listen?: (cb: (x: number) => void) => void;
+    y?: number;
+    children?: Element<any>[];
+}) => {
     const [length, setLength] = useState(5);
     useEffect(() => {
         if (props.listen) {
@@ -20,7 +26,7 @@ const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
         return dispose;
     });
 
-    return { tag: TagOne, props: { x: length } };
+    return { tag: TagOne, props: { x: length, y:props.y }, children: props.children };
 };
 
 describe("reconcile", () => {
@@ -84,6 +90,46 @@ describe("reconcile", () => {
         expect(m.children[0].props.x).toBe(9);
         expect(m.children[1].props.x).toBe(1);
     });
+    it("change children", () => {
+        const initial = {
+            tag: TagOne,
+            props: { x: 0 },
+            children: [{ tag: TagTwo, props: { x: 3 }, children: [] }],
+        };
+        const m = create<undefined, MockContainer>(
+            undefined,
+            initial,
+            mockHelper
+        );
+        if (!m) {
+            fail("error");
+        }
+        reconcile<undefined, MockContainer>(
+            undefined,
+            initial,
+            {
+                tag: TagOne,
+                props: {
+                    x: 1,
+                },
+                children: [
+                    {
+                        tag: TagTwo,
+                        props: { x: 9 },
+                        children: [{ tag: TagOne, props: { x: 1 } }],
+                    },
+                ],
+            },
+            m,
+            mockHelper
+        );
+        expect(m.props.x).toBe(1);
+        expect(m).toBeDefined;
+        expect(m.children).toHaveLength(1);
+        expect(m.children[0].props.x).toBe(9);
+        expect(m.children[0].tagName).toBe("TagTwo");
+    });
+
     it("remove children", () => {
         const initial = {
             tag: TagOne,
@@ -183,6 +229,48 @@ describe("reconcile", () => {
         );
         expect(m).toBeDefined;
         expect(m.props.x).toBe(5);
+    });
+    it("change virtual children", () => {
+        const initial = {
+            tag: TagOne,
+            props: {
+                x: 0,
+            },
+            children: [{ tag: VirtualTag, props: { x: 3 } }],
+        };
+        const m = create<undefined, MockContainer>(
+            undefined,
+            initial,
+            mockHelper
+        );
+        if (!m) {
+            fail("error");
+        }
+        reconcile<undefined, MockContainer>(
+            undefined,
+            initial,
+            {
+                tag: TagOne,
+                props: {
+                    x: 1,
+                },
+                children: [
+                    {
+                        tag: VirtualTag,
+                        props: {
+                            x: 12,
+                            y: 2,
+                        },
+                        children: [{ tag: TagOne, props: { x: 1 } }],
+                    },
+                ],
+            },
+            m,
+            mockHelper
+        );
+        expect(m.children).toHaveLength(1);
+        expect(m.children[0].props.y).toBe(2);
+        expect(m.children[0].children).toHaveLength(1);
     });
     it("change state", () => {
         let myCb: (x: number) => void = () => {};

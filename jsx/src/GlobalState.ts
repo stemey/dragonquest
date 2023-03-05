@@ -1,8 +1,10 @@
+import { Element } from "./Element";
 import { Ref } from "./useRef";
 import { UseStateReturnType } from "./useState";
 
 export class GlobalState {
-    globalVariables: {[key:string]:any}={};
+    oldTree: { [id: string]: Element<any> } = {};
+    globalVariables: { [key: string]: any } = {};
     rerender: boolean = false;
     _currentElementId: string = "";
     currentElementState?: ElementState;
@@ -32,6 +34,13 @@ export class GlobalState {
         if (this.listener) {
             this.listener();
         }
+    }
+
+    setOldTree(id: string, value: Element<any>) {
+        this.oldTree[id] = value;
+    }
+    getOldTree(id: string) {
+        return this.oldTree[id];
     }
 
     set currentElementId(id: string) {
@@ -98,7 +107,7 @@ export class ElementState {
         }
         const state = this.states[this.stateIdx];
         if (!state) {
-            console.warn("cannot find state for idx",this.stateIdx)
+            console.warn("cannot find state for idx", this.stateIdx);
         }
         this.stateIdx++;
         return [

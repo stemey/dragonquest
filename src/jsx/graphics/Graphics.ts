@@ -6,7 +6,7 @@ import { GraphicsContainer } from "./GraphicsContainer";
 export interface GraphicsProps {
     x?: number;
     y?: number;
-    ref?: ((gameObject: Phaser.GameObjects.Graphics) => void) | Ref<any>;
+    ref?: ((graphics: Phaser.GameObjects.Graphics) => void) | Ref<Phaser.GameObjects.Graphics>;
 }
 
 export const Graphics: Tag<GraphicsProps> = () => ({

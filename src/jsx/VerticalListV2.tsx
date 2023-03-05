@@ -7,9 +7,10 @@ import { getBounds } from "./utils";
 export const VerticalListV2 = (props: {
     x?: number;
     y?: number;
-    width?:number;
+    width?: number;
     children?: Element<{}>[];
 }) => {
+    const children = props.children || [];
     const [ref, setRef] = useState<GameObjects.Container | undefined>(
         undefined
     );
@@ -20,24 +21,24 @@ export const VerticalListV2 = (props: {
     };
     if (ref) {
         let currentHeight = 0;
-        props.children?.forEach((c, idx) => {
+        children.forEach((c, idx) => {
             const child = phaserJsxHelper.get(ref, idx);
             const height = getBounds(child)?.height || 0;
             c.props.y = currentHeight;
+            c.props.x = 10;
             currentHeight += height;
         });
+    } else {
     }
-    props.children?.forEach((c, idx) => {
-        if (props.width  && !c.props.width) {
+    children?.forEach((c, idx) => {
+        if (props.width && !c.props.width) {
             c.props.width = props.width;
         }
-       
     });
-
 
     return (
         <Container x={props.x} y={props.y} ref={refCallback}>
-            {props.children}
+            {children}
         </Container>
     );
 };

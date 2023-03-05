@@ -1,54 +1,72 @@
-import { useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
+import { Tag, useRef, useState } from "@dragonquest/jsx/jsx-runtime";
 import { Curves, GameObjects } from "phaser";
 import { Container } from "./Container";
 import { Follower, FollowerProps } from "./Follower";
+import { GraphicsProps } from "./graphics/Graphics";
+import { GraphicsTexture } from "./graphics/GraphicsTexture";
+import { LwRectangle } from "./graphics/LwRectangle";
 
 export const RectangleBorderV2 = (props: { width: number; height: number }) => {
     const { width, height } = props;
 
-    const size = 8;
+    const size = 2;
+    const length = 12;
+    const numberOfSwooshes = 4;
+
     const path = createPath(width, height);
 
-    //path.getLength()
+    const pathLength = path.getLength();
 
-    const points = new Phaser.Geom.Rectangle(
-        0,
-        0,
-        props.width - size,
-        props.height - size
-    ).getPoints(0, size);
+    const [texture, setTexture] = useState("");
 
-    const texture = "knight";
+    const graphicsRef = useRef<GameObjects.Graphics>();
 
-    const followers = points
-        .map((p, idx) => {
-            const length = 4;
-            const numberOfSwooshes = 2;
+    const onTexture = (id: string) => {
+        console.log("generated");
+        if (texture === "") {
+            setTexture(id);
+        }
+    };
+    const texture2: Tag<GraphicsProps> = (
+        <GraphicsTexture width={size} height={size} onTexture={onTexture}>
+            <LwRectangle
+                x={0}
+                y={0}
+                width={size}
+                height={size}
+                fillAlpha={1}
+                fillColor={0xaaaaaa}
+                graphics={graphicsRef.current}
+            />
+        </GraphicsTexture>
+    );
 
-            //const alpha = 1 - ((time + idx) % pointsInBatch) / pointsInBatch;
-            //const pos = (time + idx) % points.length;
+    if (!texture) {
+        return <Container>{texture2}</Container>;
+    }
+
+    const followers = new Array(numberOfSwooshes * length)
+        .fill("")
+        .map((v, idx) => {
             let alpha = 0;
-            const segmentLength = points.length / numberOfSwooshes;
-            const posInSegment = idx % segmentLength;
-            const startAt = idx / points.length;
-
-            //const distance = pos-idx
+            const segmentLength = pathLength / numberOfSwooshes;
+            const segment = Math.trunc(idx / length);
+            const posInSegment = idx % length;
+            const startAt =
+                (segmentLength * segment + size * posInSegment) / pathLength;
 
             const visible = posInSegment >= 0 && posInSegment < length;
             if (visible) {
-                alpha = (posInSegment+1) / length;
+                alpha = (posInSegment + 1) / length;
                 return (
                     <SelfStartingFollower
                         path={path}
                         texture={texture}
                         alpha={alpha}
-                        scale={0.3}
                         startAt={startAt}
                     ></SelfStartingFollower>
                 );
             }
-
-            //const alpha = pos===idx?1:0;//(pos % pointsInBatch) % 4 == 0;
         })
         .filter((r) => !!r);
 
@@ -57,16 +75,14 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
 
 const SelfStartingFollower = (props: FollowerProps & { startAt?: number }) => {
     const { startAt } = props;
-    const ref = useRef<GameObjects.PathFollower>();
-
-    useEffect(() => {
-        ref.current?.startFollow({
+    const ref = (follower: GameObjects.PathFollower) => {
+        follower.startFollow({
             duration: 10000,
             positionOnPath: true,
             startAt,
-            loop:-1
+            loop: -1,
         });
-    }, [ref.current]);
+    };
 
     return <Follower ref={ref} {...props}></Follower>;
 };

@@ -1,3 +1,4 @@
+import { Element } from "../Element";
 import { GlobalState } from "../GlobalState";
 import { useEffect } from "../useEffect";
 import { useState } from "../useState";
@@ -6,7 +7,10 @@ import { MockContainer, mockHelper, MockObjectFactory } from "./mocks";
 
 const TagOne = () => new MockObjectFactory("TagOne");
 
-const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
+const VirtualTag = (props: {
+    listen?: (cb: (x: number) => void) => void;
+    children: Element<any>[];
+}) => {
     const [length, setLength] = useState(5);
 
     useEffect(() => {
@@ -17,7 +21,7 @@ const VirtualTag = (props: { listen?: (cb: (x: number) => void) => void }) => {
         }
     });
 
-    return { tag: TagOne, props: { x: length } };
+    return { tag: TagOne, props: { x: length }, children: props.children };
 };
 
 describe("create", () => {
@@ -31,7 +35,7 @@ describe("create", () => {
             mockHelper
         );
         if (!m) {
-            fail("error")
+            fail("error");
         }
         expect(m).toBeDefined;
         expect(m.props.x).toBe(0);
@@ -47,7 +51,7 @@ describe("create", () => {
             mockHelper
         );
         if (!m) {
-            fail("error")
+            fail("error");
         }
         expect(m).toBeDefined;
         expect(m.children).toHaveLength(1);
@@ -63,10 +67,44 @@ describe("create", () => {
             mockHelper
         );
         if (!m) {
-            fail("error")
+            fail("error");
         }
         expect(m).toBeDefined;
         expect(m.props.x).toBe(5);
+    });
+    it("virtual parent", () => {
+        const m = create<undefined, MockContainer>(
+            undefined,
+            {
+                tag: VirtualTag,
+                props: { x: 2 },
+                children: [{ tag: TagOne, props: { x: 1 } }],
+            },
+            mockHelper
+        );
+        if (!m) {
+            fail("error");
+        }
+        expect(m).toBeDefined;
+        expect(m.props.x).toBe(5);
+        expect(m.children).toHaveLength(1);
+    });
+    it("virtual children", () => {
+        const m = create<undefined, MockContainer>(
+            undefined,
+            {
+                tag: TagOne,
+                props: { x: 2 },
+                children: [{ tag: VirtualTag, props: { x: 1 } }],
+            },
+            mockHelper
+        );
+        if (!m) {
+            fail("error");
+        }
+        expect(m).toBeDefined;
+        expect(m.props.x).toBe(2);
+        expect(m.children).toHaveLength(1);
     });
     it("change state", () => {
         let myCb: (x: number) => void = () => {};
@@ -84,7 +122,7 @@ describe("create", () => {
             mockHelper
         );
         if (!m) {
-            fail("error")
+            fail("error");
         }
         myCb(10);
         const stateMap = globalState.current?.stateMap;

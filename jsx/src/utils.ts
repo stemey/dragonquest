@@ -28,8 +28,16 @@ const evaluateTag = <S, P extends object, T>(
         currentId = createId(element);
     }
     currentState.currentElementId = currentId;
-    const creator = element.tag(element.props);
+    const creator = element.tag({
+        ...element.props,
+        children: element.children,
+    });
+
+    if (!creator) {
+        return;
+    }
     currentState.currentElementState?.onCreated();
+
     if ("update" in creator && "create" in creator) {
         const gameObject = creator.create(scene, element.props);
         handleRef(element, gameObject);
@@ -64,12 +72,16 @@ const evaluateTag = <S, P extends object, T>(
             );
         }) as any;
     }
+    const id = currentId + createId(creator);
+    if (globalState.current) {
+        globalState.current.setOldTree(id, creator);
+    }
 
     return evaluateTag(
         scene,
         creator as Element<any>,
         helper,
-        currentId + createId(creator)
+        id
     );
 };
 
@@ -89,7 +101,14 @@ export const reconcile = <S, G extends object>(
         currentId = createId(nu);
     }
     currentState.currentElementId = currentId;
-    const creator = nu.tag(nu.props);
+    const creator = nu.tag({
+        ...nu.props,
+        children: nu.children ? [...nu.children] : [],
+    });
+
+    if (!creator) {
+        return;
+    }
 
     if ("update" in creator && "create" in creator) {
         const rerender = creator.update(gameObject, nu.props);
@@ -103,7 +122,7 @@ export const reconcile = <S, G extends object>(
             if (!Array.isArray(nu.children)) {
                 children = [nu.children as unknown as Element<any>];
             }
-            let oldElementChildren = old?.children;
+            let oldElementChildren = old?.children || [];
             if (!Array.isArray(old?.children)) {
                 oldElementChildren = [old?.children as unknown as Element<any>];
             }
@@ -144,19 +163,21 @@ export const reconcile = <S, G extends object>(
                         if (oldIdx !== idx) {
                             helper.move(gameObject, oldIdx, idx);
                         }
+                        const oldChild = oldElementChildren[oldIdx];
                         const childGo = helper.get(gameObject, oldIdx);
                         currentState.currentElementId = newId;
-                        reconcile(scene, c, c, childGo, helper, newId);
+                        reconcile(scene, oldChild, c, childGo, helper, newId);
                     }
                 });
         }
         return gameObject;
     }
+
     if (Array.isArray(creator)) {
         creator.forEach((c) => {
             reconcile(
                 scene,
-                c,
+                c, // correct?
                 c as Element<any>,
                 gameObject,
                 helper,
@@ -164,13 +185,18 @@ export const reconcile = <S, G extends object>(
             );
         });
     } else {
+        const id = currentId + createId(creator);
+        const oldState = globalState.current?.getOldTree(id);
+        if (globalState.current) {
+            globalState.current.setOldTree(id, creator);
+        }
         reconcile(
             scene,
-            creator,
+            oldState,
             creator as Element<any>,
             gameObject,
             helper,
-            currentId + createId(creator)
+            id
         );
     }
 };

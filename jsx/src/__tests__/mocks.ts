@@ -15,7 +15,7 @@ export class MockObjectFactory
 {
     constructor(public tagName: string) {}
     create(scene: undefined, props: any): MockContainer {
-        return new MockContainer(props.children || [], props, this.tagName);
+        return new MockContainer([], props, this.tagName);
     }
     update(gameObject: MockContainer, props: any) {
         gameObject.props = props;

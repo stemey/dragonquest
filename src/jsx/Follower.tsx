@@ -8,7 +8,9 @@ export interface FollowerProps {
     alpha?: number;
     scale?: number;
     texture: string | Textures.Texture;
-    ref?: Ref<GameObjects.PathFollower>;
+    ref?:
+        | Ref<GameObjects.PathFollower>
+        | ((ref: GameObjects.PathFollower) => void);
 }
 
 function update(
@@ -23,14 +25,8 @@ function update(
 export const Follower: Tag<FollowerProps> = () => ({
     create(scene: Scene, props: FollowerProps) {
         const { path, x = 0, y = 0, texture } = props;
-        const follower = scene.add.follower(
-            path,
-            x,
-            y,
-            texture
-        );
+        const follower = scene.add.follower(path, x, y, texture);
 
-        
         update(follower, props);
         return follower;
     },
