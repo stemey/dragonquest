@@ -9,4 +9,9 @@ describe("color", () => {
         const color = getComplimentary(0x00ff00);
         expect(color).toBe(0xff00ff);
     });
+    it("getComplimentary green", () => {
+        const color1 = getComplimentary(0xffff00);
+        const color2 = getComplimentary(0xf0ff00);
+        expect(Math.abs(color1-color2)).toBeGreaterThan(0)
+    });
 });

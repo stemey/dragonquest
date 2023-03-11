@@ -15,6 +15,7 @@ import { Border1 } from "../../../card/border/Border1";
 import { getColor } from "../../../utils/color";
 import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
+import { Rectangle } from "../../../jsx/Rectangle";
 
 export const Unit = observer(
     (props: {
@@ -26,6 +27,15 @@ export const Unit = observer(
         baseColor: number;
     }) => {
         const { baseColor } = props;
+        const fillColor = props.unit.selected
+            ? getColor(baseColor, 0.5, 0.5, 0.6)
+            : getColor(baseColor, 0.5, 0.5, 0.5);
+        const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
+        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.5);
+        const textColor = getColor(baseColor, 0, 0.2, 1);
+        const heroBackground = getColor(baseColor, 0.5, 0.7, 0.5);
+        // console.log("selected", props.unit.name.get(), props.unit.selected);
+
         const items = props.unit.powers.map((p, idx) => {
             const m = createModelProxy<ObservableItemModel, BattleActionState>(
                 p,
@@ -34,15 +44,15 @@ export const Unit = observer(
                     selected: "selected",
                 }
             );
-            const textColor = m.selected ? 0xff0000 : 0xff;
+            const textColor1 = m.selected ? textColor : textColor;
             return (
                 <Item
                     item={m}
                     config={{
                         fontSize: "8",
                         padding: { left: 0, top: 0, bottom: 0, right: 0 },
-                        selectedBorderColor: 0xff000,
-                        textColor,
+                        selectedBorderColor: textColor,
+                        textColor: textColor1,
                     }}
                 ></Item>
             );
@@ -52,15 +62,15 @@ export const Unit = observer(
                 text: (p: Potion) => p.name + " (" + p.count + ")",
                 selected: "selected",
             });
-            const textColor = m.selected ? 0xff0000 : 0xff;
+            const textColor1 = m.selected ? textColor : textColor;
             return (
                 <Item
                     item={m}
                     config={{
                         fontSize: "8",
                         padding: { left: 0, top: 0, bottom: 0, right: 0 },
-                        selectedBorderColor: 0xff000,
-                        textColor,
+                        selectedBorderColor: textColor1,
+                        textColor: textColor1,
                     }}
                 ></Item>
             );
@@ -88,13 +98,6 @@ export const Unit = observer(
         const x = props.x || 0;
         const y = props.y || 0;
 
-        const fillColor = props.unit.selected
-            ? 0x3090ad
-            : getColor(baseColor, 0.5, 0.01, 0.5);
-        const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
-        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.5);
-        // console.log("selected", props.unit.name.get(), props.unit.selected);
-
         const status = props.unit.targetedBy
             .map((a) => a.battleUnit.name + ">" + a.name)
             .join(", ");
@@ -113,19 +116,19 @@ export const Unit = observer(
 
         return (
             <Container>
-                <Transform mode={mode} step={{scale:1.00,x:-4,y:-2}}>
-                <Div
-                    width={width+4}
-                    height={height+4}
-                    x={x - 8}
-                    y={y - 8}
-                    margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                    padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
-                    fillColor={0x113311}
-                    fillAlpha={0.8}
-                ></Div>
+                <Transform mode={mode} step={{ scale: 1.0, x: -4, y: -2 }}>
+                    <Div
+                        width={width + 4}
+                        height={height + 4}
+                        x={x - 8}
+                        y={y - 8}
+                        margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                        padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
+                        fillColor={0x112211}
+                        fillAlpha={0.5}
+                    ></Div>
                 </Transform>
-                <Transform mode={mode} step={{scale:1.05,x:10,y:4}}>
+                <Transform mode={mode} step={{ scale: 1.05, x: 10, y: 4 }}>
                     <Div
                         width={width}
                         height={height}
@@ -135,10 +138,6 @@ export const Unit = observer(
                         padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
                         fillColor={borderFillColor}
                     >
-                        <RectangleBorderV2
-                            width={width}
-                            height={height}
-                        ></RectangleBorderV2>
                         <Border1
                             lineColor={borderLineColor}
                             fillColor={fillColor}
@@ -154,14 +153,17 @@ export const Unit = observer(
                                         padding: { top: 0, bottom: 0 },
                                         align: "center",
                                         fontSize: "8",
+                                        color: "#" + textColor.toString(16),
                                     }}
                                     text={props.unit.name.get()}
                                 />
                             </GridItem>
                             <GridItem area="hero">
-                                <Sprite
-                                    frame={props.unit.character.image}
-                                ></Sprite>
+                                <Div>
+                                    <Sprite
+                                        frame={props.unit.character.image}
+                                    ></Sprite>
+                                </Div>
                             </GridItem>
 
                             <GridItem area="potion">
@@ -217,8 +219,8 @@ export const Unit = observer(
                                         right: 0,
                                         bottom: 0,
                                     }}
-                                    fillColor={0x55}
-                                    fillAlpha={0.5}
+                                    fillColor={0xffffff}
+                                    fillAlpha={0.1}
                                 >
                                     <VerticalListV2>{items}</VerticalListV2>
                                 </Div>

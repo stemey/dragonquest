@@ -5,7 +5,7 @@ import { BattleModel } from "../model/BattleModel";
 import { Unit } from "./Unit";
 
 export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
-    const baseColors = [0xff0000, 0x0f0f00];
+    const baseColors = [0xf0f000, 0x0000FF];
     const { battleModel } = props;
     const heroes = battleModel.heroes.map((u, idx) => {
         const area = `hero_${idx + 1}`;
@@ -16,7 +16,7 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
         );
     });
     const enemies = battleModel.enemies.map((u, idx) => {
-        const baseColors = [0xaaff00, 0x0a0a00, 0x0000aa];
+        const baseColors = [0xff0000, 0xf0a000, 0x00ffff];
         const area = `enemy_${idx + 1}`;
 
         return (
@@ -31,7 +31,7 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
     `;
 
     return (
-        <Div fillColor={0x117711} width={800} height={400}>
+        <Div fillColor={0x556655} width={800} height={400}>
             
             <Grid
                 areas={areas}
