@@ -10,12 +10,10 @@ import { Sprite } from "../../../jsx/Sprite";
 import { Text } from "../../../jsx/Text";
 import { Grid, GridItem } from "../../../jsx/Grid";
 import { observer } from "./Observer";
-import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 import { Border1 } from "../../../card/border/Border1";
 import { getColor } from "../../../utils/color";
 import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
-import { Rectangle } from "../../../jsx/Rectangle";
 
 export const Unit = observer(
     (props: {
@@ -46,7 +44,7 @@ export const Unit = observer(
             );
             const textColor1 = m.selected ? textColor : textColor;
             return (
-                <Item
+                <Item key={m.text}
                     item={m}
                     config={{
                         fontSize: "8",
@@ -64,7 +62,7 @@ export const Unit = observer(
             });
             const textColor1 = m.selected ? textColor : textColor;
             return (
-                <Item
+                <Item key={m.text}
                     item={m}
                     config={{
                         fontSize: "8",
@@ -115,19 +113,7 @@ export const Unit = observer(
         const mode = props.unit.selected ? "in" : "out";
 
         return (
-            <Container>
-                <Transform mode={mode} step={{ scale: 1.0, x: -4, y: -2 }}>
-                    <Div
-                        width={width + 4}
-                        height={height + 4}
-                        x={x - 8}
-                        y={y - 8}
-                        margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
-                        padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
-                        fillColor={0x112211}
-                        fillAlpha={0.5}
-                    ></Div>
-                </Transform>
+            <Container name={props.unit.name.get()}>
                 <Transform mode={mode} step={{ scale: 1.05, x: 10, y: 4 }}>
                     <Div
                         width={width}

@@ -1,6 +1,7 @@
 import { Element, useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects, Tweens } from "phaser";
 import { Container } from "./Container";
+import { getName } from "./utils";
 
 export interface TransformStep {
     scale: number;
@@ -14,6 +15,7 @@ export interface TransformProps {
     children?: Element<any>[];
     mode: "in" | "out";
     step: TransformStep;
+    name?: string;
 }
 export const Transform = (props: TransformProps) => {
     const ref = useRef<GameObjects.Container>();
@@ -21,13 +23,6 @@ export const Transform = (props: TransformProps) => {
     useEffect(() => {
         let tween: Tweens.Tween | undefined = undefined;
         if (ref.current) {
-            console.log(
-                "tr",
-                ref.current.originX,
-                ref.current.originY,
-                ref.current.x,
-                ref.current.y
-            );
             const deltaX = props.mode == "in" ? props.step.x : 0;
             const deltaY = props.mode == "in" ? props.step.y : 0;
             const deltaScale = props.mode == "in" ? props.step.scale : 1;
@@ -50,7 +45,7 @@ export const Transform = (props: TransformProps) => {
     }, [props.mode]);
 
     return (
-        <Container x={props.x} y={props.y} ref={ref}>
+        <Container name={props.name} x={props.x} y={props.y} ref={ref}>
             {props.children}
         </Container>
     );

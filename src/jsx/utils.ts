@@ -1,3 +1,5 @@
+import { GameObjects } from "phaser";
+
 export const setWidth = (
     gameObject: Phaser.GameObjects.GameObject,
     width?: number
@@ -31,6 +33,15 @@ export const getBounds = (gameObject: Phaser.GameObjects.GameObject) => {
         ).getBounds();
     }
     return undefined;
+};
+
+export const getName = (container: GameObjects.GameObject) => {
+    const paths: string[] = [];
+    do {
+        paths.push(container.name || "none");
+        container=container.parentContainer;
+    } while (container);
+    return paths.join("/");
 };
 
 export const setPosition = (

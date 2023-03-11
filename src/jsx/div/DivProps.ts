@@ -3,6 +3,7 @@ import { Padding } from "../../gameplay/battle/menu/Padding";
 
 
 export interface DivProps {
+    name?:string;
     area?: string;
     margin?: Padding;
     padding?: Padding;

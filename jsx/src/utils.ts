@@ -1,5 +1,6 @@
 import { isArrayLike } from "mobx";
 import { Element } from "./Element";
+import { getName } from "./getName";
 import { GlobalState } from "./GlobalState";
 
 export const create = <S, T>(
@@ -77,12 +78,7 @@ const evaluateTag = <S, P extends object, T>(
         globalState.current.setOldTree(id, creator);
     }
 
-    return evaluateTag(
-        scene,
-        creator as Element<any>,
-        helper,
-        id
-    );
+    return evaluateTag(scene, creator as Element<any>, helper, id);
 };
 
 export const reconcile = <S, G extends object>(
@@ -160,11 +156,19 @@ export const reconcile = <S, G extends object>(
                             helper.add(gameObject, newObject);
                         }
                     } else {
+                        let currIdx =oldIdx
                         if (oldIdx !== idx) {
                             helper.move(gameObject, oldIdx, idx);
+                            const removed = oldChildren.splice(oldIdx, 1);
+                            oldChildren.splice(idx, 0, ...removed);
+                            currIdx=idx;
                         }
-                        const oldChild = oldElementChildren[oldIdx];
-                        const childGo = helper.get(gameObject, oldIdx);
+                        const oldChild = oldElementChildren[currIdx];
+                        const childGo = helper.get(gameObject, currIdx);
+                        if (childGo !== undefined) {
+                            
+                        }
+
                         currentState.currentElementId = newId;
                         reconcile(scene, oldChild, c, childGo, helper, newId);
                     }
@@ -202,6 +206,12 @@ export const reconcile = <S, G extends object>(
 };
 
 function createId(element: Element<any>, idx?: number): string {
+    if (element.props.name) {
+        return element.tag.name + element.props.name;
+    }
+    if (element.props.key) {
+        return element.tag.name + element.props.key;
+    }
     if (typeof idx !== "undefined") {
         return element.tag.name + (element.props.key || String(idx));
     }

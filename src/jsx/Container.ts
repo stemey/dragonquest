@@ -7,26 +7,27 @@ export interface ContainerProps {
     y?: number;
     ref?: ((gameObject: any) => void) | Ref<any>;
     top?: GameObjects.GameObject;
+    name?: string;
 }
 
 export const Container: Tag<ContainerProps> = () => ({
     create(scene: Scene, props: ContainerProps) {
         const { x, y } = props;
-        return new Phaser.GameObjects.Container(scene, x, y);
+        const container = new Phaser.GameObjects.Container(scene, x, y);
+        if (props.name) container.setName(props.name);
+        return container;
     },
     update(container: Phaser.GameObjects.Container, props: ContainerProps) {
         // x and y could also be set by parent.
         const { x, y } = props;
-        if (x) {
-            container.setX(x);
+
+        if (!!x || !!y) {
+            container.setPosition(x || 0, y || 0);
+
         }
-        if (y) {
-            container.setY(y);
-        }
+
         if (props.top) {
-            
-                container.bringToTop(props.top)
-            
+            container.bringToTop(props.top);
         }
         return false;
     },

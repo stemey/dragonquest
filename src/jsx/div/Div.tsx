@@ -56,7 +56,12 @@ export const Div = (props: DivProps) => {
     });
 
     return (
-        <Container x={x + margin.left} y={y + margin.right} ref={refCallback}>
+        <Container
+            name={props.name}
+            x={x + margin.left}
+            y={y + margin.right}
+            ref={refCallback}
+        >
             <Rectangle
                 x={0}
                 y={0}

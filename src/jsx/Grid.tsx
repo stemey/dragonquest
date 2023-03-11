@@ -10,6 +10,7 @@ export interface GridItemProps {
     y?: number;
     height?: number;
     width?: number;
+    key?:string;
 }
 
 export const GridItem = (props: GridItemProps) => {
@@ -29,7 +30,7 @@ export const GridItem = (props: GridItemProps) => {
     const y = (props.y||0) + (props.height || 0)/2
     
     // container to be able to scale children
-    return <Container x={x} y={y}>{child}</Container>;
+    return <Container name={props.area} x={x} y={y}>{child}</Container>;
 };
 
 export const Grid = (props: GridProps) => {
@@ -47,7 +48,7 @@ export const Grid = (props: GridProps) => {
         }
     });
     // just return children without container
-    return <Container>{children}</Container>;
+    return <Container name={props.name}>{children}</Container>;
 };
 
 export interface AreaGeometry {

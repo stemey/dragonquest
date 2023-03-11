@@ -117,11 +117,17 @@ export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") =>
                     }
                 }
                 else {
+                    let currIdx = oldIdx;
                     if (oldIdx !== idx) {
                         helper.move(gameObject, oldIdx, idx);
+                        const removed = oldChildren.splice(oldIdx, 1);
+                        oldChildren.splice(idx, 0, ...removed);
+                        currIdx = idx;
                     }
-                    const oldChild = oldElementChildren[oldIdx];
-                    const childGo = helper.get(gameObject, oldIdx);
+                    const oldChild = oldElementChildren[currIdx];
+                    const childGo = helper.get(gameObject, currIdx);
+                    if (childGo !== undefined) {
+                    }
                     currentState.currentElementId = newId;
                     reconcile(scene, oldChild, c, childGo, helper, newId);
                 }
@@ -145,6 +151,12 @@ export const reconcile = (scene, old, nu, gameObject, helper, currentId = "") =>
     }
 };
 function createId(element, idx) {
+    if (element.props.name) {
+        return element.tag.name + element.props.name;
+    }
+    if (element.props.key) {
+        return element.tag.name + element.props.key;
+    }
     if (typeof idx !== "undefined") {
         return element.tag.name + (element.props.key || String(idx));
     }

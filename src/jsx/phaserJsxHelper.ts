@@ -23,6 +23,9 @@ export const phaserJsxHelper: ContainerHelper<GameObjects.Container> = {
         parent: GameObjects.Container,
         idx: number
     ) {
+        if (!parent) {
+            return undefined as any;
+        }
         if ("getAtJsx" in parent) {
             return (parent as JsxContainer).getAtJsx(idx);
         }

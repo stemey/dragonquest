@@ -9,6 +9,7 @@ export const Item = (props: {
     x?: number;
     y?: number;
     width?: number;
+    key?: string;
 }) => {
     const { config, item } = props;
     const color = item.selected
@@ -22,7 +23,11 @@ export const Item = (props: {
     };
 
     return (
-        <Transform mode={mode} step={{ x: 10, y: 0, scale: 1 }}>
+        <Transform
+            name={props.key}
+            mode={mode}
+            step={{ x: 10, y: 0, scale: 1 }}
+        >
             <Text
                 onPointerDown={pointerDown}
                 x={props.x}

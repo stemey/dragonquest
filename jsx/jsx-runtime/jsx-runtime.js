@@ -1,6 +1,6 @@
-export const jsx = (tag, props) => {
+export const jsx = (tag, props, key) => {
     const { children } = props;
-    const newProps = { ...props };
+    const newProps = { ...props, key };
     let childrenArray = !!props.children ? props.children : [];
     if (!Array.isArray(childrenArray)) {
         childrenArray = [children];
@@ -9,7 +9,7 @@ export const jsx = (tag, props) => {
     const flattenedChildren = [];
     childrenArray.forEach((c) => {
         if (Array.isArray(c)) {
-            c.forEach(cc => flattenedChildren.push(cc));
+            c.forEach((cc) => flattenedChildren.push(cc));
         }
         else {
             flattenedChildren.push(c);
