@@ -1,1 +1,0 @@
-{"version":3,"file":"Element.js","sourceRoot":"","sources":["../src/Element.ts"],"names":[],"mappings":"","sourcesContent":["import { Props, Tag } from \"./jsx-runtime\";\n\nexport interface Element<P extends Props> {\n    props: { [key: string]: any };\n    tag: Tag<P>;\n    children?: Element<any>[];\n}\n"]}
