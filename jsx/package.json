@@ -10,7 +10,7 @@
     "module": "jsx-runtime/index.js",
     "types": "jsx-runtime/index.d.ts",
     "files": [
-        "dijsx-runtimest"
+        "jsx-runtime"
     ],
     "dependencies": {
         "phaser": "^3.14.0"
