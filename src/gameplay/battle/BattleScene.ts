@@ -2,7 +2,7 @@ import * as Phaser from "phaser";
 import CharacterDisplay from "./CharacterDisplay";
 import { DragonQuest } from "../hub/DragonQuest";
 import { Unit } from "../../sprites/Unit";
-import { BattleAction } from "./BattleAction";
+import { BattleAction } from "./model/BattleAction";
 import { BattleEntry } from "../../scenes/WorldEntryParameter";
 import { ReversibleData, SceneTransitions } from "../SceneTransitions";
 import { SceneWithReversibleTransitions } from "../../scenes/SceneWithReversibleTransitions";
@@ -199,7 +199,7 @@ export class BattleScene
     }
 
     attack(attacker: Unit, opponent: Unit, attack: BattleAction) {
-        attack.execute(this.events, attacker, opponent);
+        //attack.execute(this.events, attacker, opponent);
         this.events.emit("ActionFinished");
     }
 

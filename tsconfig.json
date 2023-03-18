@@ -9,7 +9,9 @@
         "declaration": false,
         "strict": true,
         "target": "ESNext",
-        "allowSyntheticDefaultImports":true
+        "allowSyntheticDefaultImports": true,
+        "jsx": "preserve",
+        "jsxImportSource": "@dragonquest/jsx"
     },
-    "include": ["src","generated"]
+    "include": ["src", "generated", "jsx/src/jsx-runtime.ts"]
 }

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "rootDir": "src",
+        "outDir": "jsx-runtime",
+        "sourceMap": true,
+        "inlineSources": true,
+        "moduleResolution": "Node16",
+        "declaration": true,
+        "strict": true,
+        "target": "ESNext",
+        "allowSyntheticDefaultImports": true,
+    },
+    "include": ["src"]
+}

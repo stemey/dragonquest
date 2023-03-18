@@ -1,7 +1,9 @@
 import { Events } from "phaser";
 import { Unit } from "../../sprites/Unit";
+import { MessageManager } from "../MessageManager";
 import { Weapon } from "../types/Weapon";
-import { BattleAction } from "./BattleAction";
+import { BattleAction } from "./model/BattleAction";
+import { Target } from "./model/target";
 
 export class Attack implements BattleAction {
     constructor(private weapon: Weapon) {}
@@ -10,8 +12,12 @@ export class Attack implements BattleAction {
         return this.weapon.name;
     }
 
+    public isSelectable(target: Target) {
+        return target.opponent;
+    }
+
     execute(
-        events: Events.EventEmitter,
+        messageManager: MessageManager,
         actor: Unit,
         target: Unit,
         random = true
@@ -27,10 +33,9 @@ export class Attack implements BattleAction {
             target.takeDamage(totalDamage);
             actor.actionPerformed(true, this.weapon.name);
             if (!target.alive) {
-                events.emit("Message", target.name + " is unable to battle");
+                messageManager.displayMessage(`${target.name} is dead`);
             } else {
-                events.emit(
-                    "Message",
+                messageManager.displayMessage(
                     actor.name +
                         " attacks " +
                         target.name +
@@ -40,7 +45,7 @@ export class Attack implements BattleAction {
                 );
             }
         } else {
-            events.emit("Message", actor.name + "'s attacks was futile");
+            messageManager.displayMessage(actor.name + "'s attacks was futile");
         }
     }
 

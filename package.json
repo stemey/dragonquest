@@ -4,6 +4,11 @@
     "description": "A bootstrap project for create games with Phaser + ES6 + Webpack.",
     "author": "leandro cabrera <leandcabrera@gmail.com>",
     "main": "index.js",
+    "private": true,
+    "workspaces": [
+        ".",
+        "jsx"
+    ],
     "scripts": {
         "generate:schema-dialog": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Dialog\" -o ./generated/schemas/dialog.json --required --noExtraProps --titles",
         "generate:schema-characters": "typescript-json-schema \"src/gameplay/types/**/*.ts\" \"Characters\" -o ./generated/schemas/characters.json --required --noExtraProps --titles",
@@ -11,7 +16,7 @@
         "generate:resolve-json-refs": "node scripts/resolve-ref.js",
         "generate:generate-map-types": "node scripts/generate-map-types.js",
         "generate": "run-p generate:*",
-        "start": "webpack serve",
+        "start": "webpack serve ",
         "watch:webpack": "webpack --watch",
         "watch:general": "npm-watch",
         "watch": "run-p watch:*",
@@ -20,7 +25,8 @@
         "test": "jest",
         "add:level": "node scripts/add-level.js",
         "validate:json:watch": "node scripts/validate-json.js watch",
-        "validate:json": "node scripts/validate-json.js validate"
+        "validate:json": "node scripts/validate-json.js validate",
+        "build": "yarn workspace @dragonquest/jsx build && tsc"
     },
     "watch": {
         "generate": "src/config/**/*.json",
@@ -29,8 +35,11 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "^7.20.7",
+        "@babel/cli": "^7.20.7",
+        "@babel/core": "^7.20.12",
+        "@babel/plugin-transform-react-jsx": "^7.20.7",
         "@babel/preset-env": "^7.20.2",
+        "@babel/preset-react": "^7.18.6",
         "@babel/preset-typescript": "^7.18.6",
         "@types/jest": "^29.2.4",
         "@types/webfontloader": "^1.6.35",
@@ -51,6 +60,7 @@
         "expose-loader": "^0.7.3",
         "html-webpack-plugin": "^5.5.0",
         "jest": "^29.3.1",
+        "jest-canvas-mock": "^2.4.0",
         "jest-environment-jsdom": "^29.3.1",
         "jsdom": "^21.0.0",
         "json-refs": "^3.0.15",
@@ -65,6 +75,7 @@
         "webpack-dev-server": "^4.11.1"
     },
     "dependencies": {
+        "@dragonquest/jsx": "1.0.0",
         "mobx": "5.6.0",
         "phaser": "^3.14.0",
         "webfontloader": "^1.6.28"

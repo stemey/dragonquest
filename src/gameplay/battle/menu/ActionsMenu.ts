@@ -1,4 +1,4 @@
-import { BattleAction } from "../BattleAction";
+import { BattleAction } from "../model/BattleAction";
 import { Menu } from "./Menu";
 
 export class ActionsMenu extends Menu {

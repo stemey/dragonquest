@@ -25,7 +25,7 @@ export class Unit {
     public armor: number;
     public hp: number;
     public id: number;
-    constructor(private character: Character) {
+    constructor(public character: Character) {
         this.armor = character.armor;
         this.hp = character.maxHp;
         this.id = unitId++;
