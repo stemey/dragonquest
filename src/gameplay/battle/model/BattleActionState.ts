@@ -31,7 +31,7 @@ export class BattleActionState implements InteractiveSelectable {
     ) {
         this._name.set(power.name);
         this._description.set(power.description);
-        const selectableTargets = targets.filter(t => power.isSelectable(t))
+        const selectableTargets = targets.filter((t) => power.isSelectable(t));
         this.targets = observable.array(selectableTargets);
     }
 

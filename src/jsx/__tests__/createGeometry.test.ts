@@ -23,6 +23,6 @@ describe("createGeometry", () => {
         expect(geom["right"].height).toBe(100);
         expect(geom["right"].width).toBe(20);
         expect(geom["right"].x).toBe(100);
-            expect(geom["right"].y).toBe(20);
+        expect(geom["right"].y).toBe(20);
     });
 });

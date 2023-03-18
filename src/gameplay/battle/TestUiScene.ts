@@ -23,7 +23,7 @@ export class TestUiScene extends Phaser.Scene {
         knight.attacks.push(powers.axe as Power);
         knight.attacks.push(powers["long sword"] as Power);
         this.model = new BattleUnit(new Unit(knight), [], new BattleModel());
-       
+
         /*
         const powerItems: ObservableItemModel[] = this.model.powers.map((a) =>
             createItemProxy(a, { text: "description", selected: "selected" })

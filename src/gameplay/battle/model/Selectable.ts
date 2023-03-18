@@ -1,4 +1,4 @@
 export interface Selectable {
-    selected:boolean;
-    disabled:boolean;
+    selected: boolean;
+    disabled: boolean;
 }

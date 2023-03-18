@@ -15,14 +15,11 @@ export const phaserJsxHelper: ContainerHelper<GameObjects.Container> = {
     },
     add: function (
         parent: GameObjects.Container,
-        child: GameObjects.GameObject 
+        child: GameObjects.GameObject
     ): void {
         parent.add(child);
     },
-    get: function (
-        parent: GameObjects.Container,
-        idx: number
-    ) {
+    get: function (parent: GameObjects.Container, idx: number) {
         if (!parent) {
             return undefined as any;
         }

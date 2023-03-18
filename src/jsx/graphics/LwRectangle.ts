@@ -14,15 +14,14 @@ export interface LwRectangleProps {
     fillAlpha?: number;
     x: number;
     y: number;
-    lineStyle?: LineStyle
+    lineStyle?: LineStyle;
 }
-
-
 
 export const LwRectangle = (
     props: LwRectangleProps & { graphics?: Phaser.GameObjects.Graphics }
 ) => {
-    const { graphics, x, y, width, height, fillColor, fillAlpha, lineStyle } = props;
+    const { graphics, x, y, width, height, fillColor, fillAlpha, lineStyle } =
+        props;
 
     useEffect(() => {
         if (graphics && graphics.visible) {
@@ -31,7 +30,11 @@ export const LwRectangle = (
                 graphics.fillRect(x, y, width, height);
             }
             if (lineStyle) {
-                graphics.lineStyle(lineStyle.lineWidth,lineStyle.color,lineStyle.alpha)
+                graphics.lineStyle(
+                    lineStyle.lineWidth,
+                    lineStyle.color,
+                    lineStyle.alpha
+                );
                 graphics.strokeRect(x, y, width, height);
             }
         }

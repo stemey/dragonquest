@@ -6,15 +6,15 @@ import { enemy1, enemy2, weapon, knight } from "./fixtures";
 
 const unit1 = new Unit(enemy1);
 const unit2 = new Unit(enemy2);
-const targets = [new Target(unit1, true), new Target(unit2,true)];
+const targets = [new Target(unit1, true), new Target(unit2, true)];
 const hero = new Unit(knight);
 describe("BattleUnit", () => {
     it("init", () => {
-        const unit = new BattleUnit(hero, targets,new BattleModel());
+        const unit = new BattleUnit(hero, targets, new BattleModel());
         expect(unit.selected).toBeFalsy();
     });
     it("next", () => {
-        const unit = new BattleUnit(hero, targets,new BattleModel());
+        const unit = new BattleUnit(hero, targets, new BattleModel());
         let atTheEnd = unit.next();
         expect(atTheEnd).toBeFalsy();
         expect(unit.powers[0].selected).toBeTruthy();

@@ -13,13 +13,13 @@ export const weapon2: Weapon = {
     strength: 10,
     type: "weapon",
 };
-export const knight:Character = {
+export const knight: Character = {
     hero: true,
     name: "Knight",
     armor: 10,
     image: "knight",
     maxHp: 10,
-    attacks: [weapon,weapon2],
+    attacks: [weapon, weapon2],
     className: "Knight",
 };
 export const wizard = {

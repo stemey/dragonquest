@@ -1,3 +1,1 @@
-export class EffectState {
-    
-}
+export class EffectState {}

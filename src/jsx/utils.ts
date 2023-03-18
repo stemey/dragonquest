@@ -39,7 +39,7 @@ export const getName = (container: GameObjects.GameObject) => {
     const paths: string[] = [];
     do {
         paths.push(container.name || "none");
-        container=container.parentContainer;
+        container = container.parentContainer;
     } while (container);
     return paths.join("/");
 };

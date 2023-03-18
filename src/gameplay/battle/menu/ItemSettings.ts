@@ -5,5 +5,5 @@ export interface ItemSettings {
     fontSize: string;
     padding: Padding;
     bgColor?: number;
-    selectedBorderColor: number
+    selectedBorderColor: number;
 }

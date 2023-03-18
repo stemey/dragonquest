@@ -5,7 +5,7 @@ export const getComplimentary = (
     sat: number = 1,
     light: number = 1
 ) => {
-    return getColor(input, 0.5,sat,light);
+    return getColor(input, 0.5, sat, light);
 };
 
 export const getColor = (
@@ -26,12 +26,8 @@ export const getColor = (
     return convertColorToNumber(targetRgba);
 };
 
-export const getTriad = (
-    input: number,
-    sat: number = 1,
-    light: number = 1
-) => {
-    return [getColor(input, 0.4,sat,light), getColor(input, 0.6,sat,light)];
+export const getTriad = (input: number, sat: number = 1, light: number = 1) => {
+    return [getColor(input, 0.4, sat, light), getColor(input, 0.6, sat, light)];
 };
 
 export const convertColorToNumber = (

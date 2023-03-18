@@ -11,7 +11,7 @@ export interface GraphicsProps {
         | ((graphics: Phaser.GameObjects.Graphics) => void)
         | Ref<Phaser.GameObjects.Graphics>;
     lineStyle?: LineStyle;
-    visible:boolean;
+    visible: boolean;
 }
 
 export const Graphics: Tag<GraphicsProps> = () => ({
@@ -19,7 +19,11 @@ export const Graphics: Tag<GraphicsProps> = () => ({
         const { x, y } = props;
         const g = new GraphicsContainer(scene, { x: x, y: y });
         if (props.lineStyle) {
-            g.lineStyle(props.lineStyle.lineWidth,props.lineStyle.color,props.lineStyle.alpha);
+            g.lineStyle(
+                props.lineStyle.lineWidth,
+                props.lineStyle.color,
+                props.lineStyle.alpha
+            );
         }
         return g;
     },

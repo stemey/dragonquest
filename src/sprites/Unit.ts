@@ -37,9 +37,10 @@ export class Unit {
     convertAction(action: Power) {
         if (action.type && action.type === "healing") {
             return new Heal(action as Healing);
-        } else {
+        } else if (action.type && action.type === "weapon") {
             return new Attack(action);
         }
+        throw new Error("action type unknown");
     }
 
     actionPerformed(successful: boolean, action: string) {}

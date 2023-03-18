@@ -1,4 +1,3 @@
-
 export interface Padding {
     left: number;
     right: number;

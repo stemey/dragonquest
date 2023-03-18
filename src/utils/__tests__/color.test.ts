@@ -12,6 +12,6 @@ describe("color", () => {
     it("getComplimentary green", () => {
         const color1 = getComplimentary(0xffff00);
         const color2 = getComplimentary(0xf0ff00);
-        expect(Math.abs(color1-color2)).toBeGreaterThan(0)
+        expect(Math.abs(color1 - color2)).toBeGreaterThan(0);
     });
 });

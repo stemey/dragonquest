@@ -15,8 +15,9 @@ class HorizontalListContainer extends Phaser.GameObjects.Container {
         const length = this.getAll().length;
         const width = this.getAll().reduce((w, child, idx) => {
             w +=
-                (child as unknown as Phaser.GameObjects.Components.GetBounds).getBounds()
-                    .width + this.props.gap;
+                (
+                    child as unknown as Phaser.GameObjects.Components.GetBounds
+                ).getBounds().width + this.props.gap;
 
             return w;
         }, 0);
@@ -35,5 +36,7 @@ export const HorizontalList: Tag<HorizontalListProps> = () => ({
     update(
         container: Phaser.GameObjects.Container,
         props: HorizontalListProps
-    ) {return false;},
+    ) {
+        return false;
+    },
 });

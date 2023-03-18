@@ -5,7 +5,7 @@ import { next, previous } from "./select";
 export class SelectableGroup implements InteractiveSelectable {
     constructor(private selectables: InteractiveSelectable[]) {
         selectables.forEach((s, idx) => {
-            s.listen( () => {
+            s.listen(() => {
                 if (s.selected) this.unselect(idx);
             });
         });
@@ -79,7 +79,7 @@ export class SelectableGroup implements InteractiveSelectable {
     right() {
         this.selectables[this.selectedIndex].next();
     }
-    listen(cb:()=>void) {
-        this.selectables.forEach(s => s.listen(cb));
+    listen(cb: () => void) {
+        this.selectables.forEach((s) => s.listen(cb));
     }
 }

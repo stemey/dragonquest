@@ -1,9 +1,8 @@
 import { Element } from "@dragonquest/jsx/src/Element";
 import { Padding } from "../../gameplay/battle/menu/Padding";
 
-
 export interface DivProps {
-    name?:string;
+    name?: string;
     area?: string;
     margin?: Padding;
     padding?: Padding;
@@ -13,7 +12,6 @@ export interface DivProps {
     fillAlpha?: number;
     x?: number;
     y?: number;
-    children?:Element<any>[]
-    onPointerDown?:()=>void
-
+    children?: Element<any>[];
+    onPointerDown?: () => void;
 }
