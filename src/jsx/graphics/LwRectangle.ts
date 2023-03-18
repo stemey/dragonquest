@@ -25,7 +25,7 @@ export const LwRectangle = (
     const { graphics, x, y, width, height, fillColor, fillAlpha, lineStyle } = props;
 
     useEffect(() => {
-        if (graphics) {
+        if (graphics && graphics.visible) {
             if (fillColor) {
                 graphics.fillStyle(fillColor, fillAlpha);
                 graphics.fillRect(x, y, width, height);

@@ -199,7 +199,7 @@ export class BattleScene
     }
 
     attack(attacker: Unit, opponent: Unit, attack: BattleAction) {
-        attack.execute(this.events, attacker, opponent);
+        //attack.execute(this.events, attacker, opponent);
         this.events.emit("ActionFinished");
     }
 

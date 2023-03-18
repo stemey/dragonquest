@@ -1,4 +1,4 @@
-import { Tag, useRef, useState } from "@dragonquest/jsx/jsx-runtime";
+import { Tag, useEffect, useRef, useState } from "@dragonquest/jsx/jsx-runtime";
 import { Curves, GameObjects } from "phaser";
 import { Container } from "./Container";
 import { Follower, FollowerProps } from "./Follower";
@@ -6,7 +6,11 @@ import { GraphicsProps } from "./graphics/Graphics";
 import { GraphicsTexture } from "./graphics/GraphicsTexture";
 import { LwRectangle } from "./graphics/LwRectangle";
 
-export const RectangleBorderV2 = (props: { width: number; height: number }) => {
+export const RectangleBorderV2 = (props: {
+    visible?: boolean;
+    width: number;
+    height: number;
+}) => {
     const { width, height } = props;
 
     const size = 2;
@@ -27,7 +31,12 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
         }
     };
     const texture2: Tag<GraphicsProps> = (
-        <GraphicsTexture width={size} height={size} onTexture={onTexture}>
+        <GraphicsTexture
+            width={size}
+            height={size}
+            onTexture={onTexture}
+            visible={!!props.visible}
+        >
             <LwRectangle
                 x={0}
                 y={0}
@@ -59,6 +68,7 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
                 alpha = (posInSegment + 1) / length;
                 return (
                     <SelfStartingFollower
+                        visible={!!props.visible}
                         path={path}
                         texture={texture}
                         alpha={alpha}
@@ -72,29 +82,46 @@ export const RectangleBorderV2 = (props: { width: number; height: number }) => {
     return <Container>{followers}</Container>;
 };
 
-const SelfStartingFollower = (props: FollowerProps & { startAt?: number }) => {
+const SelfStartingFollower = (
+    props: FollowerProps & { visible: boolean; startAt?: number }
+) => {
     const { startAt } = props;
-    const [started, setStarted] = useState(false);
-    const ref = (follower: GameObjects.PathFollower) => {
-        if (!started) {
-            setStarted(true);
-            follower.startFollow({
+    const ref = useRef<GameObjects.PathFollower>();
+    const startedCount = useRef<number>(0);
+
+    useEffect(() => {
+        if (props.visible && ref.current) {
+            ref.current.startFollow({
                 duration: 10000,
                 positionOnPath: true,
                 startAt,
                 loop: -1,
             });
+            if (typeof startedCount.current === "number") {
+                startedCount.current += 1;
+            }
+            ref.current.visible = true;
         }
-    };
+        return () => {
+            if (ref.current) {
+                ref.current.stopFollow();
+                ref.current.visible = false;
+
+                if (typeof startedCount.current === "number") {
+                    startedCount.current -= 1;
+                }
+            }
+        };
+    }, [props.visible, ref.current]);
 
     return <Follower ref={ref} {...props}></Follower>;
 };
 
 function createPath(width: number, height: number): Curves.Path {
-    const path = new Curves.Path(0, 0);
-    path.lineTo(width, 0);
-    path.lineTo(width, height);
-    path.lineTo(0, height);
+    const path = new Curves.Path(-width / 2, -height / 2);
+    path.lineTo(width / 2, -height / 2);
+    path.lineTo(width / 2, height / 2);
+    path.lineTo(-width / 2, height / 2);
     path.closePath();
     return path;
 }

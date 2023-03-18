@@ -1,11 +1,12 @@
 import { Element } from "@dragonquest/jsx/src/Element";
 import { Div } from "../../../jsx/div/Div";
 import { Grid, GridItem } from "../../../jsx/Grid";
+import { Text } from "../../../jsx/Text";
 import { BattleModel } from "../model/BattleModel";
 import { Unit } from "./Unit";
 import { UnitShadow } from "./UnitShadow";
 
-export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
+export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
     const { battleModel } = props;
     const baseColors = {
         [battleModel.heroes[0].name.get()]: 0xf0f000,
@@ -14,6 +15,7 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
     const heroAreas: string[] = battleModel.heroes.map(
         (h) => `hero_${h.name.get()}`
     );
+    const candidateTargets = battleModel.weaponSelected?.targets;
     const heroes = battleModel.heroes
         .slice()
         .sort((x1, x2) => {
@@ -25,9 +27,16 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
         })
         .map((u) => {
             const area = `hero_${u.name.get()}`;
+            const candidate =
+                candidateTargets &&
+                candidateTargets.some((t) => t.name === u.name.get());
             return (
                 <GridItem key={area} area={area}>
-                    <Unit unit={u} baseColor={baseColors[u.name.get()]}></Unit>
+                    <Unit
+                        unit={u}
+                        baseColor={baseColors[u.name.get()]}
+                        candidate={candidate}
+                    ></Unit>
                 </GridItem>
             );
         });
@@ -36,17 +45,44 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
         const baseColors = [0xff0000, 0xf0a000, 0x00ffff];
         const area = `enemy_${u.name.get()}`;
         enemyAreas.push(area);
+        const candidate =
+            candidateTargets &&
+            candidateTargets.some((t) => t.name === u.name.get());
 
         return (
             <GridItem key={area} area={area}>
-                <Unit unit={u} baseColor={baseColors[idx]}></Unit>
+                <Unit
+                    unit={u}
+                    baseColor={baseColors[idx]}
+                    candidate={candidate}
+                ></Unit>
             </GridItem>
         );
     });
     const areas = `
     ${heroAreas[2]} ${heroAreas[0]} nomansland ${enemyAreas[0]} ${enemyAreas[2]}
     ${heroAreas[3]} ${heroAreas[1]} nomansland ${enemyAreas[1]} ${enemyAreas[3]}
+    . bar bar bar .
     `;
+
+    const fightCallback = () => {
+        battleModel.finishTurn();
+    };
+
+    const bar = (
+        <GridItem area="bar">
+            <Div
+                fillColor={0x002200}
+                padding={{ top: 2, bottom: 2, left: 0, right: 0 }}
+            >
+                <Text
+                    text="Fight"
+                    style={{ align: "center" }}
+                    onPointerDown={fightCallback}
+                ></Text>
+            </Div>
+        </GridItem>
+    );
 
     const shadows = battleModel.heroes
         .map((u, idx) => (
@@ -67,7 +103,7 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
             <Grid
                 areas={areas}
                 columns="150 150 20 150 150"
-                rows="190 190"
+                rows="180 180 20"
                 gap={{ x: 10, y: 10 }}
                 name="shadowGrid"
             >
@@ -76,11 +112,11 @@ export const Gui = (props: { battleModel: BattleModel }): Element<any> => {
             <Grid
                 areas={areas}
                 columns="150 150 20 150 150"
-                rows="190 190"
+                rows="180 180 40"
                 gap={{ x: 10, y: 10 }}
                 name="unitGrid"
             >
-                {heroes.concat(enemies)}
+                {heroes.concat(enemies).concat([bar])}
             </Grid>
         </Div>
     );

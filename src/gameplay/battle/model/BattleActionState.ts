@@ -1,4 +1,5 @@
 import { observable, ObservableMap, runInAction } from "mobx";
+import { MessageManager } from "../../MessageManager";
 import { Attack } from "../Attack";
 import { Heal } from "../Heal";
 import { BattleUnit } from "./BattleUnit";
@@ -7,6 +8,22 @@ import { getSelected, next, previous } from "./select";
 import { Target } from "./target";
 
 export class BattleActionState implements InteractiveSelectable {
+    execute(): void {
+        const target = this.selectedTarget?.name;
+        if (!target) {
+            return;
+        }
+        const unit = this.battleUnit.battleModel.findUnitByName(target);
+        if (!unit) {
+            return;
+        }
+        this.action?.execute(
+            new MessageManager(),
+            unit.unit,
+            this.battleUnit.unit,
+            false
+        );
+    }
     constructor(
         private power: Heal | Attack,
         targets: Target[],
@@ -14,7 +31,8 @@ export class BattleActionState implements InteractiveSelectable {
     ) {
         this._name.set(power.name);
         this._description.set(power.description);
-        this.targets = observable.array(targets);
+        const selectableTargets = targets.filter(t => power.isSelectable(t))
+        this.targets = observable.array(selectableTargets);
     }
 
     _selectedTarget = observable.box<Target | undefined>();
@@ -62,24 +80,54 @@ export class BattleActionState implements InteractiveSelectable {
         );
         this.selectTarget(true);
     }
-
-    selectTarget(selected: boolean) {
-        const targetName = getSelected(this.targets)?.name;
-
-        if (targetName) {
-            const unit = this.battleUnit.battleModel.findUnitByName(targetName);
+    deselectAllTargets() {
+        this.targets.forEach((t) => {
+            const unit = this.battleUnit.battleModel.findUnitByName(t.name);
             if (unit) {
-                if (selected) {
-                    unit.targetedBy.push(this);
-                } else {
-                    const index = unit.targetedBy.indexOf(this);
-                    if (index >= 0) {
-                        unit.targetedBy.splice(index, 1);
-                    }
+                const index = unit.targetedBy.indexOf(this);
+                if (index >= 0) {
+                    unit.targetedBy.splice(index, 1);
                 }
+            }
+        });
+    }
+
+    deselectTarget(unit: BattleUnit) {
+        const index = unit.targetedBy.indexOf(this);
+        if (index >= 0) {
+            unit.targetedBy.splice(index, 1);
+        }
+    }
+
+    selectTarget(selected: boolean | BattleUnit) {
+        let unit: BattleUnit | undefined;
+        if (typeof selected == "boolean") {
+            const targetName = getSelected(this.targets)?.name;
+
+            if (targetName) {
+                unit = this.battleUnit.battleModel.findUnitByName(targetName);
+            }
+        } else {
+            unit = selected;
+        }
+
+        if (unit) {
+            this.deselectAllTargets();
+            const index = unit.targetedBy.indexOf(this);
+            if (index >= 0) {
+                unit.targetedBy.splice(index, 1);
+                this._selectedTarget.set(undefined);
+            } else {
+                unit.targetedBy.push(this);
+                this.targets.forEach((t) => {
+                    if (t.name === unit?.name.get()) {
+                        this._selectedTarget.set(t);
+                    }
+                });
             }
         }
     }
+
     _name = observable.box("");
     _selected = observable.box(false);
     chosen = observable.box(false);

@@ -1,7 +1,7 @@
-import { GameObjects } from "phaser";
+import { GameObjects, Geom } from "phaser";
 import { getBounds } from "../utils";
 import { DivProps } from "./DivProps";
-import { useState } from "@dragonquest/jsx/jsx-runtime";
+import { useEffect, useState } from "@dragonquest/jsx/jsx-runtime";
 import { phaserJsxHelper } from "../phaserJsxHelper";
 import { Container } from "../Container";
 import { Rectangle } from "../Rectangle";
@@ -15,6 +15,26 @@ export const Div = (props: DivProps) => {
             setRef(aref);
         }
     };
+    useEffect(() => {
+        if (ref && props.onPointerDown && props.width && props.height) {
+            
+            ref.setInteractive(
+                new Geom.Rectangle(
+                    (ref.displayOriginX || 0),
+                    (ref.displayOriginY || 0),
+                    props.width,
+                    props.height
+                ),
+                Geom.Rectangle.Contains
+            );
+            ref.addListener("pointerdown", props.onPointerDown);
+        }
+        return () => {
+            if (ref && props.onPointerDown) {
+                ref?.removeListener("pointerdown", props.onPointerDown);
+            }
+        };
+    }, [ref, props.onPointerDown, props.width, props.height]);
     const x = props.x || 0;
     const y = props.y || 0;
     const padding = props.padding || { bottom: 0, left: 0, right: 0, top: 0 };

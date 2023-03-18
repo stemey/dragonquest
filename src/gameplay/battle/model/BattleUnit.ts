@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, observe } from "mobx";
 import { Unit } from "../../../sprites/Unit";
 import { Character } from "../../types/Character";
 import { BattleActionState } from "./BattleActionState";
@@ -6,15 +6,44 @@ import { BattleModel } from "./BattleModel";
 import { EffectState } from "./EffectState";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 import { Potion } from "./Potion";
-import { previous } from "./select";
 import { SelectableGroup } from "./SelectableGroup";
 import { Stats } from "./Stats";
 import { Target } from "./target";
 
 export class BattleUnit implements InteractiveSelectable {
+    executeAction() {
+        this.powers.forEach((p) => {
+            if (p.selectedTarget) {
+                p.execute();
+            }
+        });
+    }
+    chosenAndExecuteAction() {
+        const actionIdx =
+            Math.trunc(Math.random() * this.powers.length) % this.powers.length;
+        const p = this.powers[actionIdx];
+        const targetIdx =
+            Math.trunc(Math.random() * p.targets.length) % p.targets.length;
+        const targetUnit = this.battleModel.findUnitByName(
+            p.targets[targetIdx].name
+        );
+        if (targetUnit) {
+            p.selectTarget(targetUnit);
+            this.executeAction();
+        }
+    }
     deselect() {
         this._selected.set(false);
-        this.selectableGroups.forEach(s => s.deselect())
+        this.selectableGroups.forEach((s) => s.deselect());
+    }
+
+    toggle() {
+        this._selected.set(!this._selected);
+        if (this._selected) {
+            this.next();
+        } else {
+            this.deselect();
+        }
     }
     name = observable.box("");
     hp = observable.box(0);
@@ -34,7 +63,7 @@ export class BattleUnit implements InteractiveSelectable {
     public targetedBy = observable.array<BattleActionState>([]);
 
     constructor(
-        unit: Unit,
+        public unit: Unit,
         targets: Target[],
         public battleModel: BattleModel
     ) {
@@ -49,8 +78,31 @@ export class BattleUnit implements InteractiveSelectable {
             new SelectableGroup(this.potions),
             new SelectableGroup(this.powers),
         ];
-        this.selectableGroups.forEach((s) => s.listen(() => this.unselect(s)));
+        this.selectableGroups.forEach((s) =>
+            s.listen(() => {
+                this.unselect(s);
+            })
+        );
     }
+
+    deselectAllTargets(except: BattleActionState) {
+        this.powers.forEach((p) => {
+            if (p !== except) {
+                p.deselectAllTargets();
+            }
+        });
+    }
+
+    selectTarget(unit: BattleUnit) {
+        this.powers.forEach((p) => {
+            if (p.selected) {
+                p.selectTarget(unit);
+            } else {
+                p.deselectAllTargets();
+            }
+        });
+    }
+
     unselect(s: SelectableGroup) {
         if (s.selected) {
             this.selectableGroups.filter((s2) => {

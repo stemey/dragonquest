@@ -75,7 +75,7 @@ export const Border1 = (props: {
     });
 
     return (
-        <GraphicsTexture width={width} height={height}>
+        <GraphicsTexture width={width} height={height} visible>
             <LwRectangle
                 x={options.indent}
                 y={options.indent}

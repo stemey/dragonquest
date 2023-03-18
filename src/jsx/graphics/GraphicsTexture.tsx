@@ -15,6 +15,7 @@ export const GraphicsTexture = (props: {
     onTexture?: (name: string, texture: Phaser.Textures.Texture) => void;
     lineStyle?: LineStyle;
     children?: Element<{ graphics?: GameObjects.Graphics }>[];
+    visible:boolean
 }) => {
     const ref = useRef<GameObjects.Graphics>();
     const [ready, setReady] = useState(false);
@@ -36,7 +37,7 @@ export const GraphicsTexture = (props: {
     }, [ref.current, ready]);
 
     return (
-        <Graphics ref={ref} lineStyle={props.lineStyle}>
+        <Graphics ref={ref} lineStyle={props.lineStyle} visible={props.visible}>
             {props.children?.map((c) => ({
                 tag: c.tag,
                 children: c.children,

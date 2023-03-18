@@ -8,6 +8,6 @@ export const chooseAttacksRandom: chooseAttacks = (unit, enemies, friends) => {
     const enemyIdx =
         Math.round(Math.random() * enemies.length) % enemies.length;
     const target = enemies[enemyIdx];
-    attack.execute(eventsMock, unit, target, false);
+    // attack.execute(eventsMock, unit, target, false);
     return { attack: attack.name, targetName: target.name };
 };

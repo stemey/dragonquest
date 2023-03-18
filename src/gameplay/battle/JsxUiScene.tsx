@@ -5,7 +5,7 @@ import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
 import { globalState, render } from "@dragonquest/jsx/jsx-runtime";
-import { Gui } from "./menu/Gui";
+import { Battle } from "./menu/Battle";
 import { phaserJsxHelper } from "../../jsx/phaserJsxHelper";
 import { BattleModel } from "./model/BattleModel";
 import { action, runInAction } from "mobx";
@@ -41,7 +41,7 @@ export class JsxUiScene extends Phaser.Scene {
         this.model.startBattle(heroes, enemies);
         this.ui = render(
             this,
-            <Gui battleModel={this.model} />,
+            <Battle battleModel={this.model} />,
             phaserJsxHelper
         );
         if (this.ui) {

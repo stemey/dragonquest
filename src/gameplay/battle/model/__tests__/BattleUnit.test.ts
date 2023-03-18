@@ -6,7 +6,7 @@ import { enemy1, enemy2, weapon, knight } from "./fixtures";
 
 const unit1 = new Unit(enemy1);
 const unit2 = new Unit(enemy2);
-const targets = [new Target(unit1), new Target(unit2)];
+const targets = [new Target(unit1, true), new Target(unit2,true)];
 const hero = new Unit(knight);
 describe("BattleUnit", () => {
     it("init", () => {

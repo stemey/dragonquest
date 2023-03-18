@@ -11,6 +11,7 @@ export interface GraphicsProps {
         | ((graphics: Phaser.GameObjects.Graphics) => void)
         | Ref<Phaser.GameObjects.Graphics>;
     lineStyle?: LineStyle;
+    visible:boolean;
 }
 
 export const Graphics: Tag<GraphicsProps> = () => ({
@@ -30,6 +31,9 @@ export const Graphics: Tag<GraphicsProps> = () => ({
         }
         if (y) {
             container.setY(y);
+        }
+        if (!props.visible) {
+            container.clear();
         }
         return false;
     },

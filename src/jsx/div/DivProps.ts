@@ -14,4 +14,6 @@ export interface DivProps {
     x?: number;
     y?: number;
     children?:Element<any>[]
+    onPointerDown?:()=>void
+
 }

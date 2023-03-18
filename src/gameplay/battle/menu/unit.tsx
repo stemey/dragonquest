@@ -14,6 +14,7 @@ import { Border1 } from "../../../card/border/Border1";
 import { getColor } from "../../../utils/color";
 import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
+import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 
 export const Unit = observer(
     (props: {
@@ -23,16 +24,15 @@ export const Unit = observer(
         height?: number;
         unit: BattleUnit;
         baseColor: number;
+        candidate?: boolean;
     }) => {
         const { baseColor } = props;
         const fillColor = props.unit.selected
-            ? getColor(baseColor, 0.5, 0.5, 0.6)
-            : getColor(baseColor, 0.5, 0.5, 0.5);
+            ? getColor(baseColor, 0.5, 0.2, 0.6)
+            : getColor(baseColor, 0.5, 0.2, 0.5);
         const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
         const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.5);
         const textColor = getColor(baseColor, 0, 0.2, 1);
-        const heroBackground = getColor(baseColor, 0.5, 0.7, 0.5);
-        // console.log("selected", props.unit.name.get(), props.unit.selected);
 
         const items = props.unit.powers.map((p, idx) => {
             const m = createModelProxy<ObservableItemModel, BattleActionState>(
@@ -44,7 +44,8 @@ export const Unit = observer(
             );
             const textColor1 = m.selected ? textColor : textColor;
             return (
-                <Item key={m.text}
+                <Item
+                    key={m.text}
                     item={m}
                     config={{
                         fontSize: "8",
@@ -62,7 +63,8 @@ export const Unit = observer(
             });
             const textColor1 = m.selected ? textColor : textColor;
             return (
-                <Item key={m.text}
+                <Item
+                    key={m.text}
                     item={m}
                     config={{
                         fontSize: "8",
@@ -112,9 +114,17 @@ export const Unit = observer(
 
         const mode = props.unit.selected ? "in" : "out";
 
+        const candidate = !!props.candidate;
+
         return (
             <Container name={props.unit.name.get()}>
                 <Transform mode={mode} step={{ scale: 1.05, x: 10, y: 4 }}>
+                    <RectangleBorderV2
+                        visible={candidate}
+                        height={height}
+                        width={width}
+                    ></RectangleBorderV2>
+
                     <Div
                         width={width}
                         height={height}
@@ -123,6 +133,18 @@ export const Unit = observer(
                         margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
                         padding={{ left: 10, top: 10, right: 10, bottom: 10 }}
                         fillColor={borderFillColor}
+                        onPointerDown={() => {
+                            if (
+                                candidate &&
+                                props.unit.battleModel.weaponSelected
+                            ) {
+                                props.unit.battleModel.currentHero.selectTarget(
+                                    props.unit
+                                );
+                            } else {
+                                props.unit.toggle();
+                            }
+                        }}
                     >
                         <Border1
                             lineColor={borderLineColor}
