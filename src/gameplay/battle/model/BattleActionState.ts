@@ -19,10 +19,11 @@ export class BattleActionState implements InteractiveSelectable {
         }
         this.action?.execute(
             new MessageManager(),
-            unit.unit,
             this.battleUnit.unit,
+            unit.unit,
             false
         );
+        this.battleUnit.sync();
     }
     constructor(
         private power: Heal | Attack,

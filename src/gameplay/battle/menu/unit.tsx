@@ -15,6 +15,7 @@ import { getColor } from "../../../utils/color";
 import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
+import { ValueBar } from "./ValueBar";
 
 export const Unit = observer(
     (props: {
@@ -177,41 +178,22 @@ export const Unit = observer(
                             <GridItem area="potion">
                                 <VerticalListV2>{potions}</VerticalListV2>
                             </GridItem>
+
                             <GridItem area="hpbar">
-                                <Div
-                                    margin={{
-                                        left: 0,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                    }}
-                                    padding={{
-                                        left: 0,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                    }}
-                                    fillColor={0x005500}
-                                    fillAlpha={0.5}
-                                ></Div>
+                                <ValueBar
+                                    emptyColor={0x003300}
+                                    fillColor={0x00dd00}
+                                    value={props.unit.hp.get()}
+                                    maxValue={props.unit.maxHp.get()}
+                                ></ValueBar>
                             </GridItem>
                             <GridItem area="powerbar">
-                                <Div
-                                    margin={{
-                                        left: 0,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                    }}
-                                    padding={{
-                                        left: 0,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                    }}
-                                    fillColor={0x550000}
-                                    fillAlpha={0.5}
-                                ></Div>
+                                <ValueBar
+                                    emptyColor={0x330000}
+                                    fillColor={0xdd0000}
+                                    value={props.unit.hp.get()}
+                                    maxValue={props.unit.maxHp.get()}
+                                ></ValueBar>
                             </GridItem>
                             <GridItem area="weapons">
                                 <Div

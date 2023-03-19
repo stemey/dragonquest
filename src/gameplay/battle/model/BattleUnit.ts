@@ -11,6 +11,9 @@ import { Stats } from "./Stats";
 import { Target } from "./target";
 
 export class BattleUnit implements InteractiveSelectable {
+    sync() {
+        this.hp.set(this.unit.hp);
+    }
     executeAction() {
         this.powers.forEach((p) => {
             if (p.selectedTarget) {

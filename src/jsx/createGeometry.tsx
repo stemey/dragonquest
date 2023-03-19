@@ -28,7 +28,7 @@ export function createGeometry(props: GridProps) {
         .map((d) =>
             parseSize(
                 d,
-                width ? width - props.columns.length * gap.x : undefined
+                width ? width - props.columns.length * gap.x : props.columns
             )
         );
     const rows = props.rows
@@ -37,7 +37,7 @@ export function createGeometry(props: GridProps) {
         .map((d) =>
             parseSize(
                 d,
-                height ? height - props.rows.length * gap.y : undefined
+                height ? height - props.rows.length * gap.y : props.rows
             )
         );
 
@@ -90,12 +90,15 @@ export function createGeometry(props: GridProps) {
     });
     return areas;
 }
-function parseSize(d: string, maxSize?: number): number {
+function parseSize(d: string, maxSize: number | string): number {
     const match = d.match(/.*%$/);
     if (match) {
         const percentage = parseInt(d.substring(0, d.length - 1), 10);
-        if (!maxSize) {
-            console.error("no maxSize given, so cannot derive percentage");
+        if (typeof maxSize === "string") {
+            console.error(
+                "no maxSize given, so cannot derive percentage",
+                maxSize
+            );
             return 1;
         }
         return (percentage / 100) * maxSize;

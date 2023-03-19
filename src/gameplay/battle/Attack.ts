@@ -32,17 +32,16 @@ export class Attack implements BattleAction {
             const totalDamage = Math.round(this.weapon.damage + extraDamage);
             target.takeDamage(totalDamage);
             actor.actionPerformed(true, this.weapon.name);
+            messageManager.displayMessage(
+                actor.name +
+                    " attacks " +
+                    target.name +
+                    " for " +
+                    totalDamage +
+                    " damage"
+            );
             if (!target.alive) {
                 messageManager.displayMessage(`${target.name} is dead`);
-            } else {
-                messageManager.displayMessage(
-                    actor.name +
-                        " attacks " +
-                        target.name +
-                        " for " +
-                        totalDamage +
-                        " damage"
-                );
             }
         } else {
             messageManager.displayMessage(actor.name + "'s attacks was futile");
