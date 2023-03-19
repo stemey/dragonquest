@@ -1,4 +1,4 @@
-import { Tag } from "@dragonquest/jsx/jsx-runtime";
+import { Ref, Tag } from "@dragonquest/jsx/jsx-runtime";
 import { reaction } from "mobx";
 import { GameObjects, Scene } from "phaser";
 
@@ -11,6 +11,7 @@ export interface RectangleProps {
     x: number;
     y: number;
     onPointerDown?: () => void;
+    ref?: Ref<GameObjects.Rectangle>;
 }
 
 export const Rectangle: Tag<RectangleProps> = () => ({

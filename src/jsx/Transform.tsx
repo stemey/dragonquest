@@ -27,14 +27,16 @@ export const Transform = (props: TransformProps) => {
             const deltaY = props.mode == "in" ? props.step.y : 0;
             const deltaScale = props.mode == "in" ? props.step.scale : 1;
 
-            tween = ref.current.scene.tweens.add({
+            const config = {
                 targets: ref.current,
                 x: deltaX,
                 y: deltaY,
                 scale: deltaScale,
                 ease: "Power1",
                 duration: 300,
-            });
+            } as any;
+
+            tween = ref.current.scene.tweens.add(config);
         }
 
         return () => {
