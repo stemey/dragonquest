@@ -16,6 +16,7 @@ export interface TransformProps {
     mode: "in" | "out";
     step: TransformStep;
     name?: string;
+    delay?: number;
 }
 export const Transform = (props: TransformProps) => {
     const ref = useRef<GameObjects.Container>();
@@ -31,6 +32,7 @@ export const Transform = (props: TransformProps) => {
                 targets: ref.current,
                 x: deltaX,
                 y: deltaY,
+                delay: props.delay || 0,
                 scale: deltaScale,
                 ease: "Power1",
                 duration: 300,

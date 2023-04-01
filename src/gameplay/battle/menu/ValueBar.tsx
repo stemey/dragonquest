@@ -3,7 +3,8 @@ import { GameObjects } from "phaser";
 import { Container } from "../../../jsx/Container";
 import { Div } from "../../../jsx/div/Div";
 import { Rectangle } from "../../../jsx/Rectangle";
-import { TweenedChanges } from "../../../jsx/TweenedChanges";
+import { Text } from "../../../jsx/Text";
+import { useTween } from "../../../jsx/useTween";
 
 export interface ValueBarProps {
     value: number;
@@ -17,12 +18,13 @@ export interface ValueBarProps {
 }
 
 export const ValueBar = (props: ValueBarProps) => {
-    const { value, maxValue, emptyColor, fillColor } = props;
+    const { value, maxValue } = props;
 
-    const valuePercentage = Math.trunc((value * 100) / maxValue);
     const rectRef = useRef<GameObjects.Rectangle>();
 
     const valueWidth = Math.trunc(((props.width || 0) * value) / maxValue);
+    const currentWidth =
+        useTween({ objectRef: rectRef, width: valueWidth }) || 0;
 
     return (
         <Container
@@ -31,26 +33,33 @@ export const ValueBar = (props: ValueBarProps) => {
             x={props.x}
             y={props.y}
         >
-            <Div
-                width={props.width}
-                height={props.height}
-                fillColor={emptyColor}
-            ></Div>
-            <TweenedChanges name="tweenWidth" width={valueWidth} objectRef={rectRef}>
-                {(width: number) => {
-                    return (
-                        <Rectangle
-                            ref={rectRef}
-                            width={width}
-                            x={0}
-                            y={0}
-                            height={props.height || 0}
-                            fillAlpha={1}
-                            fillColor={props.fillColor}
-                        />
-                    );
+            <Rectangle
+                width={props.width || 0}
+                x={0}
+                y={0}
+                height={props.height || 0}
+                fillAlpha={1}
+                fillColor={props.emptyColor}
+            />
+
+            <Rectangle
+                ref={rectRef}
+                width={currentWidth}
+                x={0}
+                y={0}
+                height={props.height || 0}
+                fillAlpha={1}
+                fillColor={props.fillColor}
+            ></Rectangle>
+            <Text
+                y={(props.height || 0) / 2}
+                style={{
+                    fixedHeight: props.height,
+                    align: "left",
+                    fontSize: "6",
                 }}
-            </TweenedChanges>
+                text={`${value}`}
+            />
         </Container>
     );
 };

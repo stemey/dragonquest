@@ -1,5 +1,6 @@
 import Phaser, { Scene } from "phaser";
 import { Tag } from "@dragonquest/jsx/src/jsx-runtime";
+import { Ref } from "@dragonquest/jsx/jsx-runtime";
 
 export interface TextProps {
     text: string;
@@ -8,6 +9,8 @@ export interface TextProps {
     y?: number;
     width?: number;
     onPointerDown?: () => void;
+    alpha?:number;
+    ref?:Ref<Phaser.GameObjects.Text>
 }
 
 export const Text: Tag<TextProps> = () => ({
@@ -27,6 +30,9 @@ export const Text: Tag<TextProps> = () => ({
             textObject.setInteractive();
             textObject.on("pointerdown", props.onPointerDown);
         }
+        if (typeof props.alpha == "number") {
+            textObject.alpha=props.alpha
+        }
         return textObject;
     },
 
@@ -39,6 +45,9 @@ export const Text: Tag<TextProps> = () => ({
         textObject.setStyle(style);
         textObject.setPosition(newProps.x || 0, newProps.y || 0);
         textObject.updateDisplayOrigin();
+        if (typeof newProps.alpha == "number") {
+            textObject.alpha=newProps.alpha
+        }
         return false;
     },
 });

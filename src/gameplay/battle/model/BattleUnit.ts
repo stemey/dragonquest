@@ -1,4 +1,4 @@
-import { observable, observe } from "mobx";
+import { observable } from "mobx";
 import { Unit } from "../../../sprites/Unit";
 import { Character } from "../../types/Character";
 import { BattleActionState } from "./BattleActionState";
@@ -11,17 +11,21 @@ import { Stats } from "./Stats";
 import { Target } from "./target";
 
 export class BattleUnit implements InteractiveSelectable {
+    newTurn(): void {
+        this.powers.forEach((p) => p.newTurn());
+    }
     sync() {
         this.hp.set(this.unit.hp);
     }
-    executeAction() {
-        this.powers.forEach((p) => {
+    async executeAction(duration:number) {
+        for (let p of this.powers) {
             if (p.selectedTarget) {
-                p.execute();
+                await p.execute(duration);
             }
-        });
+        }
+        
     }
-    chosenAndExecuteAction() {
+    async chosenAndExecuteAction(duration:number) {
         const actionIdx =
             Math.trunc(Math.random() * this.powers.length) % this.powers.length;
         const p = this.powers[actionIdx];
@@ -32,7 +36,7 @@ export class BattleUnit implements InteractiveSelectable {
         );
         if (targetUnit) {
             p.selectTarget(targetUnit);
-            this.executeAction();
+            await this.executeAction(duration);
         }
     }
     deselect() {
@@ -48,6 +52,7 @@ export class BattleUnit implements InteractiveSelectable {
             this.deselect();
         }
     }
+    battleMode = observable.box<""|"defend"|"attack">("");
     name = observable.box("");
     hp = observable.box(0);
     maxHp = observable.box(0);

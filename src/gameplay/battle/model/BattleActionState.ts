@@ -6,9 +6,13 @@ import { BattleUnit } from "./BattleUnit";
 import { InteractiveSelectable } from "./InteractiveSelectable";
 import { getSelected, next, previous } from "./select";
 import { Target } from "./target";
+import { wait } from "./wait";
 
 export class BattleActionState implements InteractiveSelectable {
-    execute(): void {
+    newTurn(): void {
+        this.deselectAllTargets();
+    }
+    async execute(duration: number): Promise<void> {
         const target = this.selectedTarget?.name;
         if (!target) {
             return;
@@ -17,13 +21,22 @@ export class BattleActionState implements InteractiveSelectable {
         if (!unit) {
             return;
         }
+        this.battleUnit.battleMode.set("attack");
+        unit.battleMode.set("defend");
+
         this.action?.execute(
             new MessageManager(),
             this.battleUnit.unit,
             unit.unit,
             false
         );
+
         this.battleUnit.sync();
+        unit.sync();
+        await wait(() => {}, duration);
+
+        this.battleUnit.battleMode.set("");
+        unit.battleMode.set("");
     }
     constructor(
         private power: Heal | Attack,

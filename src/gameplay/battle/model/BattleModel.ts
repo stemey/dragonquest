@@ -3,6 +3,7 @@ import { Unit } from "../../../sprites/Unit";
 import { BattleUnit } from "./BattleUnit";
 import { next, previous } from "./select";
 import { Target } from "./target";
+import { wait } from "./wait";
 
 export class BattleModel {
     findUnitByName(targetName: string) {
@@ -13,6 +14,8 @@ export class BattleModel {
 
     heroes = observable.array<BattleUnit>([]);
     enemies = observable.array<BattleUnit>([]);
+
+    prepare = observable.box(true);
 
     startBattle(heroes: Unit[], enemies: Unit[]) {
         this.heroes.clear();
@@ -40,13 +43,21 @@ export class BattleModel {
         );
     }
 
-    finishTurn() {
-        this.heroes.forEach((h) => {
-            h.executeAction();
-        });
-        this.enemies.forEach((e) => {
-            e.chosenAndExecuteAction();
-        });
+    async finishTurn() {
+        this.prepare.set(false);
+        this.heroes.forEach(h => h.deselect());
+        for (const h of this.heroes.filter(h => h.unit.alive).slice()) {
+
+            await h.executeAction(3000)
+        }
+        for (const e of this.enemies.filter(h => h.unit.alive).slice()) {
+            await e.chosenAndExecuteAction(3000)
+        }
+
+        this.heroes.forEach((h) => h.newTurn());
+        this.enemies.forEach((h) => h.newTurn());
+        this.prepare.set(true);
+
     }
 
     get currentHero() {

@@ -11,6 +11,7 @@ module.exports = {
     watchOptions: {
         poll: true,
         ignored: /node_modules/,
+        aggregateTimeout: 300,
     },
     output: {
         pathinfo: true,
@@ -42,28 +43,30 @@ module.exports = {
         }),
     ],
     module: {
-        
         rules: [
             {
                 test: /\.tsx?$/,
                 use: [
-                    'babel-loader',
+                    "babel-loader",
                     {
-                        loader: 'ts-loader',
-                        
-                    }
+                        loader: "ts-loader",
+                    },
                 ],
                 exclude: /(node_modules)/,
                 include: path.join(__dirname, "src"),
-            }
+            },
         ],
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
     },
+    cache: false,
     devServer: {
         static: {
             directory: path.join(__dirname, "dist"),
+        },
+        client: {
+            progress: true,
         },
         port: 3000,
         hot: true,

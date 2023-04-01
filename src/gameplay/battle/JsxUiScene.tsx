@@ -4,11 +4,11 @@ import powers from "../../config/global/powers.json";
 import { Unit } from "../../sprites/Unit";
 import { Character } from "../types/Character";
 import { Power } from "../types/Power";
-import { globalState, render } from "@dragonquest/jsx/jsx-runtime";
+import {  render } from "@dragonquest/jsx/jsx-runtime";
 import { Battle } from "./menu/Battle";
 import { phaserJsxHelper } from "../../jsx/phaserJsxHelper";
 import { BattleModel } from "./model/BattleModel";
-import { action, runInAction } from "mobx";
+import {  runInAction } from "mobx";
 
 export const SCENE_KEY = "JsxUiScene";
 

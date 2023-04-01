@@ -1,18 +1,14 @@
-import { Element, Ref, useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
+import { Ref, useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects, Tweens } from "phaser";
-import { Container } from "./Container";
-import { getName } from "./utils";
 
 export interface TransformProps {
     objectRef: Ref<GameObjects.GameObject>;
-    children?: (width: number) => Element<any>[] | Element<any>;
     width: number;
-    name: string;
 }
-export const TweenedChanges = (props: TransformProps) => {
+export const useTween = (props: TransformProps) => {
     //const currentWidth = useRef(props.width);
-    const { children, objectRef } = props;
-    const currentWidth = useRef(props.width)
+    const { objectRef } = props;
+    const currentWidth = useRef(props.width);
 
     useEffect(() => {
         let tween: Tweens.Tween | undefined = undefined;
@@ -21,9 +17,9 @@ export const TweenedChanges = (props: TransformProps) => {
                 targets: objectRef.current,
                 width: props.width,
                 ease: "Power1",
-                duration: 3000,
+                duration: 500,
                 onComplete: () => {
-                    currentWidth.current=props.width
+                    currentWidth.current = props.width;
                 },
             } as any;
 
@@ -37,10 +33,5 @@ export const TweenedChanges = (props: TransformProps) => {
         };
     }, [props.width]);
 
-    if (!children) {
-        return <Container></Container>
-    }
-
-    // TODO fix the
-    return <Container>{(children as any)[0](currentWidth.current)}</Container>;
+    return currentWidth.current;
 };

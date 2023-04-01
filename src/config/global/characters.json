@@ -5,7 +5,7 @@
         "name": "Knight",
         "armor": 10,
         "image": "knight",
-        "maxHp": 10,
+        "maxHp": 25,
         "attacks": [],
         "className": "Knight"
     },
@@ -14,7 +14,7 @@
         "name": "Wizard",
         "armor": 10,
         "image": "mage",
-        "maxHp": 10,
+        "maxHp": 25,
         "attacks": [],
         "className": "Wizard"
     },

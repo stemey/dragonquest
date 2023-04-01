@@ -16,6 +16,7 @@ import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 import { ValueBar } from "./ValueBar";
+import { ActionText } from "./ActionText";
 
 export const Unit = observer(
     (props: {
@@ -28,12 +29,16 @@ export const Unit = observer(
         candidate?: boolean;
     }) => {
         const { baseColor } = props;
-        const fillColor = props.unit.selected
-            ? getColor(baseColor, 0.5, 0.2, 0.6)
-            : getColor(baseColor, 0.5, 0.2, 0.5);
-        const borderLineColor = getColor(baseColor, 0, 0.4, 0.8);
-        const borderFillColor = getColor(baseColor, 0.1, 0.4, 0.5);
-        const textColor = getColor(baseColor, 0, 0.2, 1);
+        const preparePhase = props.unit.battleModel.prepare.get();
+        const satFactor =
+            preparePhase || props.unit.battleMode.get() !== "" ? 1 : 0;
+        const fillColor =
+            props.unit.selected || props.unit.battleMode.get() !== ""
+                ? getColor(baseColor, 0.5, 0.2 * satFactor, 0.6)
+                : getColor(baseColor, 0.5, 0.2 * satFactor, 0.5);
+        const borderLineColor = getColor(baseColor, 0, 0.4 * satFactor, 0.8);
+        const borderFillColor = getColor(baseColor, 0.1, 0.4 * satFactor, 0.5);
+        const textColor = getColor(baseColor, 0, 0.2 * satFactor, 1);
 
         const items = props.unit.powers.map((p, idx) => {
             const m = createModelProxy<ObservableItemModel, BattleActionState>(
@@ -76,10 +81,8 @@ export const Unit = observer(
                 ></Item>
             );
         });
-        const relative =
-            (160 * (props.unit.hp.get() / props.unit.maxHp.get())) / 2;
         const columns = "60% 40%";
-        const rows = "10% 30% 5% 5% 40% 10%";
+        const rows = "10% 30% 7% 7% 36% 10%";
 
         const areas = `
      title title
@@ -113,13 +116,20 @@ export const Unit = observer(
         const width = props.width || 120;
         const height = props.height || 210;
 
-        const mode = props.unit.selected ? "in" : "out";
+        const mode =
+            props.unit.selected || props.unit.battleMode.get() !== ""
+                ? "in"
+                : "out";
 
         const candidate = !!props.candidate;
 
         return (
             <Container name={props.unit.name.get()}>
-                <Transform mode={mode} step={{ scale: 1.05, x: 10, y: 4 }}>
+                <Transform
+                    mode={mode}
+                    step={{ scale: 1.05, x: 10, y: 4 }}
+                    delay={props.unit.battleMode.get() == "defend" ? 300 : 0}
+                >
                     <RectangleBorderV2
                         visible={candidate}
                         height={height}
@@ -191,8 +201,8 @@ export const Unit = observer(
                                 <ValueBar
                                     emptyColor={0x330000}
                                     fillColor={0xdd0000}
-                                    value={props.unit.hp.get()}
-                                    maxValue={props.unit.maxHp.get()}
+                                    value={10}
+                                    maxValue={100}
                                 ></ValueBar>
                             </GridItem>
                             <GridItem area="weapons">
@@ -223,11 +233,19 @@ export const Unit = observer(
                             </GridItem>
                         </Grid>
                     </Div>
+                    <ActionText
+                        x={-(props.width || 0) / 2}
+                        y={0}
+                        unit={props.unit}
+                        style={{
+                            align: "center",
+                            color: "red",
+                            fontSize: "20px",
+                            strokeThickness: 5,
+                        }}
+                    ></ActionText>
                 </Transform>
             </Container>
         );
     }
 );
-/*
-   
-*/
