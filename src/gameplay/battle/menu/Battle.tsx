@@ -1,3 +1,4 @@
+import { useGlobal } from "@dragonquest/jsx/jsx-runtime";
 import { Element } from "@dragonquest/jsx/src/Element";
 import { Div } from "../../../jsx/div/Div";
 import { Grid, GridItem } from "../../../jsx/Grid";
@@ -66,6 +67,7 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
     `;
 
     const fightCallback = () => {
+        
         battleModel.finishTurn();
     };
 

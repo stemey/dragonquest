@@ -15,6 +15,10 @@ export const observer = <P>(fn: (props: P) => Element<any>) => {
         if (!trackingRef.current) {
             disposeRef.current = reaction(
                 () => {
+                    const again = trackingRef.current;
+                    if (again) {
+                        console.log("calling reaction again");
+                    }
                     rendering = fn(props);
                     return rendering;
                 },
@@ -36,7 +40,7 @@ export const observer = <P>(fn: (props: P) => Element<any>) => {
         useEffect(() => {
             return () => {
                 if (disposeRef.current) {
-                    disposeRef.current();
+                    //disposeRef.current();
                 }
             };
         });

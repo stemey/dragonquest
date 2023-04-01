@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 import { Unit } from "../../../sprites/Unit";
 import { BattleUnit } from "./BattleUnit";
 import { next, previous } from "./select";

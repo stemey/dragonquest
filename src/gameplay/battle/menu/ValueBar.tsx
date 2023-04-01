@@ -1,10 +1,9 @@
 import { useRef } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects } from "phaser";
 import { Container } from "../../../jsx/Container";
-import { Div } from "../../../jsx/div/Div";
 import { Rectangle } from "../../../jsx/Rectangle";
 import { Text } from "../../../jsx/Text";
-import { useTween } from "../../../jsx/useTween";
+import { useWidthTween } from "../../../jsx/useWidthTween";
 
 export interface ValueBarProps {
     value: number;
@@ -24,7 +23,7 @@ export const ValueBar = (props: ValueBarProps) => {
 
     const valueWidth = Math.trunc(((props.width || 0) * value) / maxValue);
     const currentWidth =
-        useTween({ objectRef: rectRef, width: valueWidth }) || 0;
+        useWidthTween({ objectRef: rectRef, width: valueWidth }) || 0;
 
     return (
         <Container

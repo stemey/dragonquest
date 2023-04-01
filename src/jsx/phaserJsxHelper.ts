@@ -1,4 +1,4 @@
-import { ContainerHelper } from "@dragonquest/jsx/jsx-runtime";
+import { ContainerHelper, JsxContext } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects } from "phaser";
 import { JsxContainer } from "./JsxContainer";
 

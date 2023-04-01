@@ -47,7 +47,7 @@ export class GlobalState {
         this._currentElementId = id;
         this.currentElementState = this.stateMap.get(this.currentElementId);
         if (!this.currentElementState) {
-            this.currentElementState = new ElementState();
+            this.currentElementState = new ElementState(id);
             this.stateMap.set(this.currentElementId, this.currentElementState);
         } else {
             this.currentElementState.reset();
@@ -64,6 +64,7 @@ export interface EffectState {
 }
 
 export class ElementState {
+    constructor(public readonly id: string) {}
     useEffect(cb: () => void | (() => void), dependencies: any[] | undefined) {
         if (!this.initialized) {
             const disposeFn = cb();

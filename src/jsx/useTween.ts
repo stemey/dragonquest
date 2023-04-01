@@ -3,27 +3,19 @@ import { GameObjects, Tweens } from "phaser";
 
 export interface TransformProps {
     objectRef: Ref<GameObjects.GameObject>;
-    width: number;
+    config: Partial<Phaser.Types.Tweens.TweenBuilderConfig>;
 }
-export const useTween = (props: TransformProps) => {
-    //const currentWidth = useRef(props.width);
-    const { objectRef } = props;
-    const currentWidth = useRef(props.width);
+export const useTween = (props: TransformProps & any) => {
+    const tweenRef = useRef<Tweens.Tween | undefined>();
+    const { objectRef, config } = props;
 
     useEffect(() => {
         let tween: Tweens.Tween | undefined = undefined;
         if (objectRef.current) {
-            const config = {
-                targets: objectRef.current,
-                width: props.width,
-                ease: "Power1",
-                duration: 500,
-                onComplete: () => {
-                    currentWidth.current = props.width;
-                },
-            } as any;
-
-            tween = objectRef.current.scene.tweens.add(config);
+            tweenRef.current = objectRef.current.scene.tweens.add({
+                ...config,
+                targets: [objectRef.current],
+            });
         }
 
         return () => {
@@ -31,7 +23,6 @@ export const useTween = (props: TransformProps) => {
                 tween.remove();
             }
         };
-    }, [props.width]);
-
-    return currentWidth.current;
+    }, [objectRef?.current, config]);
+    return tweenRef;
 };

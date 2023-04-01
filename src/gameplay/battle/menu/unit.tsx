@@ -17,6 +17,7 @@ import { Container } from "../../../jsx/Container";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 import { ValueBar } from "./ValueBar";
 import { ActionText } from "./ActionText";
+import { UnitTransform } from "./UnitTransform";
 
 export const Unit = observer(
     (props: {
@@ -116,20 +117,11 @@ export const Unit = observer(
         const width = props.width || 120;
         const height = props.height || 210;
 
-        const mode =
-            props.unit.selected || props.unit.battleMode.get() !== ""
-                ? "in"
-                : "out";
-
         const candidate = !!props.candidate;
 
         return (
             <Container name={props.unit.name.get()}>
-                <Transform
-                    mode={mode}
-                    step={{ scale: 1.05, x: 10, y: 4 }}
-                    delay={props.unit.battleMode.get() == "defend" ? 300 : 0}
-                >
+                <UnitTransform unit={props.unit}>
                     <RectangleBorderV2
                         visible={candidate}
                         height={height}
@@ -233,18 +225,18 @@ export const Unit = observer(
                             </GridItem>
                         </Grid>
                     </Div>
-                    <ActionText
-                        x={-(props.width || 0) / 2}
-                        y={0}
-                        unit={props.unit}
-                        style={{
-                            align: "center",
-                            color: "red",
-                            fontSize: "20px",
-                            strokeThickness: 5,
-                        }}
-                    ></ActionText>
-                </Transform>
+                </UnitTransform>
+                <ActionText
+                    x={-(props.width || 0) / 2}
+                    y={0}
+                    unit={props.unit}
+                    style={{
+                        align: "center",
+                        color: "red",
+                        fontSize: "20px",
+                        strokeThickness: 5,
+                    }}
+                ></ActionText>
             </Container>
         );
     }

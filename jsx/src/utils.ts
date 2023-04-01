@@ -1,5 +1,6 @@
 import { isArrayLike } from "mobx";
 import { Element } from "./Element";
+import { JsxContext } from "./gameObjectFactory";
 import { getName } from "./getName";
 import { GlobalState } from "./GlobalState";
 
@@ -7,15 +8,17 @@ export const create = <S, T>(
     scene: S,
     element: Element<any>,
     helper: ContainerHelper<T>,
+    ctx: JsxContext,
     currentId: string = ""
 ) => {
-    return evaluateTag(scene, element, helper, currentId);
+    return evaluateTag(scene, element, helper, ctx, currentId);
 };
 
 const evaluateTag = <S, P extends object, T>(
     scene: S,
     element: Element<any>,
     helper: ContainerHelper<T>,
+    ctx: JsxContext,
     currentId: string = ""
 ): T | undefined => {
     if (!element) {
@@ -40,7 +43,7 @@ const evaluateTag = <S, P extends object, T>(
     currentState.currentElementState?.onCreated();
 
     if ("update" in creator && "create" in creator) {
-        const gameObject = creator.create(scene, element.props);
+        const gameObject = creator.create(scene, element.props, ctx);
         handleRef(element, gameObject);
 
         if (element.children) {
@@ -54,7 +57,7 @@ const evaluateTag = <S, P extends object, T>(
                 }
                 const newId = currentId + createId(c, idx);
                 currentState.currentElementId = newId;
-                const child = create(scene, c, helper, newId);
+                const child = create(scene, c, helper, ctx, newId);
                 if (child) {
                     helper.add(gameObject, child);
                 }
@@ -69,6 +72,7 @@ const evaluateTag = <S, P extends object, T>(
                 scene,
                 c as Element<any>,
                 helper,
+                ctx,
                 currentId + createId(c)
             );
         }) as any;
@@ -78,7 +82,7 @@ const evaluateTag = <S, P extends object, T>(
         globalState.current.setOldTree(id, creator);
     }
 
-    return evaluateTag(scene, creator as Element<any>, helper, id);
+    return evaluateTag(scene, creator as Element<any>, helper, ctx, id);
 };
 
 export const reconcile = <S, G extends object>(
@@ -87,6 +91,7 @@ export const reconcile = <S, G extends object>(
     nu: Element<any>,
     gameObject: G,
     helper: ContainerHelper<G>,
+    ctx: JsxContext,
     currentId: string = ""
 ) => {
     const currentState = globalState.current;
@@ -151,26 +156,33 @@ export const reconcile = <S, G extends object>(
                     const newId = currentId + createId(c, idx);
                     const oldIdx = oldChildren.indexOf(newId);
                     if (oldIdx < 0) {
-                        const newObject = create(scene, c, helper, newId);
+                        const newObject = create(scene, c, helper, ctx, newId);
                         if (newObject) {
                             helper.add(gameObject, newObject);
                         }
                     } else {
-                        let currIdx =oldIdx
+                        let currIdx = oldIdx;
                         if (oldIdx !== idx) {
                             helper.move(gameObject, oldIdx, idx);
                             const removed = oldChildren.splice(oldIdx, 1);
                             oldChildren.splice(idx, 0, ...removed);
-                            currIdx=idx;
+                            currIdx = idx;
                         }
                         const oldChild = oldElementChildren[currIdx];
                         const childGo = helper.get(gameObject, currIdx);
                         if (childGo !== undefined) {
-                            
                         }
 
                         currentState.currentElementId = newId;
-                        reconcile(scene, oldChild, c, childGo, helper, newId);
+                        reconcile(
+                            scene,
+                            oldChild,
+                            c,
+                            childGo,
+                            helper,
+                            ctx,
+                            newId
+                        );
                     }
                 });
         }
@@ -185,6 +197,7 @@ export const reconcile = <S, G extends object>(
                 c as Element<any>,
                 gameObject,
                 helper,
+                ctx,
                 currentId + createId(c)
             );
         });
@@ -200,6 +213,7 @@ export const reconcile = <S, G extends object>(
             creator as Element<any>,
             gameObject,
             helper,
+            ctx,
             id
         );
     }
@@ -224,25 +238,37 @@ export const render = <S, G extends object>(
     helper: ContainerHelper<G>
 ) => {
     const globalState = new GlobalState();
+    const ctx = {
+        wrapHandler: (cb: () => any) => {
+            return () => {
+                return wrapInGlobalState(globalState, cb);
+            };
+        },
+    };
 
     const value = wrapInGlobalState(globalState, () =>
-        create(scene, element, helper)
+        create(scene, element, helper, ctx)
     );
 
+    let rendering = false;
     function renderInternally() {
+        rendering = true;
         while (!!value && globalState.rerender) {
             globalState.rerender = false;
 
             wrapInGlobalState(globalState, () => {
-                reconcile(scene, element, element, value, helper);
+                reconcile(scene, element, element, value, helper, ctx);
             });
         }
+        rendering = false;
     }
 
     renderInternally();
 
     globalState.onStateChange(() => {
-        renderInternally();
+        if (!rendering) {
+            renderInternally();
+        }
     });
 
     return value;
@@ -253,9 +279,10 @@ export const globalState: { current: GlobalState | undefined } = {
 };
 
 export const wrapInGlobalState = <T>(g: GlobalState, cb: () => T): T => {
+    const previousState = globalState.current;
     globalState.current = g;
     const returnValue = cb();
-    globalState.current = undefined;
+    globalState.current = previousState;
     return returnValue;
 };
 
