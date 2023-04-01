@@ -40,7 +40,7 @@ export class BattleScene
 
         // Run UI Scene at the same time
         //this.scene.launch("UIScene");
-        this.input.keyboard.on("keydown", this.onKeyInput, this);
+        this.input.keyboard?.on("keydown", this.onKeyInput, this);
 
         if (data.data.enemies) {
             this.addCharacters(data.data.enemies);

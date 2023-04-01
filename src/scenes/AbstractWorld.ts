@@ -192,8 +192,8 @@ export class AbstractWorld extends Phaser.Scene {
         this.cameras.main.roundPixels = true; // avoid tile bleed
 
         // user input
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.input.keyboard.on("keydown", this.onInventory, this);
+        this.cursors = this.input.keyboard?.createCursorKeys();
+        this.input.keyboard?.on("keydown", this.onInventory, this);
 
         switch (data?.type) {
             case "load": {

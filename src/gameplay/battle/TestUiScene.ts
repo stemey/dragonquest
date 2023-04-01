@@ -39,7 +39,7 @@ export class TestUiScene extends Phaser.Scene {
         const potionList = new ItemList(this, 0, 0, config, { items:potionItems });
         this.add.existing(potionList);
 */
-        this.input.keyboard.on("keydown", this.onKeyInput, this);
+        this.input.keyboard?.on("keydown", this.onKeyInput, this);
     }
 
     onKeyInput(event: KeyboardEvent) {

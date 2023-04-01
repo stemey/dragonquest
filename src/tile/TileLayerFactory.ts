@@ -113,7 +113,7 @@ export default class TileLayerFactory {
         const tilemapConfig: Phaser.Types.Tilemaps.TilemapConfig = {};
         const map = this.scene.make.tilemap({ key: this.mapKey });
         this.tileSets.forEach((ts) => {
-            this.tileSetImages[ts.name] = map.addTilesetImage(
+            const tileset = map.addTilesetImage(
                 ts.name,
                 ts.original.image.substring(
                     0,
@@ -125,6 +125,9 @@ export default class TileLayerFactory {
                 0,
                 ts.first
             );
+            if (tileset) {
+                this.tileSetImages[ts.name] = tileset;
+            }
         });
 
         this.process(map, this.mapConfig.layers);
@@ -148,11 +151,13 @@ export default class TileLayerFactory {
                             0,
                             0
                         );
-                        theLayer.setCollisionByExclusion([-1]);
-                        this.scene.physics.add.collider(
-                            this.scene.player,
-                            theLayer
-                        );
+                        if (theLayer) {
+                            theLayer.setCollisionByExclusion([-1]);
+                            this.scene.physics.add.collider(
+                                this.scene.player,
+                                theLayer
+                            );
+                        }
                     }
                 } else if (layerProps.getProp("depthSorting") as boolean) {
                     const tileSet = this.mapConfig.tilesets.find(
@@ -172,8 +177,10 @@ export default class TileLayerFactory {
                             0,
                             0
                         );
-                        action(map, layer, this.scene);
-                        tiles.visible = false;
+                        if (tiles) {
+                            action(map, layer, this.scene);
+                            tiles.visible = false;
+                        }
                     }
                 } else {
                     map.createLayer(

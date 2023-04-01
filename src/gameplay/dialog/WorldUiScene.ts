@@ -16,7 +16,7 @@ export class WorldUiScene extends Phaser.Scene {
         if (scene) {
             this.dialog = new DialogUi(this);
             this.add.existing(this.dialog);
-            this.input.keyboard.on("keydown", this.dialog.onKey, this.dialog);
+            this.input.keyboard?.on("keydown", this.dialog.onKey, this.dialog);
         }
     }
 

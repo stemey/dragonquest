@@ -49,7 +49,7 @@ export class JsxUiScene extends Phaser.Scene {
         }
 
 
-        this.input.keyboard.on("keydown", this.onKeyInput, this);
+        this.input.keyboard?.on("keydown", this.onKeyInput, this);
     }
 
     onKeyInput(event: KeyboardEvent) {

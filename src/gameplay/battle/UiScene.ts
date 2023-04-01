@@ -61,7 +61,7 @@ export class UiScene extends Phaser.Scene {
         menus.add(heroesMenu);
         menus.add(actionsMenu);
 
-        this.input.keyboard.on("keydown", this.onKeyInput, this);
+        this.input.keyboard?.on("keydown", this.onKeyInput, this);
 
         battleScene.events.on("PlayerSelect", this.onPlayerSelect, this);
         battleScene.events.on(

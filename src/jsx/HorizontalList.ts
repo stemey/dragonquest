@@ -11,7 +11,7 @@ class HorizontalListContainer extends Phaser.GameObjects.Container {
     constructor(scene: Scene, private props: HorizontalListProps) {
         super(scene, 0, 0);
     }
-    add(child: GameObjects.GameObject) {
+    add(child: GameObjects.GameObject | GameObjects.GameObject[]) {
         const length = this.getAll().length;
         const width = this.getAll().reduce((w, child, idx) => {
             w +=

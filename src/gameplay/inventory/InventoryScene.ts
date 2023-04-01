@@ -20,7 +20,7 @@ export class Inventory
         const graphics = this.add.graphics();
         this.createTable(graphics);
 
-        this.input.keyboard.on("keydown", this.onKey, this);
+        this.input.keyboard?.on("keydown", this.onKey, this);
     }
 
     createTable(graphics: Phaser.GameObjects.Graphics) {

@@ -26,7 +26,7 @@ export const PickUpAction = (
                 undefined,
                 layer.name
             );
-            goldSprites.forEach((goldSprite) => {
+            goldSprites?.forEach((goldSprite) => {
                 if (!scene.player) {
                     return;
                 }
@@ -34,7 +34,7 @@ export const PickUpAction = (
                 scene.physics.add.overlap(
                     scene.player,
                     goldSprite,
-                    pickupCallback
+                    pickupCallback as any
                 );
             });
         });
