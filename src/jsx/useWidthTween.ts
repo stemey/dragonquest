@@ -1,5 +1,6 @@
 import { Ref, useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects, Tweens } from "phaser";
+import { AnimationTiming } from "../gameplay/battle/menu/AnimationTiming";
 
 export interface TransformProps {
     objectRef: Ref<GameObjects.GameObject>;
@@ -17,6 +18,7 @@ export const useWidthTween = (props: TransformProps) => {
                 targets: objectRef.current,
                 width: props.width,
                 ease: "Power1",
+                delay: AnimationTiming.defenseDelay,
                 duration: 500,
                 onComplete: () => {
                     currentWidth.current = props.width;

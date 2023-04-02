@@ -2,36 +2,38 @@ import { useEffect, useRef } from "@dragonquest/jsx/jsx-runtime";
 import { GameObjects, Tweens } from "phaser";
 import { Text } from "../../../jsx/Text";
 import { BattleUnit } from "../model/BattleUnit";
+import { observer } from "./Observer";
 
 export interface ActionTextProps {
     unit: BattleUnit;
     x?: number;
     y?: number;
-    style: Phaser.Types.GameObjects.Text.TextStyle;
 }
 
-export const ActionText = (props: ActionTextProps) => {
-    const { x, y, style } = props;
+export const PowerActionText = observer((props: ActionTextProps) => {
+    const { x, y } = props;
     const ref = useRef<GameObjects.Text>();
-    const currentHp = useRef(props.unit.hp.get() || 0);
-    const deltaHp =
-        (currentHp.current || props.unit.maxHp.get()) - props.unit.hp.get();
-    const text = "-" + deltaHp + "HP";
-    const alpha = 0;
+
+    const power = props.unit.currentlyChosenPower;
+    const text = power?.name || "";
+
+    const style = {
+        align: "center",
+        color: "blue",
+        fontSize: "20px",
+        strokeThickness: 5,
+    };
 
     useEffect(() => {
         let tween: Tweens.Tween | undefined = undefined;
-        if (ref.current && deltaHp > 0) {
+        if (ref.current && power) {
             const config = {
                 targets: ref.current,
                 alpha: 1,
-                scale:1.5,
-                y:-40,
+                scale: 1.5,
+                y: -40,
                 ease: "Power1",
                 duration: 500,
-                onComplete: () => {
-                    currentHp.current = props.unit.hp.get();
-                },
             } as any;
 
             tween = ref.current.scene.tweens.add(config);
@@ -42,9 +44,7 @@ export const ActionText = (props: ActionTextProps) => {
                 tween.remove();
             }
         };
-    }, [deltaHp]);
-   
-    return (
-        <Text alpha={alpha} ref={ref} x={x} y={y} style={style} text={text} />
-    );
-};
+    }, [power, props.unit, ref.current]);
+
+    return <Text alpha={0} ref={ref} x={x} y={y} style={style} text={text} />;
+});

@@ -12,12 +12,12 @@ import { Grid, GridItem } from "../../../jsx/Grid";
 import { observer } from "./Observer";
 import { Border1 } from "../../../card/border/Border1";
 import { getColor } from "../../../utils/color";
-import { Transform } from "../../../jsx/Transform";
 import { Container } from "../../../jsx/Container";
 import { RectangleBorderV2 } from "../../../jsx/RectangleBorderV2";
 import { ValueBar } from "./ValueBar";
-import { ActionText } from "./ActionText";
+import { HpActionText } from "./HpActionText";
 import { UnitTransform } from "./UnitTransform";
+import { PowerActionText } from "./PowerActionText";
 
 export const Unit = observer(
     (props: {
@@ -35,10 +35,10 @@ export const Unit = observer(
             preparePhase || props.unit.battleMode.get() !== "" ? 1 : 0;
         const fillColor =
             props.unit.selected || props.unit.battleMode.get() !== ""
-                ? getColor(baseColor, 0.5, 0.2 * satFactor, 0.6)
-                : getColor(baseColor, 0.5, 0.2 * satFactor, 0.5);
+                ? getColor(baseColor, 0.3, 0.2 * satFactor, 0.3)
+                : getColor(baseColor, 0.3, 0.2 * satFactor, 0.2);
         const borderLineColor = getColor(baseColor, 0, 0.4 * satFactor, 0.8);
-        const borderFillColor = getColor(baseColor, 0.1, 0.4 * satFactor, 0.5);
+        const borderFillColor = getColor(baseColor, 0.3, 0.3 * satFactor, 0.2);
         const textColor = getColor(baseColor, 0, 0.2 * satFactor, 1);
 
         const items = props.unit.powers.map((p, idx) => {
@@ -226,17 +226,16 @@ export const Unit = observer(
                         </Grid>
                     </Div>
                 </UnitTransform>
-                <ActionText
+                <HpActionText
                     x={-(props.width || 0) / 2}
                     y={0}
                     unit={props.unit}
-                    style={{
-                        align: "center",
-                        color: "red",
-                        fontSize: "20px",
-                        strokeThickness: 5,
-                    }}
-                ></ActionText>
+                ></HpActionText>
+                <PowerActionText
+                    x={-(props.width || 0) / 2}
+                    y={0}
+                    unit={props.unit}
+                ></PowerActionText>
             </Container>
         );
     }

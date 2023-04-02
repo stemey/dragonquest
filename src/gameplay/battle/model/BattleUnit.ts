@@ -17,15 +17,14 @@ export class BattleUnit implements InteractiveSelectable {
     sync() {
         this.hp.set(this.unit.hp);
     }
-    async executeAction(duration:number) {
+    async executeAction(duration: number) {
         for (let p of this.powers) {
             if (p.selectedTarget) {
                 await p.execute(duration);
             }
         }
-        
     }
-    async chosenAndExecuteAction(duration:number) {
+    async chosenAndExecuteAction(duration: number) {
         const actionIdx =
             Math.trunc(Math.random() * this.powers.length) % this.powers.length;
         const p = this.powers[actionIdx];
@@ -52,7 +51,7 @@ export class BattleUnit implements InteractiveSelectable {
             this.deselect();
         }
     }
-    battleMode = observable.box<""|"defend"|"attack">("");
+    battleMode = observable.box<"" | "defend" | "attack">("");
     name = observable.box("");
     hp = observable.box(0);
     maxHp = observable.box(0);
@@ -69,6 +68,14 @@ export class BattleUnit implements InteractiveSelectable {
     private selectableGroups: SelectableGroup[];
     public character: Character;
     public targetedBy = observable.array<BattleActionState>([]);
+
+    get currentlyChosenPower() {
+        const power = this.powers.find((p) => p.chosen);
+        if (this.battleMode.get() !== "attack") {
+            return undefined;
+        }
+        return power;
+    }
 
     constructor(
         public unit: Unit,
