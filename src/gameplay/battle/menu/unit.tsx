@@ -35,10 +35,10 @@ export const Unit = observer(
             preparePhase || props.unit.battleMode.get() !== "" ? 1 : 0;
         const fillColor =
             props.unit.selected || props.unit.battleMode.get() !== ""
-                ? getColor(baseColor, 0.3, 0.2 * satFactor, 0.3)
-                : getColor(baseColor, 0.3, 0.2 * satFactor, 0.2);
+                ? getColor(baseColor, 0.3, 0.2 * satFactor, 0.6)
+                : getColor(baseColor, 0.3, 0.2 * satFactor, 0.5);
         const borderLineColor = getColor(baseColor, 0, 0.4 * satFactor, 0.8);
-        const borderFillColor = getColor(baseColor, 0.3, 0.3 * satFactor, 0.2);
+        const borderFillColor = getColor(baseColor, 0.3, 0.3 * satFactor, 0.4);
         const textColor = getColor(baseColor, 0, 0.2 * satFactor, 1);
 
         const items = props.unit.powers.map((p, idx) => {

@@ -1,7 +1,9 @@
 import { useGlobal } from "@dragonquest/jsx/jsx-runtime";
 import { Element } from "@dragonquest/jsx/src/Element";
+import { dimension } from "../../../config";
 import { Div } from "../../../jsx/div/Div";
 import { Grid, GridItem } from "../../../jsx/Grid";
+import { Rectangle } from "../../../jsx/Rectangle";
 import { Text } from "../../../jsx/Text";
 import { BattleModel } from "../model/BattleModel";
 import { Unit } from "./Unit";
@@ -67,7 +69,6 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
     `;
 
     const fightCallback = () => {
-        
         battleModel.finishTurn();
     };
 
@@ -101,11 +102,16 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
         );
 
     return (
-        <Div fillColor={0x556655} width={800} height={400}>
+        <Div
+            fillColor={0x445544}
+            width={dimension.width}
+            height={dimension.height}
+            padding={{ bottom: 10, top: 10, left: 10, right: 10 }}
+        >
             <Grid
                 areas={areas}
-                columns="150 150 20 150 150"
-                rows="180 180 20"
+                columns="24% 24% 4% 24% 24%"
+                rows="45% 45% 10%"
                 gap={{ x: 10, y: 10 }}
                 name="shadowGrid"
             >
@@ -113,8 +119,8 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
             </Grid>
             <Grid
                 areas={areas}
-                columns="150 150 20 150 150"
-                rows="180 180 40"
+                columns="24% 24% 4% 24% 24%"
+                rows="45% 45% 10%"
                 gap={{ x: 10, y: 10 }}
                 name="unitGrid"
             >
