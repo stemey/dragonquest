@@ -10,8 +10,11 @@ export const UnitTransform = observer(
     (props: { unit: BattleUnit; children?: Element[] }) => {
         const shatterRef = useRef<GameObjects.GameObject>();
         const battleMode = props.unit.battleMode.get();
-        const preparePhase = props.unit.battleModel.prepare.get();
-        const mode = (props.unit.selected && preparePhase) || battleMode !== "" ? "in" : "out";
+        const preparePhase = props.unit.battleModel.prepare.get() === "prepare";
+        const mode =
+            (props.unit.selected && preparePhase) || battleMode !== ""
+                ? "in"
+                : "out";
 
         useShatter({
             objectRef: shatterRef,
@@ -31,4 +34,3 @@ export const UnitTransform = observer(
         );
     }
 );
-

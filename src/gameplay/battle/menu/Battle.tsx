@@ -1,13 +1,12 @@
-import { useGlobal } from "@dragonquest/jsx/jsx-runtime";
 import { Element } from "@dragonquest/jsx/src/Element";
 import { dimension } from "../../../config";
 import { Div } from "../../../jsx/div/Div";
 import { Grid, GridItem } from "../../../jsx/Grid";
-import { Rectangle } from "../../../jsx/Rectangle";
 import { Text } from "../../../jsx/Text";
 import { BattleModel } from "../model/BattleModel";
-import { Unit } from "./Unit";
+import { Unit } from "./unit";
 import { UnitShadow } from "./UnitShadow";
+import { BattleText } from "./BattleText";
 
 export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
     const { battleModel } = props;
@@ -126,6 +125,11 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
             >
                 {heroes.concat(enemies).concat([bar])}
             </Grid>
+            <BattleText
+                x={dimension.width / 2}
+                y={dimension.height / 2}
+                battle={battleModel}
+            ></BattleText>
         </Div>
     );
 };

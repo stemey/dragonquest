@@ -32,7 +32,10 @@ export const Unit = observer(
         const { baseColor } = props;
         const preparePhase = props.unit.battleModel.prepare.get();
         const satFactor =
-            preparePhase || props.unit.battleMode.get() !== "" ? 1 : 0;
+            (preparePhase || props.unit.battleMode.get() !== "") &&
+            props.unit.hp.get() > 0
+                ? 1
+                : 0;
         const fillColor =
             props.unit.selected || props.unit.battleMode.get() !== ""
                 ? getColor(baseColor, 0.3, 0.2 * satFactor, 0.6)

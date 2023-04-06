@@ -2,14 +2,18 @@ import * as Phaser from "phaser";
 
 const debug =
     new URLSearchParams(window.location.search).get("debug") === "true";
-export const dimension =  {width:window.visualViewport?.width,height:window.visualViewport?.height}  
+const zoom = 2;
+export const dimension = {
+    width: (window.visualViewport?.width || 0) / zoom,
+    height: (window.visualViewport?.height || 0) / zoom,
+};
 
 export const config = {
     type: Phaser.AUTO,
     parent: "content",
     width: dimension.width,
     height: dimension.height,
-    zoom: 1,
+    zoom,
     pixelArt: true,
     physics: {
         default: "arcade",

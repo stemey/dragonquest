@@ -4,7 +4,7 @@ import {
     useRef,
     useState,
 } from "@dragonquest/jsx/jsx-runtime";
-import { IReactionDisposer, Reaction, reaction, trace } from "mobx";
+import { Reaction } from "mobx";
 
 export const observer = <P>(fn: (props: P) => Element<any>) => {
     const x = function observing(props: P) {

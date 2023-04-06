@@ -3,7 +3,8 @@ import { Unit } from "../../../sprites/Unit";
 import { BattleUnit } from "./BattleUnit";
 import { next, previous } from "./select";
 import { Target } from "./target";
-import { wait } from "./wait";
+
+export type BattelMode = "prepare" | "fight" | "finished";
 
 export class BattleModel {
     findUnitByName(targetName: string) {
@@ -15,7 +16,7 @@ export class BattleModel {
     heroes = observable.array<BattleUnit>([]);
     enemies = observable.array<BattleUnit>([]);
 
-    prepare = observable.box(true);
+    prepare = observable.box<BattelMode>("prepare");
 
     startBattle(heroes: Unit[], enemies: Unit[]) {
         this.heroes.clear();
@@ -44,20 +45,33 @@ export class BattleModel {
     }
 
     async finishTurn() {
-        this.prepare.set(false);
-        this.heroes.forEach(h => h.deselect());
-        for (const h of this.heroes.filter(h => h.unit.alive).slice()) {
-
-            await h.executeAction(3000)
+        this.prepare.set("fight");
+        this.heroes.forEach((h) => h.deselect());
+        for (const h of this.heroes.filter((h) => h.unit.alive).slice()) {
+            await h.executeAction(3000);
         }
-        for (const e of this.enemies.filter(h => h.unit.alive).slice()) {
-            await e.chosenAndExecuteAction(3000)
+        for (const e of this.enemies.filter((h) => h.unit.alive).slice()) {
+            await e.chosenAndExecuteAction(3000);
         }
 
         this.heroes.forEach((h) => h.newTurn());
         this.enemies.forEach((h) => h.newTurn());
-        this.prepare.set(true);
+        const heroesDead =
+            this.heroes.filter((h) => h.hp.get() > 0).length == 0;
+        const enemiesDead =
+            this.enemies.filter((h) => h.hp.get() > 0).length == 0;
+        if (heroesDead || enemiesDead) {
+            this.prepare.set("finished");
+        } else {
+            this.prepare.set("prepare");
+        }
+    }
 
+    get win() {
+        return (
+            this.prepare.get() == "finished" &&
+            this.heroes.filter((h) => h.hp.get() <= 0).length == 0
+        );
     }
 
     get currentHero() {

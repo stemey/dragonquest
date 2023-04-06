@@ -13,8 +13,11 @@ export function getValue(values: number[], idx: number, gap: number = 0) {
     }
     return values
         .filter((value, x) => x <= idx)
-        .reduce((val, value) => {
+        .reduce((val, value, idx) => {
             val += value;
+            if (idx > 0) {
+                val += gap;
+            }
             return val;
         }, 0);
 }
@@ -22,22 +25,22 @@ export function getValue(values: number[], idx: number, gap: number = 0) {
 export function createGeometry(props: GridProps) {
     const { height, width } = props;
     const gap = getGap(props.gap);
-    const columns = props.columns
-        .split(" ")
+    const columWidths = props.columns.split(" ");
+    const columns = columWidths
         .filter((d) => d.length !== 0)
         .map((d) =>
             parseSize(
                 d,
-                width ? width - props.columns.length * gap.x : props.columns
+                width ? width - (columWidths.length - 1) * gap.x : props.columns
             )
         );
-    const rows = props.rows
-        .split(" ")
+    const rowHeights = props.rows.split(" ");
+    const rows = rowHeights
         .filter((d) => d.length !== 0)
         .map((d) =>
             parseSize(
                 d,
-                height ? height - props.rows.length * gap.y : props.rows
+                height ? height - (rowHeights.length - 1) * gap.y : props.rows
             )
         );
 
@@ -75,12 +78,20 @@ export function createGeometry(props: GridProps) {
     } = {};
     Object.keys(areasRowCol).forEach((name) => {
         const areaRowCol = areasRowCol[name];
-        const x = getValue(columns, areaRowCol.colStart - 1) + gap.x;
+        const x =
+            getValue(columns, areaRowCol.colStart - 1, gap.x) +
+            (areaRowCol.colStart > 0 ? gap.x : 0);
         const width =
-            getValue(columns, areaRowCol.colEnd || areaRowCol.colStart) - x;
-        const y = getValue(rows, areaRowCol.rowStart - 1) + gap.y;
-        const height =
-            getValue(rows, areaRowCol.rowEnd || areaRowCol.rowStart) - y;
+            getValue(columns, areaRowCol.colEnd || areaRowCol.colStart, gap.x) -
+            x;
+        const y =
+            getValue(rows, areaRowCol.rowStart - 1, gap.y) +
+            (areaRowCol.rowStart > 0 ? gap.x : 0);
+        const height = getValue(
+            rows,
+            areaRowCol.rowEnd || areaRowCol.rowStart,
+            gap.y
+        )-y;
         areas[name] = {
             x,
             y,
