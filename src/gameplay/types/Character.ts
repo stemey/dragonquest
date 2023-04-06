@@ -3,7 +3,7 @@ import { Power } from "./Power";
 
 export interface Character {
     hero?: boolean;
-    name: string;   
+    name: string;
     armor: number;
     image: string;
     maxHp: number;

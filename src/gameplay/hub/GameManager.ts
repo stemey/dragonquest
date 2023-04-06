@@ -50,7 +50,7 @@ export class GameManager {
                 let index = 1;
                 while (units.find((u) => u.name === name)) {
                     name = current.name + " " + index;
-                    index++
+                    index++;
                 }
 
                 const namedCharacter = { ...current, name };

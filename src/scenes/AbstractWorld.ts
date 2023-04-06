@@ -31,6 +31,12 @@ export class AbstractWorld extends Phaser.Scene {
     private storePoint?: number;
 
     create(data?: GatewayEntry | LoadEntry) {
+        this.events.on(
+            "wake",
+            (scene: Phaser.Scene, data: WorldEntryParameter) =>
+                this.onWake(data)
+        );
+
         this.startWorld(data);
     }
 
@@ -203,8 +209,12 @@ export class AbstractWorld extends Phaser.Scene {
             }
             default: {
                 const entry = this.getEntry(data?.entry);
-                this.player.x = entry.x;
-                this.player.y = entry.y;
+                if (entry) {
+                    this.player.x = entry.x;
+                    this.player.y = entry.y;
+                } else {
+                    console.error("cannot find entry", data?.entry);
+                }
             }
         }
 
@@ -334,7 +344,7 @@ export class AbstractWorld extends Phaser.Scene {
             this.player.x = pos.x;
             this.player.y = pos.y;
         } else if (data && data.type == "gateway" && data.entry) {
-            const entry = this.entries[data.entry];
+            const entry = this.getEntry(data.entry);
             this.player.x = entry.x;
             this.player.y = entry.y;
         } else if (data && data.type == "load") {

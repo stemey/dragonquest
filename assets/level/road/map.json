@@ -216,8 +216,8 @@
                          "rotation":0,
                          "visible":true,
                          "width":211.25,
-                         "x":446.033972024739,
-                         "y":42.6860152592336
+                         "x":438.033972024739,
+                         "y":33.6860152592336
                         }, 
                         {
                          "class":"Dialog",
@@ -272,16 +272,22 @@
                          "y":820.608148648649
                         }, 
                         {
-                         "class":"",
+                         "class":"Entry",
                          "height":0,
                          "id":26,
                          "name":"entry from north",
                          "point":true,
+                         "properties":[
+                                {
+                                 "name":"name",
+                                 "type":"string",
+                                 "value":"entry from north"
+                                }],
                          "rotation":0,
                          "visible":true,
                          "width":0,
                          "x":538,
-                         "y":199
+                         "y":165
                         }],
                  "opacity":1,
                  "type":"objectgroup",

@@ -2,7 +2,7 @@ import { Unit } from "../../sprites/Unit";
 import { Healing } from "./Healing";
 import { Weapon } from "./Weapon";
 
-type PowerExecution = (targets: Unit[])=> void;
+type PowerExecution = (targets: Unit[]) => void;
 
 export interface BasePower {
     name: string;

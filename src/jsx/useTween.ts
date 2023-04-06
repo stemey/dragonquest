@@ -17,7 +17,6 @@ export const useTween = (props: TransformProps) => {
 
     useEffect(() => {
         if (objectRef.current) {
-
             if (Array.isArray(config)) {
                 tweenRef.current = objectRef.current.scene.tweens.timeline({
                     targets: [objectRef.current],

@@ -16,7 +16,7 @@ class VerticalListContainer extends Phaser.GameObjects.Container {
         super(scene, props.x || 0, props.y || 0);
     }
 
-    add(child: GameObjects.GameObject |  GameObjects.GameObject[]) {
+    add(child: GameObjects.GameObject | GameObjects.GameObject[]) {
         const height = this.getAll().reduce((h, child, idx) => {
             h +=
                 (
