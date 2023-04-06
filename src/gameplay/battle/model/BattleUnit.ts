@@ -9,8 +9,18 @@ import { Potion } from "./Potion";
 import { SelectableGroup } from "./SelectableGroup";
 import { Stats } from "./Stats";
 import { Target } from "./target";
+import { convertColorValueToNumber } from "../../../utils/color";
 
 export class BattleUnit implements InteractiveSelectable {
+    get baseColor(): number | undefined {
+        if (!this.character.baseColor) {
+            return undefined;
+        }
+
+        return convertColorValueToNumber(
+            Phaser.Display.Color.HexStringToColor(this.character.baseColor)
+        );
+    }
     newTurn(): void {
         this.powers.forEach((p) => p.newTurn());
     }

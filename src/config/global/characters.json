@@ -7,7 +7,8 @@
         "image": "knight",
         "maxHp": 25,
         "attacks": [],
-        "className": "Knight"
+        "className": "Knight",
+        "baseColor": "f0f000"
     },
     "wizard": {
         "hero": true,
@@ -16,7 +17,8 @@
         "image": "mage",
         "maxHp": 25,
         "attacks": [],
-        "className": "Wizard"
+        "className": "Wizard",
+        "baseColor": "0000aa"
     },
     "tristran": {
         "name": "Tristran",
@@ -35,9 +37,10 @@
                 "type": "weapon",
                 "name": "claws",
                 "strength": 10,
-                "damage": 5
+                "damage": 12
             }
-        ]
+        ],
+        "baseColor": "aa0000"
     },
     "rumps": {
         "name": "Rumps",
@@ -51,7 +54,8 @@
                 "strength": 15,
                 "damage": 10
             }
-        ]
+        ],
+        "baseColor": "000ee"
     },
     "green mage": {
         "name": "Greenie",
@@ -65,6 +69,7 @@
                 "strength": 100,
                 "damage": 10
             }
-        ]
+        ],
+        "baseColor": "00ee00"
     }
 }

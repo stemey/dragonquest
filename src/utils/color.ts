@@ -35,3 +35,7 @@ export const convertColorToNumber = (
 ) => {
     return color.r * 0x10000 + color.g * 0x100 + color.b * 0x1;
 };
+
+export const convertColorValueToNumber = (color: Phaser.Display.Color) => {
+    return color.red * 0x10000 + color.green * 0x100 + color.blue * 0x1;
+};

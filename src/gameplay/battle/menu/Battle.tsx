@@ -8,12 +8,12 @@ import { Unit } from "./unit";
 import { UnitShadow } from "./UnitShadow";
 import { BattleText } from "./BattleText";
 
-export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
+export const Battle = (props: {
+    battleModel: BattleModel;
+    returnToWorld: () => void;
+}): Element<any> => {
     const { battleModel } = props;
-    const baseColors = {
-        [battleModel.heroes[0].name.get()]: 0xf0f000,
-        [battleModel.heroes[1].name.get()]: 0x0000ff,
-    };
+
     const heroAreas: string[] = battleModel.heroes.map(
         (h) => `hero_${h.name.get()}`
     );
@@ -34,18 +34,14 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
                 candidateTargets.some((t) => t.name === u.name.get());
             return (
                 <GridItem key={area} area={area}>
-                    <Unit
-                        unit={u}
-                        baseColor={baseColors[u.name.get()]}
-                        candidate={candidate}
-                    ></Unit>
+                    <Unit unit={u} candidate={candidate}></Unit>
                 </GridItem>
             );
         });
     const enemyAreas: string[] = [];
     const enemies = battleModel.enemies.map((u, idx) => {
         const baseColors = [0xff0000, 0xf0a000, 0x00ffff];
-        const area = `enemy_${u.name.get()}`;
+        const area = `enemy_${u.name.get().replaceAll(" ", "_")}`;
         enemyAreas.push(area);
         const candidate =
             candidateTargets &&
@@ -53,11 +49,7 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
 
         return (
             <GridItem key={area} area={area}>
-                <Unit
-                    unit={u}
-                    baseColor={baseColors[idx]}
-                    candidate={candidate}
-                ></Unit>
+                <Unit unit={u} candidate={candidate}></Unit>
             </GridItem>
         );
     });
@@ -67,8 +59,15 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
     . bar bar bar .
     `;
 
-    const fightCallback = () => {
-        battleModel.finishTurn();
+    const actionLabel =
+        battleModel.prepare.get() === "finished" ? "Finish" : "Fight";
+
+    const actionCallback = () => {
+        if (battleModel.prepare.get() === "finished") {
+            props.returnToWorld();
+        } else {
+            battleModel.finishTurn();
+        }
     };
 
     const bar = (
@@ -78,9 +77,9 @@ export const Battle = (props: { battleModel: BattleModel }): Element<any> => {
                 padding={{ top: 2, bottom: 2, left: 0, right: 0 }}
             >
                 <Text
-                    text="Fight"
+                    text={actionLabel}
                     style={{ align: "center" }}
-                    onPointerDown={fightCallback}
+                    onPointerDown={actionCallback}
                 ></Text>
             </Div>
         </GridItem>

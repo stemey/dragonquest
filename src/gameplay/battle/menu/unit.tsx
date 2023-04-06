@@ -26,10 +26,9 @@ export const Unit = observer(
         width?: number;
         height?: number;
         unit: BattleUnit;
-        baseColor: number;
         candidate?: boolean;
     }) => {
-        const { baseColor } = props;
+        const baseColor = props.unit.baseColor || 0x777777;
         const preparePhase = props.unit.battleModel.prepare.get();
         const satFactor =
             (preparePhase || props.unit.battleMode.get() !== "") &&
@@ -125,11 +124,7 @@ export const Unit = observer(
         return (
             <Container name={props.unit.name.get()}>
                 <UnitTransform unit={props.unit}>
-                    <RectangleBorderV2
-                        visible={candidate}
-                        height={height}
-                        width={width}
-                    ></RectangleBorderV2>
+                   
 
                     <Div
                         width={width}
@@ -243,3 +238,11 @@ export const Unit = observer(
         );
     }
 );
+
+/*
+ <RectangleBorderV2
+                        visible={candidate}
+                        height={height}
+                        width={width}
+                    ></RectangleBorderV2>
+                    */

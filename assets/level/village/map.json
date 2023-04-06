@@ -114,6 +114,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"entry",
+                         "type":"string",
+                         "value":"entry from north"
+                        }, 
+                        {
                          "name":"targetScene",
                          "type":"string",
                          "value":"road"
@@ -131,7 +136,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":5,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

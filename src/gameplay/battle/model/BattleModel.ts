@@ -3,10 +3,12 @@ import { Unit } from "../../../sprites/Unit";
 import { BattleUnit } from "./BattleUnit";
 import { next, previous } from "./select";
 import { Target } from "./target";
+import { DragonQuest } from "../../hub/DragonQuest";
 
 export type BattelMode = "prepare" | "fight" | "finished";
 
 export class BattleModel {
+    public enemyName?: string;
     findUnitByName(targetName: string) {
         return this.heroes
             .concat(this.enemies)
@@ -18,7 +20,8 @@ export class BattleModel {
 
     prepare = observable.box<BattelMode>("prepare");
 
-    startBattle(heroes: Unit[], enemies: Unit[]) {
+    startBattle(heroes: Unit[], enemies: Unit[], enemyName: string) {
+        this.enemyName = enemyName;
         this.heroes.clear();
         this.enemies.clear();
         const targets = heroes
@@ -70,7 +73,7 @@ export class BattleModel {
     get win() {
         return (
             this.prepare.get() == "finished" &&
-            this.heroes.filter((h) => h.hp.get() <= 0).length == 0
+            this.heroes.filter((h) => h.hp.get() > 0).length > 0
         );
     }
 

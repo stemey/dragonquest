@@ -154,7 +154,7 @@ export class DialogState {
         }
         let deltaX = this.deltaX[actor];
         if (!deltaX) {
-            deltaX = Object.keys(this.deltaX).length * 10 - 10;
+            deltaX = Object.keys(this.deltaX).length * 40 - 10;
             this.deltaX[actor] = deltaX;
         }
         return deltaX;

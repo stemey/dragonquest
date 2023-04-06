@@ -270,6 +270,18 @@
                          "width":297.297,
                          "x":243.919067567568,
                          "y":820.608148648649
+                        }, 
+                        {
+                         "class":"",
+                         "height":0,
+                         "id":26,
+                         "name":"entry from north",
+                         "point":true,
+                         "rotation":0,
+                         "visible":true,
+                         "width":0,
+                         "x":538,
+                         "y":199
                         }],
                  "opacity":1,
                  "type":"objectgroup",
@@ -638,7 +650,7 @@
          "y":0
         }],
  "nextlayerid":20,
- "nextobjectid":26,
+ "nextobjectid":27,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

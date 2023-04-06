@@ -5,6 +5,7 @@ import { Heal } from "../battle/Heal";
 import { Characters } from "../types/Characters";
 import { Powers } from "../types/Powers";
 import { DragonQuestType } from "./DragonQuest";
+import { Character } from "../types/Character";
 
 export class GameManager {
     getHeroes(): Unit[] {
@@ -44,7 +45,18 @@ export class GameManager {
         return monsterIds
             .map((id) => this.characters[id])
             .filter((c) => !!c)
-            .map((c) => new Unit(c));
+            .reduce((units, current) => {
+                let name = current.name;
+                let index = 1;
+                while (units.find((u) => u.name === name)) {
+                    name = current.name + " " + index;
+                    index++
+                }
+
+                const namedCharacter = { ...current, name };
+                units.push(new Unit(namedCharacter));
+                return units;
+            }, [] as Unit[]);
     }
 
     foundFood(foodCount: number) {

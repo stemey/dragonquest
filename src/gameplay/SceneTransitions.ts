@@ -70,8 +70,7 @@ export interface ReversibleData<D = {}, R = {}> {
 
 export const SceneTransitions = {
     battle: new ReversibleTransition<BattleSceneParameter, BattleEntry>([
-        "BattleScene",
-        "UIScene",
+        "JsxUiScene",
     ]),
     inventory: new ReversibleTransition(["InventoryScene"]),
 };

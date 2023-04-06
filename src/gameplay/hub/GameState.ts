@@ -65,6 +65,7 @@ export class GameState
         this.hub.onChanged();
     }
     finishedBattle(outcome: BattleOutcome) {
+        this.hub.events.battle.end.emit(outcome); // removes the enemy sprites
         if (outcome.heroWin) {
             this.currentLevel.monsters[outcome.deadEnemy] = { dead: true };
         }

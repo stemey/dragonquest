@@ -12,7 +12,7 @@
     },
     "answer": {
         "actor": "Hero",
-        "message": "They seem pretty dangerous. It will be certain death for me.",
+        "message": "They seem pretty dangerous. It will be the death of me.",
         "next": "idea"
     },
     "idea": {

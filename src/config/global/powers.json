@@ -14,8 +14,8 @@
     "fireball": {
         "type": "weapon",
         "name": "fireball",
-        "strength": 5,
-        "damage": 50
+        "strength": 10,
+        "damage": 15
     },
     "mighty sparks": {
         "type": "weapon",
